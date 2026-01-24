@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "name": "Emma Thompson",
+    "email": "emma.thompson@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Chief Client Officer",
+    "department": "Executive",
+    "job_title": "Chief Client Officer",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Leadership",
+    "languages": [
+      "['English (Native)'",
+      "'French (Professional)'",
+      "'Italian (Conversational)']"
+    ],
+    "skills": [
+      "['Client Strategy'",
+      "'Relationship Management'",
+      "'Business Development'",
+      "'Contract Negotiation'",
+      "'Enterprise Sales']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

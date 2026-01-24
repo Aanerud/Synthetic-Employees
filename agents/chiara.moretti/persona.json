@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "name": "Chiara Moretti",
+    "email": "chiara.moretti@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Literary Writer",
+    "department": "Creative Writing",
+    "job_title": "Literary Writer",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Dramatic Writing",
+    "languages": [
+      "['Italian (Native)'",
+      "'English (Fluent)'",
+      "'French (Conversational)']"
+    ],
+    "skills": [
+      "['Dramatic Writing'",
+      "'Screenplay'",
+      "'Dialogue'",
+      "'Italian Cinema Tradition'",
+      "'Video Scripts']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

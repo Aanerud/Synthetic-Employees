@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "name": "Isabella Rossi",
+    "email": "isabella.rossi@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "CEO",
+    "department": "Executive",
+    "job_title": "CEO",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Leadership",
+    "languages": [
+      "['Italian (Native)'",
+      "'English (Fluent)'",
+      "'French (Professional)']"
+    ],
+    "skills": [
+      "['Strategic Planning'",
+      "'Business Development'",
+      "'Publishing Industry'",
+      "'Team Leadership'",
+      "'Corporate Communications']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 30,
+    "response_time_sla_hours": 1,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

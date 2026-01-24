@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "name": "Prof. Erik Nilsson",
+    "email": "erik.nilsson@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Academic Writer",
+    "department": "Creative Writing",
+    "job_title": "Academic Writer",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Medical Research",
+    "languages": [
+      "['Swedish (Native)'",
+      "'English (Fluent)'",
+      "'Norwegian (Professional)']"
+    ],
+    "skills": [
+      "['Medical Writing'",
+      "'Clinical Research'",
+      "'Healthcare Publications'",
+      "'Medical Journals'",
+      "'Patient Information']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

@@ -1,0 +1,36 @@
+{
+  "identity": {
+    "name": "Jonas Pettersson",
+    "email": "jonas.pettersson@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Fact Checker",
+    "department": "Quality Assurance",
+    "job_title": "Fact Checker",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Academic Verification",
+    "languages": [
+      "['Swedish (Native)'",
+      "'English (Fluent)']"
+    ],
+    "skills": [
+      "['Academic Fact Checking'",
+      "'Citation Verification'",
+      "'Statistical Review'",
+      "'Scientific Claims'",
+      "'Source Credibility']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

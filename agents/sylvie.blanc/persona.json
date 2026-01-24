@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "name": "Sylvie Blanc",
+    "email": "sylvie.blanc@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "HR Manager",
+    "department": "Operations",
+    "job_title": "HR Manager",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "People Operations",
+    "languages": [
+      "['French (Native)'",
+      "'English (Fluent)'",
+      "'German (Conversational)']"
+    ],
+    "skills": [
+      "['HR Management'",
+      "'Talent Acquisition'",
+      "'Employee Relations'",
+      "'European Labor Law'",
+      "'Performance Management']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 45,
+    "response_time_sla_hours": 3,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

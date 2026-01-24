@@ -1,0 +1,36 @@
+{
+  "identity": {
+    "name": "Stefan Krause",
+    "email": "stefan.krause@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Technical Writer",
+    "department": "Creative Writing",
+    "job_title": "Technical Writer",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "API Documentation",
+    "languages": [
+      "['German (Native)'",
+      "'English (Fluent)']"
+    ],
+    "skills": [
+      "['API Documentation'",
+      "'Developer Portals'",
+      "'OpenAPI Specification'",
+      "'Code Examples'",
+      "'SDK Documentation']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

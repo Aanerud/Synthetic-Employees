@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "name": "Sebastian Mueller",
+    "email": "sebastian.mueller@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "CCO",
+    "department": "Executive",
+    "job_title": "CCO",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Leadership",
+    "languages": [
+      "['German (Native)'",
+      "'English (Fluent)'",
+      "'Spanish (Conversational)']"
+    ],
+    "skills": [
+      "['Creative Direction'",
+      "'Content Strategy'",
+      "'Brand Voice Development'",
+      "'Editorial Leadership'",
+      "'Style Guide Creation']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

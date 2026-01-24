@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "name": "Alejandro Vega",
+    "email": "alejandro.vega@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Marketing Copywriter",
+    "department": "Creative Writing",
+    "job_title": "Marketing Copywriter",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Video Scripts",
+    "languages": [
+      "['Spanish (Native)'",
+      "'English (Fluent)'",
+      "'Portuguese (Conversational)']"
+    ],
+    "skills": [
+      "['Video Scripts'",
+      "'Commercial Writing'",
+      "'Voiceover Scripts'",
+      "'Storyboarding'",
+      "'Motion Graphics Copy']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

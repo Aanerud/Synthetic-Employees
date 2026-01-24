@@ -1,0 +1,35 @@
+{
+  "identity": {
+    "name": "Oliver Hughes",
+    "email": "oliver.hughes@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Technical Writer Lead",
+    "department": "Creative Writing",
+    "job_title": "Technical Writer Lead",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Software Documentation",
+    "languages": [
+      "['English (Native)']"
+    ],
+    "skills": [
+      "['Technical Writing'",
+      "'Software Documentation'",
+      "'API Documentation'",
+      "'Developer Experience'",
+      "'Information Architecture']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

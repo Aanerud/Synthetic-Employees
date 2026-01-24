@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "name": "Sofia Lopes",
+    "email": "sofia.lopes@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Round Table Coordinator",
+    "department": "Round Table Coordination",
+    "job_title": "Round Table Coordinator",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Creative Sessions",
+    "languages": [
+      "['Portuguese (Native)'",
+      "'English (Fluent)'",
+      "'Spanish (Professional)']"
+    ],
+    "skills": [
+      "['Brainstorming'",
+      "'Ideation Workshops'",
+      "'Creative Problem Solving'",
+      "'Design Thinking'",
+      "'Innovation Sessions']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 45,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

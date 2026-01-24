@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthetic Employees Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            border-bottom: 1px solid #e1e5eb;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd6;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .filter-group select {
+            padding: 0.5rem;
+            border: 1px solid #e1e5eb;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        .search-box {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e1e5eb;
+            border-radius: 6px;
+            width: 250px;
+        }
+
+        .main {
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .agent-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .agent-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .agent-card.running {
+            border-color: #2ecc71;
+        }
+
+        .agent-card.paused {
+            border-color: #f39c12;
+        }
+
+        .agent-card.error {
+            border-color: #e74c3c;
+        }
+
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .agent-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #2c3e50;
+        }
+
+        .agent-role {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-running {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-paused {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-stopped {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .agent-meta {
+            display: flex;
+            gap: 0.75rem;
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            margin-bottom: 0.75rem;
+        }
+
+        .agent-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .agent-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .agent-actions .btn {
+            flex: 1;
+            padding: 0.375rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-start {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-start:hover {
+            background: #27ae60;
+        }
+
+        .btn-pause {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-pause:hover {
+            background: #e67e22;
+        }
+
+        .btn-stop {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-stop:hover {
+            background: #c0392b;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow: auto;
+        }
+
+        .modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e1e5eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.25rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .activity-log {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            padding: 0.75rem;
+            border-bottom: 1px solid #f5f7fa;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            white-space: nowrap;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-type {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-detail {
+            font-size: 0.875rem;
+            color: #7f8c8d;
+        }
+
+        .connection-status {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .connection-status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .connection-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Synthetic Employees</h1>
+        <div class="header-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="stat-total">-</div>
+                <div class="stat-label">Total Agents</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="stat-running">-</div>
+                <div class="stat-label">Running</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="stat-paused">-</div>
+                <div class="stat-label">Paused</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="stat-errors">-</div>
+                <div class="stat-label">Errors</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="controls">
+        <button class="btn btn-primary" onclick="startAll()">Start All</button>
+        <button class="btn btn-danger" onclick="stopAll()">Stop All</button>
+        <button class="btn btn-secondary" onclick="refreshAgents()">Refresh</button>
+
+        <div class="filter-group">
+            <select id="filter-department" onchange="applyFilters()">
+                <option value="">All Departments</option>
+            </select>
+            <select id="filter-status" onchange="applyFilters()">
+                <option value="">All Status</option>
+                <option value="running">Running</option>
+                <option value="paused">Paused</option>
+                <option value="stopped">Stopped</option>
+                <option value="error">Error</option>
+            </select>
+            <input type="text" class="search-box" placeholder="Search agents..." id="search-box" oninput="applyFilters()">
+        </div>
+    </div>
+
+    <main class="main">
+        <div class="agents-grid" id="agents-grid">
+            <div class="loading">Loading agents...</div>
+        </div>
+    </main>
+
+    <!-- Agent Detail Modal -->
+    <div class="modal" id="agent-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-agent-name">Agent Details</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="connection-status disconnected" id="connection-status">
+        Disconnected
+    </div>
+
+    <script>
+        let agents = [];
+        let ws = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshAgents();
+            connectWebSocket();
+        });
+
+        // WebSocket connection
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${window.location.host}/ws/status`);
+
+            ws.onopen = () => {
+                document.getElementById('connection-status').className = 'connection-status connected';
+                document.getElementById('connection-status').textContent = 'Connected';
+            };
+
+            ws.onclose = () => {
+                document.getElementById('connection-status').className = 'connection-status disconnected';
+                document.getElementById('connection-status').textContent = 'Disconnected';
+                // Reconnect after 5 seconds
+                setTimeout(connectWebSocket, 5000);
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === 'status_update') {
+                    updateAgentStatuses(data.agents);
+                }
+            };
+        }
+
+        // Update agent statuses from WebSocket
+        function updateAgentStatuses(statusUpdates) {
+            statusUpdates.forEach(update => {
+                const agent = agents.find(a => a.email === update.email);
+                if (agent) {
+                    agent.status = update.status;
+                    agent.last_tick_at = update.last_tick;
+                    agent.error_count = update.error_count;
+                }
+            });
+            renderAgents();
+            updateStats();
+        }
+
+        // Fetch agents from API
+        async function refreshAgents() {
+            try {
+                const response = await fetch('/api/agents');
+                agents = await response.json();
+                populateFilters();
+                renderAgents();
+                updateStats();
+            } catch (error) {
+                console.error('Failed to fetch agents:', error);
+            }
+        }
+
+        // Populate filter dropdowns
+        function populateFilters() {
+            const deptSelect = document.getElementById('filter-department');
+            const departments = [...new Set(agents.map(a => a.department))].sort();
+
+            deptSelect.innerHTML = '<option value="">All Departments</option>';
+            departments.forEach(dept => {
+                deptSelect.innerHTML += `<option value="${dept}">${dept}</option>`;
+            });
+        }
+
+        // Apply filters
+        function applyFilters() {
+            renderAgents();
+        }
+
+        // Get filtered agents
+        function getFilteredAgents() {
+            const dept = document.getElementById('filter-department').value;
+            const status = document.getElementById('filter-status').value;
+            const search = document.getElementById('search-box').value.toLowerCase();
+
+            return agents.filter(a => {
+                if (dept && a.department !== dept) return false;
+                if (status && a.status !== status) return false;
+                if (search && !a.name.toLowerCase().includes(search) && !a.email.toLowerCase().includes(search)) return false;
+                return true;
+            });
+        }
+
+        // Render agents grid
+        function renderAgents() {
+            const grid = document.getElementById('agents-grid');
+            const filtered = getFilteredAgents();
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="loading">No agents found</div>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(agent => `
+                <div class="agent-card ${agent.status}" data-email="${agent.email}">
+                    <div class="agent-header">
+                        <div>
+                            <div class="agent-name">${agent.name}</div>
+                            <div class="agent-role">${agent.role}</div>
+                        </div>
+                        <span class="status-badge status-${agent.status}">${agent.status}</span>
+                    </div>
+                    <div class="agent-meta">
+                        <span>${agent.department}</span>
+                        ${agent.last_tick_at ? `<span>Last: ${formatTime(agent.last_tick_at)}</span>` : ''}
+                        ${agent.error_count > 0 ? `<span style="color: #e74c3c;">Errors: ${agent.error_count}</span>` : ''}
+                    </div>
+                    <div class="agent-actions">
+                        ${getAgentButtons(agent)}
+                        <button class="btn btn-secondary" onclick="showAgentDetail('${agent.email}')">Details</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get action buttons based on status
+        function getAgentButtons(agent) {
+            switch (agent.status) {
+                case 'running':
+                    return `
+                        <button class="btn btn-pause" onclick="pauseAgent('${agent.email}')">Pause</button>
+                        <button class="btn btn-stop" onclick="stopAgent('${agent.email}')">Stop</button>
+                    `;
+                case 'paused':
+                    return `
+                        <button class="btn btn-start" onclick="resumeAgent('${agent.email}')">Resume</button>
+                        <button class="btn btn-stop" onclick="stopAgent('${agent.email}')">Stop</button>
+                    `;
+                default:
+                    return `
+                        <button class="btn btn-start" onclick="startAgent('${agent.email}')">Start</button>
+                    `;
+            }
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('stat-total').textContent = agents.length;
+            document.getElementById('stat-running').textContent = agents.filter(a => a.status === 'running').length;
+            document.getElementById('stat-paused').textContent = agents.filter(a => a.status === 'paused').length;
+            document.getElementById('stat-errors').textContent = agents.filter(a => a.error_count > 0).length;
+        }
+
+        // Agent actions
+        async function startAgent(email) {
+            await agentAction(email, 'start');
+        }
+
+        async function stopAgent(email) {
+            await agentAction(email, 'stop');
+        }
+
+        async function pauseAgent(email) {
+            await agentAction(email, 'pause');
+        }
+
+        async function resumeAgent(email) {
+            await agentAction(email, 'resume');
+        }
+
+        async function agentAction(email, action) {
+            try {
+                const response = await fetch(`/api/agents/${encodeURIComponent(email)}/${action}`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                if (result.success) {
+                    await refreshAgents();
+                } else {
+                    alert(`Failed to ${action} agent: ${result.message}`);
+                }
+            } catch (error) {
+                console.error(`Failed to ${action} agent:`, error);
+                alert(`Failed to ${action} agent`);
+            }
+        }
+
+        async function startAll() {
+            if (!confirm('Start all agents?')) return;
+            try {
+                await fetch('/api/agents/start-all', { method: 'POST' });
+                await refreshAgents();
+            } catch (error) {
+                console.error('Failed to start all agents:', error);
+            }
+        }
+
+        async function stopAll() {
+            if (!confirm('Stop all agents?')) return;
+            try {
+                await fetch('/api/agents/stop-all', { method: 'POST' });
+                await refreshAgents();
+            } catch (error) {
+                console.error('Failed to stop all agents:', error);
+            }
+        }
+
+        // Show agent detail modal
+        async function showAgentDetail(email) {
+            const modal = document.getElementById('agent-modal');
+            const content = document.getElementById('modal-content');
+
+            content.innerHTML = '<div class="loading">Loading...</div>';
+            modal.classList.add('active');
+
+            try {
+                const [detailRes, activityRes] = await Promise.all([
+                    fetch(`/api/agents/${encodeURIComponent(email)}`),
+                    fetch(`/api/agents/${encodeURIComponent(email)}/activity?limit=20`)
+                ]);
+
+                const detail = await detailRes.json();
+                const activity = await activityRes.json();
+
+                document.getElementById('modal-agent-name').textContent = detail.name;
+
+                content.innerHTML = `
+                    <div style="margin-bottom: 1.5rem;">
+                        <p><strong>Email:</strong> ${detail.email}</p>
+                        <p><strong>Role:</strong> ${detail.job_title}</p>
+                        <p><strong>Department:</strong> ${detail.department}</p>
+                        <p><strong>Office:</strong> ${detail.office_location}</p>
+                        <p><strong>Timezone:</strong> ${detail.timezone}</p>
+                        ${detail.manager_email ? `<p><strong>Manager:</strong> ${detail.manager_email}</p>` : ''}
+                        <p><strong>Status:</strong> <span class="status-badge status-${detail.status}">${detail.status}</span></p>
+                        ${detail.last_error ? `<p style="color: #e74c3c;"><strong>Last Error:</strong> ${detail.last_error}</p>` : ''}
+                    </div>
+
+                    <h3 style="margin-bottom: 0.75rem;">Recent Activity</h3>
+                    <div class="activity-log">
+                        ${activity.length === 0 ? '<p style="color: #7f8c8d;">No recent activity</p>' :
+                            activity.map(a => `
+                                <div class="activity-item">
+                                    <div class="activity-time">${formatTime(a.timestamp)}</div>
+                                    <div class="activity-content">
+                                        <div class="activity-type">${a.action_type}</div>
+                                        <div class="activity-detail">${a.result}${a.error_message ? `: ${a.error_message}` : ''}</div>
+                                    </div>
+                                </div>
+                            `).join('')
+                        }
+                    </div>
+                `;
+            } catch (error) {
+                content.innerHTML = '<p style="color: #e74c3c;">Failed to load agent details</p>';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('agent-modal').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.getElementById('agent-modal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                closeModal();
+            }
+        });
+
+        // Format timestamp
+        function formatTime(timestamp) {
+            if (!timestamp) return '-';
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+    </script>
+</body>
+</html>

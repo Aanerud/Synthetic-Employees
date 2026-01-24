@@ -1,0 +1,36 @@
+{
+  "identity": {
+    "name": "Laura Fontaine",
+    "email": "laura.fontaine@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Technical Writer",
+    "department": "Creative Writing",
+    "job_title": "Technical Writer",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Aerospace",
+    "languages": [
+      "['French (Native)'",
+      "'English (Fluent)']"
+    ],
+    "skills": [
+      "['Aerospace Documentation'",
+      "'Aviation Standards'",
+      "'EASA Compliance'",
+      "'Flight Manuals'",
+      "'Maintenance Documentation']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

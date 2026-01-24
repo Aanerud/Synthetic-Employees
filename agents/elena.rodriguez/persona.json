@@ -1,0 +1,39 @@
+{
+  "identity": {
+    "name": "Elena Rodriguez",
+    "email": "elena.rodriguez@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Style Editor",
+    "department": "Editorial",
+    "job_title": "Style Editor",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Translation Quality",
+    "languages": [
+      "['Spanish (Native)'",
+      "'English (Fluent)'",
+      "'French (Professional)'",
+      "'Portuguese (Professional)'",
+      "'Italian (Conversational)']"
+    ],
+    "skills": [
+      "['Multilingual Editing'",
+      "'Translation Review'",
+      "'Style Consistency'",
+      "'Romance Languages'",
+      "'Localization']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

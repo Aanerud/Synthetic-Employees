@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "name": "Eva Svensson",
+    "email": "eva.svensson@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Key Account Manager",
+    "department": "Key Accounts",
+    "job_title": "Key Account Manager",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Healthcare",
+    "languages": [
+      "['Swedish (Native)'",
+      "'English (Fluent)'",
+      "'Danish (Professional)']"
+    ],
+    "skills": [
+      "['Healthcare Communications'",
+      "'Pharmaceutical Marketing'",
+      "'Nordic Healthcare Systems'",
+      "'Patient Education'",
+      "'Clinical Documentation']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 45,
+    "response_time_sla_hours": 3,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

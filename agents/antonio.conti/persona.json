@@ -1,0 +1,36 @@
+{
+  "identity": {
+    "name": "Antonio Conti",
+    "email": "antonio.conti@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Corporate Writer",
+    "department": "Creative Writing",
+    "job_title": "Corporate Writer",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Press Releases",
+    "languages": [
+      "['Italian (Native)'",
+      "'English (Fluent)']"
+    ],
+    "skills": [
+      "['Press Releases'",
+      "'Media Relations'",
+      "'Crisis Communications'",
+      "'Italian Corporate Style'",
+      "'News Writing']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}

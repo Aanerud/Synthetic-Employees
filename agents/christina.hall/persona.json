@@ -1,0 +1,36 @@
+{
+  "identity": {
+    "name": "Christina Hall",
+    "email": "christina.hall@a830edad9050849coep9vqp9bog.onmicrosoft.com",
+    "role": "Marketing Copywriter Lead",
+    "department": "Creative Writing",
+    "job_title": "Marketing Copywriter Lead",
+    "office_location": "London"
+  },
+  "personality": {
+    "writing_style": "Professional",
+    "communication_style": "Clear and concise",
+    "specialization": "Brand Campaigns",
+    "languages": [
+      "['English (Native)'",
+      "'French (Conversational)']"
+    ],
+    "skills": [
+      "['Copywriting'",
+      "'Brand Campaigns'",
+      "'Creative Strategy'",
+      "'Integrated Marketing'",
+      "'Campaign Development']"
+    ]
+  },
+  "work_preferences": {
+    "email_check_frequency_minutes": 60,
+    "response_time_sla_hours": 4,
+    "timezone": "Europe/London"
+  },
+  "relationships": {
+    "manager_email": null,
+    "auto_accept_meetings_from": []
+  },
+  "about_me": ""
+}
