@@ -5,33 +5,32 @@
     "role": "Academic Writer",
     "department": "Creative Writing",
     "job_title": "Academic Writer",
-    "office_location": "London"
+    "office_location": "Stockholm Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Medical Research",
     "languages": [
-      "['Swedish (Native)'",
-      "'English (Fluent)'",
-      "'Norwegian (Professional)']"
+      "Swedish (Native)",
+      "English (Fluent)",
+      "Norwegian (Professional)"
     ],
     "skills": [
-      "['Medical Writing'",
-      "'Clinical Research'",
-      "'Healthcare Publications'",
-      "'Medical Journals'",
-      "'Patient Information']"
+      "Medical Writing Clinical Research Healthcare Publications Medical Journals Patient Information"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Stockholm"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Medical writing specialist with background in clinical research. Ensures medical content is scientifically accurate and ethically sound.",
+  "metadata": {
+    "country": "Sweden"
+  }
 }

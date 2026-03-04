@@ -5,33 +5,32 @@
     "role": "Key Account Manager",
     "department": "Key Accounts",
     "job_title": "Key Account Manager",
-    "office_location": "London"
+    "office_location": "Berlin Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Automotive",
     "languages": [
-      "['German (Native)'",
-      "'English (Fluent)'",
-      "'French (Conversational)']"
+      "German (Native)",
+      "English (Fluent)",
+      "French (Conversational)"
     ],
     "skills": [
-      "['Automotive Industry'",
-      "'Technical Marketing'",
-      "'German OEM Expertise'",
-      "'Sustainability Communications'",
-      "'Electric Mobility']"
+      "Automotive Industry Technical Marketing German OEM Expertise Sustainability Communications Electric Mobility"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 45,
     "response_time_sla_hours": 3,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Berlin"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Automotive specialist working with German OEMs and suppliers. Expert in translating complex engineering achievements into compelling brand stories.",
+  "metadata": {
+    "country": "Germany"
+  }
 }

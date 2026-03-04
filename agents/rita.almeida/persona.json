@@ -5,33 +5,32 @@
     "role": "Consistency Checker",
     "department": "Quality Assurance",
     "job_title": "Consistency Checker",
-    "office_location": "London"
+    "office_location": "Lisbon Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Style Compliance",
     "languages": [
-      "['Portuguese (Native)'",
-      "'English (Fluent)'",
-      "'Spanish (Professional)']"
+      "Portuguese (Native)",
+      "English (Fluent)",
+      "Spanish (Professional)"
     ],
     "skills": [
-      "['Style Consistency'",
-      "'Brand Compliance'",
-      "'Terminology Management'",
-      "'Cross-Document Review'",
-      "'Version Control']"
+      "Style Consistency Brand Compliance Terminology Management Cross-Document Review Version Control"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Lisbon"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Consistency checker ensuring unified voice across all deliverables. Expert in maintaining brand standards across large content sets.",
+  "metadata": {
+    "country": "Portugal"
+  }
 }

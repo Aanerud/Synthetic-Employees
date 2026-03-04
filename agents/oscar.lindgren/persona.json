@@ -5,32 +5,31 @@
     "role": "Technical Writer",
     "department": "Creative Writing",
     "job_title": "Technical Writer",
-    "office_location": "London"
+    "office_location": "Stockholm Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Telecom",
     "languages": [
-      "['Swedish (Native)'",
-      "'English (Fluent)']"
+      "Swedish (Native)",
+      "English (Fluent)"
     ],
     "skills": [
-      "['Telecom Documentation'",
-      "'5G Technology'",
-      "'Network Architecture'",
-      "'Protocol Specifications'",
-      "'Infrastructure Guides']"
+      "Telecom Documentation 5G Technology Network Architecture Protocol Specifications Infrastructure Guides"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Stockholm"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Telecommunications technical writer covering 5G and next-generation network technologies. Makes complex protocols understandable.",
+  "metadata": {
+    "country": "Sweden"
+  }
 }

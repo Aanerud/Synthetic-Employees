@@ -5,33 +5,32 @@
     "role": "Key Account Manager",
     "department": "Key Accounts",
     "job_title": "Key Account Manager",
-    "office_location": "London"
+    "office_location": "Vienna Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Education",
     "languages": [
-      "['German (Native)'",
-      "'English (Fluent)'",
-      "'Hungarian (Conversational)']"
+      "German (Native)",
+      "English (Fluent)",
+      "Hungarian (Conversational)"
     ],
     "skills": [
-      "['Education Sector'",
-      "'Academic Publishing'",
-      "'E-Learning Content'",
-      "'Austrian Market'",
-      "'DACH Region Education']"
+      "Education Sector Academic Publishing E-Learning Content Austrian Market DACH Region Education"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 45,
     "response_time_sla_hours": 3,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Vienna"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Education sector specialist working with universities, publishers, and e-learning platforms across the DACH region and Central Europe.",
+  "metadata": {
+    "country": "Austria"
+  }
 }

@@ -5,32 +5,31 @@
     "role": "Academic Writer",
     "department": "Creative Writing",
     "job_title": "Academic Writer",
-    "office_location": "London"
+    "office_location": "Vienna Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Economics",
     "languages": [
-      "['German (Native)'",
-      "'English (Fluent)']"
+      "German (Native)",
+      "English (Fluent)"
     ],
     "skills": [
-      "['Economic Writing'",
-      "'Financial Research'",
-      "'Policy Analysis'",
-      "'Austrian Economics'",
-      "'Quantitative Methods']"
+      "Economic Writing Financial Research Policy Analysis Austrian Economics Quantitative Methods"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Vienna"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Economics writer with strong quantitative background. Translates complex economic models into clear policy recommendations.",
+  "metadata": {
+    "country": "Austria"
+  }
 }

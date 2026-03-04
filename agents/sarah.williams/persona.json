@@ -5,22 +5,18 @@
     "role": "Corporate Writer",
     "department": "Creative Writing",
     "job_title": "Corporate Writer",
-    "office_location": "London"
+    "office_location": "London Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Executive Speeches",
     "languages": [
-      "['English (Native)'",
-      "'French (Conversational)']"
+      "English (Native)",
+      "French (Conversational)"
     ],
     "skills": [
-      "['Speech Writing'",
-      "'Executive Positioning'",
-      "'Thought Leadership'",
-      "'Conference Presentations'",
-      "'Leadership Communications']"
+      "Speech Writing Executive Positioning Thought Leadership Conference Presentations Leadership Communications"
     ]
   },
   "work_preferences": {
@@ -32,5 +28,8 @@
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Executive speechwriter who gives leaders their voice. Creates memorable moments for conferences, investor days, and internal town halls.",
+  "metadata": {
+    "country": "United Kingdom"
+  }
 }

@@ -5,33 +5,32 @@
     "role": "Round Table Coordinator",
     "department": "Round Table Coordination",
     "job_title": "Round Table Coordinator",
-    "office_location": "London"
+    "office_location": "Warsaw Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Technical Reviews",
     "languages": [
-      "['Polish (Native)'",
-      "'English (Fluent)'",
-      "'German (Conversational)']"
+      "Polish (Native)",
+      "English (Fluent)",
+      "German (Conversational)"
     ],
     "skills": [
-      "['Technical Content Review'",
-      "'Accuracy Verification'",
-      "'Expert Consultation'",
-      "'Specialist Coordination'",
-      "'Technical Alignment']"
+      "Technical Content Review Accuracy Verification Expert Consultation Specialist Coordination Technical Alignment"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 45,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Warsaw"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Coordinates technical content reviews. Ensures technical accuracy by bringing together subject matter experts and writers.",
+  "metadata": {
+    "country": "Poland"
+  }
 }

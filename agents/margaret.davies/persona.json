@@ -5,22 +5,18 @@
     "role": "QA Director",
     "department": "Quality Assurance",
     "job_title": "QA Director",
-    "office_location": "London"
+    "office_location": "London Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Standards",
     "languages": [
-      "['English (Native)'",
-      "'French (Professional)']"
+      "English (Native)",
+      "French (Professional)"
     ],
     "skills": [
-      "['Quality Management'",
-      "'Editorial Standards'",
-      "'Process Improvement'",
-      "'Team Leadership'",
-      "'Quality Metrics']"
+      "Quality Management Editorial Standards Process Improvement Team Leadership Quality Metrics"
     ]
   },
   "work_preferences": {
@@ -32,5 +28,8 @@
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Leads Quality Assurance ensuring every piece of content meets TextCraft exacting standards. 20 years in publishing quality control.",
+  "metadata": {
+    "country": "United Kingdom"
+  }
 }

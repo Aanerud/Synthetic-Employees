@@ -5,33 +5,32 @@
     "role": "Literary Writer",
     "department": "Creative Writing",
     "job_title": "Literary Writer",
-    "office_location": "London"
+    "office_location": "Lisbon Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Magical Realism",
     "languages": [
-      "['Portuguese (Native)'",
-      "'English (Fluent)'",
-      "'Spanish (Professional)']"
+      "Portuguese (Native)",
+      "English (Fluent)",
+      "Spanish (Professional)"
     ],
     "skills": [
-      "['Magical Realism'",
-      "'Portuguese Literature'",
-      "'Saudade'",
-      "'Narrative Innovation'",
-      "'Lusophone Tradition']"
+      "Magical Realism Portuguese Literature Saudade Narrative Innovation Lusophone Tradition"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Lisbon"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Magical realism writer in the Lusophone tradition. Brings wonder and poetry to brand storytelling with a distinctly Portuguese sensibility.",
+  "metadata": {
+    "country": "Portugal"
+  }
 }

@@ -5,32 +5,31 @@
     "role": "Round Table Coordinator",
     "department": "Round Table Coordination",
     "job_title": "Round Table Coordinator",
-    "office_location": "London"
+    "office_location": "Dublin Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Final Approvals",
     "languages": [
-      "['English (Native)'",
-      "'Irish (Conversational)']"
+      "English (Native)",
+      "Irish (Conversational)"
     ],
     "skills": [
-      "['Final Review Sessions'",
-      "'Sign-off Coordination'",
-      "'Delivery Preparation'",
-      "'Quality Gates'",
-      "'Client Handover']"
+      "Final Review Sessions Sign-off Coordination Delivery Preparation Quality Gates Client Handover"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 45,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Dublin"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Coordinates final approval sessions. Expert in managing the critical last stage before content delivery to clients.",
+  "metadata": {
+    "country": "Ireland"
+  }
 }

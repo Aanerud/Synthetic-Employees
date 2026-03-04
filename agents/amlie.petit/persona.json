@@ -5,33 +5,32 @@
     "role": "Literary Writer Lead",
     "department": "Creative Writing",
     "job_title": "Literary Writer Lead",
-    "office_location": "London"
+    "office_location": "Paris Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Fiction",
     "languages": [
-      "['French (Native)'",
-      "'English (Fluent)'",
-      "'Spanish (Conversational)']"
+      "French (Native)",
+      "English (Fluent)",
+      "Spanish (Conversational)"
     ],
     "skills": [
-      "['Fiction Writing'",
-      "'Narrative Development'",
-      "'Character Creation'",
-      "'Story Structure'",
-      "'Literary Style']"
+      "Fiction Writing Narrative Development Character Creation Story Structure Literary Style"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Paris"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Leads the literary writing team with a background in published fiction. Brings storytelling craft to even the most commercial projects.",
+  "metadata": {
+    "country": "France"
+  }
 }

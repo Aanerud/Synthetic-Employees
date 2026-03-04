@@ -5,32 +5,31 @@
     "role": "Accountant",
     "department": "Operations",
     "job_title": "Accountant",
-    "office_location": "London"
+    "office_location": "Milan Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Payroll",
     "languages": [
-      "['Italian (Native)'",
-      "'English (Professional)']"
+      "Italian (Native)",
+      "English (Professional)"
     ],
     "skills": [
-      "['Accounting'",
-      "'Payroll'",
-      "'Italian Tax'",
-      "'AP/AR'",
-      "'Financial Compliance']"
+      "Accounting Payroll Italian Tax AP/AR Financial Compliance"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Rome"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Senior accountant managing payroll and accounts across Italian operations. Expert in Italian tax and employment regulations.",
+  "metadata": {
+    "country": "Italy"
+  }
 }

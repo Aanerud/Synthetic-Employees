@@ -79,6 +79,10 @@ class AgentRegistry:
         """Get agent by email address."""
         return self.agents_by_email.get(email)
 
+    def get_by_email(self, email: str) -> Optional[AgentConfig]:
+        """Alias for get_agent_by_email (used by AgencyOrchestrator)."""
+        return self.agents_by_email.get(email)
+
     def get_agents_by_role(self, role: str) -> List[AgentConfig]:
         """Get all agents with a specific role."""
         return self.agents_by_role.get(role, [])

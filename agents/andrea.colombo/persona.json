@@ -5,32 +5,31 @@
     "role": "Proofreader",
     "department": "Quality Assurance",
     "job_title": "Proofreader",
-    "office_location": "London"
+    "office_location": "Milan Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Italian Texts",
     "languages": [
-      "['Italian (Native)'",
-      "'English (Professional)']"
+      "Italian (Native)",
+      "English (Professional)"
     ],
     "skills": [
-      "['Italian Proofreading'",
-      "'Accademia della Crusca'",
-      "'Grammar'",
-      "'Punctuation'",
-      "'Regional Variants']"
+      "Italian Proofreading Accademia della Crusca Grammar Punctuation Regional Variants"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Rome"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Italian proofreader maintaining the beauty of Italian language. Expert in regional variants and formal Italian standards.",
+  "metadata": {
+    "country": "Italy"
+  }
 }

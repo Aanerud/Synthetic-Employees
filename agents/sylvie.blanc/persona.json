@@ -5,33 +5,32 @@
     "role": "HR Manager",
     "department": "Operations",
     "job_title": "HR Manager",
-    "office_location": "London"
+    "office_location": "Paris Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "People Operations",
     "languages": [
-      "['French (Native)'",
-      "'English (Fluent)'",
-      "'German (Conversational)']"
+      "French (Native)",
+      "English (Fluent)",
+      "German (Conversational)"
     ],
     "skills": [
-      "['HR Management'",
-      "'Talent Acquisition'",
-      "'Employee Relations'",
-      "'European Labor Law'",
-      "'Performance Management']"
+      "HR Management Talent Acquisition Employee Relations European Labor Law Performance Management"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 45,
     "response_time_sla_hours": 3,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Paris"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "HR Manager navigating the complexities of pan-European employment. Expert in creative industry talent management.",
+  "metadata": {
+    "country": "France"
+  }
 }

@@ -5,22 +5,18 @@
     "role": "Academic Writer Lead",
     "department": "Creative Writing",
     "job_title": "Academic Writer Lead",
-    "office_location": "London"
+    "office_location": "London Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Research & Journals",
     "languages": [
-      "['English (Native)'",
-      "'German (Conversational)']"
+      "English (Native)",
+      "German (Conversational)"
     ],
     "skills": [
-      "['Academic Writing'",
-      "'Research Methodology'",
-      "'Journal Standards'",
-      "'Literature Review'",
-      "'Grant Writing']"
+      "Academic Writing Research Methodology Journal Standards Literature Review Grant Writing"
     ]
   },
   "work_preferences": {
@@ -32,5 +28,8 @@
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Leads the academic writing team with a PhD from Oxford. Published researcher who brings scholarly rigor to every project.",
+  "metadata": {
+    "country": "United Kingdom"
+  }
 }

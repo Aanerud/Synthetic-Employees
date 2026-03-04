@@ -245,3 +245,91 @@ AFTER UPDATE ON rate_limit_state
 BEGIN
     UPDATE rate_limit_state SET updated_at = CURRENT_TIMESTAMP WHERE agent_email = NEW.agent_email;
 END;
+
+-- =============================================================================
+-- Agent Memory System Tables
+-- =============================================================================
+
+-- Conversation Memory Table
+-- Tracks conversation context across email/Teams threads
+CREATE TABLE IF NOT EXISTS conversation_memory (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    agent_email TEXT NOT NULL,
+    conversation_id TEXT NOT NULL,
+    participants TEXT,  -- JSON array of participant emails
+    context_type TEXT NOT NULL CHECK (context_type IN ('email_thread', 'teams_chat', 'teams_channel', 'project')),
+    summary TEXT,
+    key_points TEXT,  -- JSON array of key points
+    sentiment TEXT CHECK (sentiment IN ('positive', 'neutral', 'negative', 'mixed')),
+    message_count INTEGER DEFAULT 0,
+    last_interaction_at TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(agent_email, conversation_id),
+    FOREIGN KEY (agent_email) REFERENCES agent_state(email)
+);
+
+CREATE INDEX IF NOT EXISTS idx_conversation_memory_agent ON conversation_memory(agent_email);
+CREATE INDEX IF NOT EXISTS idx_conversation_memory_conv ON conversation_memory(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_conversation_memory_last ON conversation_memory(last_interaction_at);
+
+-- Agent Knowledge Table
+-- Stores learned knowledge about people, topics, and preferences
+CREATE TABLE IF NOT EXISTS agent_knowledge (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    agent_email TEXT NOT NULL,
+    knowledge_type TEXT NOT NULL CHECK (knowledge_type IN ('person', 'topic', 'preference', 'project', 'skill')),
+    subject TEXT NOT NULL,
+    content TEXT NOT NULL,
+    confidence REAL DEFAULT 0.5 CHECK (confidence >= 0.0 AND confidence <= 1.0),
+    source TEXT,  -- Where this knowledge came from (email_id, conversation_id, etc.)
+    source_type TEXT CHECK (source_type IN ('email', 'teams', 'observation', 'explicit', 'inferred')),
+    use_count INTEGER DEFAULT 0,
+    last_used_at TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(agent_email, knowledge_type, subject),
+    FOREIGN KEY (agent_email) REFERENCES agent_state(email)
+);
+
+CREATE INDEX IF NOT EXISTS idx_agent_knowledge_agent ON agent_knowledge(agent_email);
+CREATE INDEX IF NOT EXISTS idx_agent_knowledge_type ON agent_knowledge(knowledge_type);
+CREATE INDEX IF NOT EXISTS idx_agent_knowledge_subject ON agent_knowledge(subject);
+
+-- Trigger to update conversation_memory.updated_at
+CREATE TRIGGER IF NOT EXISTS update_conversation_memory_timestamp
+AFTER UPDATE ON conversation_memory
+BEGIN
+    UPDATE conversation_memory SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;
+
+-- Trigger to update agent_knowledge.updated_at
+CREATE TRIGGER IF NOT EXISTS update_agent_knowledge_timestamp
+AFTER UPDATE ON agent_knowledge
+BEGIN
+    UPDATE agent_knowledge SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;
+
+-- =============================================================================
+-- Employee State Table (Agency CLI integration)
+-- =============================================================================
+
+-- Tracks per-employee state for Agency CLI execution cycles
+CREATE TABLE IF NOT EXISTS employee_state (
+    email TEXT PRIMARY KEY,
+    last_check_in TEXT,                          -- ISO timestamp of first check-in today
+    processed_email_ids TEXT DEFAULT '[]',        -- JSON array of recently processed email IDs
+    processed_teams_ids TEXT DEFAULT '[]',        -- JSON array of recently processed Teams message IDs
+    pending_items TEXT DEFAULT '[]',              -- JSON array of items flagged for later
+    consecutive_failures INTEGER DEFAULT 0,
+    circuit_breaker_until TEXT,                   -- ISO timestamp when circuit opens again
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (email) REFERENCES agent_state(email)
+);
+
+-- Trigger to update employee_state.updated_at
+CREATE TRIGGER IF NOT EXISTS update_employee_state_timestamp
+AFTER UPDATE ON employee_state
+BEGIN
+    UPDATE employee_state SET updated_at = CURRENT_TIMESTAMP WHERE email = NEW.email;
+END;

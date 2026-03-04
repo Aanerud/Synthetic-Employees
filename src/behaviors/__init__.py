@@ -1,14 +1,5 @@
 """Behaviors module for agent actions and responses."""
 
-from .agent_loop import (
-    tick_agent,
-    check_inbox,
-    check_calendar,
-    process_email,
-    should_respond_to_email,
-)
-from .rules import behavior_engine
-
 # Pulse system
 from .pulse import PulseEvent, DailyRoutine, PulseExecution
 from .pulse_definitions import get_routine_for_role, ROLE_ROUTINES
@@ -47,13 +38,6 @@ from .communication_channel import (
 )
 
 __all__ = [
-    # Agent loop
-    "tick_agent",
-    "check_inbox",
-    "check_calendar",
-    "process_email",
-    "should_respond_to_email",
-    "behavior_engine",
     # Pulse system
     "PulseEvent",
     "DailyRoutine",

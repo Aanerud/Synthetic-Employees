@@ -260,6 +260,42 @@ def get_email_signature(persona: LoadedPersona) -> str:
     return "\n".join(lines)
 
 
+def to_agency_input_vars(persona: LoadedPersona) -> Dict[str, str]:
+    """Convert a LoadedPersona into Agency CLI --input variable dict.
+
+    Returns a dict of key=value pairs for Agency's Handlebars templates.
+    """
+    # Build Background from custom context
+    background = persona.custom_context.get("background", "")
+    expertise = persona.custom_context.get("expertise", "")
+    relationships_text = persona.custom_context.get("relationships", "")
+    if persona.manager_email:
+        relationships_text += f"\nManager: {persona.manager_email}"
+
+    # Clean up list fields (they may have parsing artifacts from CSV)
+    languages = ", ".join(
+        lang.strip().strip("'\"[]") for lang in persona.languages
+    )
+    skills = ", ".join(
+        skill.strip().strip("'\"[]") for skill in persona.skills
+    )
+
+    return {
+        "Name": persona.name,
+        "Email": persona.email,
+        "JobTitle": persona.job_title,
+        "Department": persona.department,
+        "OfficeLocation": persona.office_location,
+        "Timezone": persona.timezone,
+        "Languages": languages,
+        "WritingStyle": persona.writing_style or "Professional",
+        "CommunicationStyle": persona.communication_style or "Clear and professional",
+        "Background": background or persona.about_me or f"{persona.name} works as {persona.job_title} at TextCraft Europe.",
+        "Expertise": expertise or f"Skills: {skills}" if skills else "",
+        "Relationships": relationships_text,
+    }
+
+
 class PersonaRegistry:
     """Registry for managing loaded personas."""
 

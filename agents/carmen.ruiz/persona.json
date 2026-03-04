@@ -5,33 +5,32 @@
     "role": "Proofreader",
     "department": "Quality Assurance",
     "job_title": "Proofreader",
-    "office_location": "London"
+    "office_location": "Madrid Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Spanish Texts",
     "languages": [
-      "['Spanish (Native)'",
-      "'English (Professional)'",
-      "'Portuguese (Conversational)']"
+      "Spanish (Native)",
+      "English (Professional)",
+      "Portuguese (Conversational)"
     ],
     "skills": [
-      "['Spanish Proofreading'",
-      "'RAE Standards'",
-      "'Castilian Spanish'",
-      "'LATAM Variants'",
-      "'Grammar']"
+      "Spanish Proofreading RAE Standards Castilian Spanish LATAM Variants Grammar"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Madrid"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Spanish proofreader expert in both European and Latin American Spanish variants. Ensures content works across the Spanish-speaking world.",
+  "metadata": {
+    "country": "Spain"
+  }
 }

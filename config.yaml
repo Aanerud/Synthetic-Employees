@@ -1,0 +1,146 @@
+# Synthetic Employees Configuration
+# Central configuration for the Agency CLI-based agent system
+
+instance_name: "TextCraft Europe"
+
+# Agency CLI Settings
+agency:
+  binary_path: "agency"               # Path to agency binary
+  default_backend: "copilot"           # "copilot" (free) or "claude" (premium)
+  premium_backend: "claude"            # Backend for client-facing tasks
+  premium_roles:                       # Roles that get premium backend for external comms
+    - "Key Account Manager"
+    - "Key Account Director"
+    - "CEO"
+    - "Editorial Director"
+  default_timeout: 300                  # seconds per agent invocation (Agency CLI needs time to start)
+  role_timeouts:                       # Override timeouts per role
+    Writer: 180
+    Academic Writer: 180
+    Corporate Writer: 180
+    Technical Writer: 180
+    CEO: 90
+    COO: 90
+    CFO: 90
+    CCO: 90
+  agent_directory: ".github/agents"    # Where agent templates live
+  mcp_servers: []                      # No MCP servers - M365 access via Python MCPClient
+
+# Concurrency Control
+concurrency:
+  max_concurrent: 15                   # Max simultaneous Agency CLI processes
+  circuit_breaker_threshold: 3         # Consecutive failures before cooldown
+  circuit_breaker_cooldown: 3600       # Cooldown duration in seconds (1 hour)
+  debounce_seconds: 300                # Min seconds between same-employee executions
+
+# Scheduling
+scheduling:
+  check_interval_seconds: 60           # Main loop check interval
+  variance_percent: 20                 # Randomization on check intervals (±%)
+  enable_weekends: false
+  cultural_schedules:
+    IT:
+      work_start: "09:00"
+      work_end: "18:00"
+      lunch_start: "12:30"
+      lunch_end: "14:00"
+      timezone: "Europe/Rome"
+    SE:
+      work_start: "08:00"
+      work_end: "16:30"
+      lunch_start: "12:00"
+      lunch_end: "13:00"
+      breaks: ["10:00-10:15", "15:00-15:15"]   # Fika
+      timezone: "Europe/Stockholm"
+    FR:
+      work_start: "09:30"
+      work_end: "18:30"
+      lunch_start: "12:30"
+      lunch_end: "14:00"
+      timezone: "Europe/Paris"
+    DE:
+      work_start: "08:30"
+      work_end: "17:00"
+      lunch_start: "12:00"
+      lunch_end: "13:00"
+      timezone: "Europe/Berlin"
+    ES:
+      work_start: "09:00"
+      work_end: "19:00"
+      lunch_start: "14:00"
+      lunch_end: "16:00"
+      timezone: "Europe/Madrid"
+    PL:
+      work_start: "08:00"
+      work_end: "16:00"
+      lunch_start: "12:00"
+      lunch_end: "12:30"
+      timezone: "Europe/Warsaw"
+    NL:
+      work_start: "08:30"
+      work_end: "17:00"
+      lunch_start: "12:00"
+      lunch_end: "13:00"
+      timezone: "Europe/Amsterdam"
+    BE:
+      work_start: "08:30"
+      work_end: "17:30"
+      lunch_start: "12:00"
+      lunch_end: "13:00"
+      timezone: "Europe/Brussels"
+    PT:
+      work_start: "09:00"
+      work_end: "18:00"
+      lunch_start: "13:00"
+      lunch_end: "14:00"
+      timezone: "Europe/Lisbon"
+    AT:
+      work_start: "08:00"
+      work_end: "16:30"
+      lunch_start: "12:00"
+      lunch_end: "13:00"
+      timezone: "Europe/Vienna"
+    DK:
+      work_start: "08:00"
+      work_end: "16:00"
+      lunch_start: "12:00"
+      lunch_end: "12:30"
+      timezone: "Europe/Copenhagen"
+    IE:
+      work_start: "09:00"
+      work_end: "17:30"
+      lunch_start: "13:00"
+      lunch_end: "14:00"
+      timezone: "Europe/Dublin"
+    CH:
+      work_start: "08:00"
+      work_end: "17:00"
+      lunch_start: "12:00"
+      lunch_end: "13:00"
+      timezone: "Europe/Zurich"
+    GB:
+      work_start: "09:00"
+      work_end: "17:30"
+      lunch_start: "12:30"
+      lunch_end: "13:30"
+      timezone: "Europe/London"
+
+# Rate Limits (per wake-up cycle)
+rate_limits:
+  max_emails_per_cycle: 3
+  max_teams_per_cycle: 5
+  max_calendar_per_cycle: 2
+
+# Database
+database:
+  path: "data/synthetic_employees.db"
+
+# Logging
+logging:
+  level: "INFO"
+  file: "logs/agents.log"
+
+# Authentication
+auth:
+  mcp_server_url: "https://mcp.nstop.no"
+  agents_config: "config/agents.json"

@@ -5,34 +5,33 @@
     "role": "Key Account Manager",
     "department": "Key Accounts",
     "job_title": "Key Account Manager",
-    "office_location": "London"
+    "office_location": "Brussels Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Government",
     "languages": [
-      "['French (Native)'",
-      "'Dutch (Fluent)'",
-      "'English (Fluent)'",
-      "'German (Conversational)']"
+      "French (Native)",
+      "Dutch (Fluent)",
+      "English (Fluent)",
+      "German (Conversational)"
     ],
     "skills": [
-      "['EU Institutions'",
-      "'Public Sector Communications'",
-      "'Policy Writing'",
-      "'Multilingual Projects'",
-      "'Tender Documentation']"
+      "EU Institutions Public Sector Communications Policy Writing Multilingual Projects Tender Documentation"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 45,
     "response_time_sla_hours": 3,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Brussels"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Government and EU institutions specialist based in the heart of Europe. Expert in navigating multilingual, multi-stakeholder public sector communications.",
+  "metadata": {
+    "country": "Belgium"
+  }
 }

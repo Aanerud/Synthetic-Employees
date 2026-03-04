@@ -1,56 +1,88 @@
 """API router for agent management."""
 
+import csv
 from datetime import datetime
-from typing import List, Optional
+from pathlib import Path
+from typing import Dict, List, Optional
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 
-from ...orchestration import get_process_manager
-from ...database import get_db
+from ...database.db_service import get_db
 from ...agents.persona_loader import PersonaRegistry
+from ...scheduler.cultural_schedules import get_cultural_schedule, COUNTRY_NAME_TO_CODE
 
 
 router = APIRouter()
 
+# Cached data (loaded once per request cycle)
+_csv_countries: Optional[Dict[str, str]] = None
 
-# Pydantic models for API
+
+def _get_csv_countries() -> Dict[str, str]:
+    global _csv_countries
+    if _csv_countries is None:
+        _csv_countries = {}
+        csv_path = Path("textcraft-europe.csv")
+        if csv_path.exists():
+            with open(csv_path, encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    email = row.get("email", "").lower()
+                    country = row.get("country", "")
+                    if email and country:
+                        _csv_countries[email] = country
+    return _csv_countries
+
+
+def _get_country_for(email: str) -> str:
+    return _get_csv_countries().get(email.lower(), "United Kingdom")
+
+
+def _get_local_time(email: str) -> str:
+    country = _get_country_for(email)
+    code = COUNTRY_NAME_TO_CODE.get(country, "GB")
+    sched = get_cultural_schedule(usage_location=code)
+    try:
+        return datetime.now(ZoneInfo(sched.timezone)).strftime("%H:%M")
+    except Exception:
+        return "??:??"
+
+
+def _get_flag(country: str) -> str:
+    flags = {
+        "Italy": "🇮🇹", "Sweden": "🇸🇪", "France": "🇫🇷", "Germany": "🇩🇪",
+        "Spain": "🇪🇸", "Poland": "🇵🇱", "Netherlands": "🇳🇱", "Belgium": "🇧🇪",
+        "Portugal": "🇵🇹", "Austria": "🇦🇹", "Denmark": "🇩🇰", "Ireland": "🇮🇪",
+        "Switzerland": "🇨🇭", "United Kingdom": "🇬🇧",
+    }
+    return flags.get(country, "🏳️")
+
+
 class AgentSummary(BaseModel):
-    """Summary of an agent's status."""
-
     email: str
     name: str
     role: str
     department: str
     status: str
+    country: str = ""
+    flag: str = ""
+    local_time: str = ""
     last_tick_at: Optional[str] = None
-    next_tick_at: Optional[str] = None
-    error_count: int = 0
-
-
-class AgentDetail(BaseModel):
-    """Detailed agent information."""
-
-    email: str
-    name: str
-    role: str
-    department: str
-    job_title: str
-    office_location: str
-    status: str
-    last_tick_at: Optional[str] = None
-    next_tick_at: Optional[str] = None
     error_count: int = 0
     last_error: Optional[str] = None
-    writing_style: str
-    communication_style: str
-    timezone: str
+
+
+class AgentDetail(AgentSummary):
+    job_title: str = ""
+    office_location: str = ""
+    writing_style: str = ""
+    communication_style: str = ""
+    timezone: str = ""
     manager_email: Optional[str] = None
 
 
 class ActivityLogEntry(BaseModel):
-    """Activity log entry."""
-
     id: int
     action_type: str
     action_data: Optional[dict] = None
@@ -59,110 +91,87 @@ class ActivityLogEntry(BaseModel):
     timestamp: str
 
 
-class ActionResponse(BaseModel):
-    """Response for agent actions."""
-
-    success: bool
-    message: str
-    agent_email: str
+# ── ROUTES (order matters: specific routes BEFORE catch-all) ──
 
 
-class BulkActionResponse(BaseModel):
-    """Response for bulk agent actions."""
-
-    success: bool
-    results: dict
-
-
-@router.get("", response_model=List[AgentSummary])
-async def list_agents(
-    department: Optional[str] = Query(None, description="Filter by department"),
-    status: Optional[str] = Query(None, description="Filter by status"),
-    role: Optional[str] = Query(None, description="Filter by role"),
-):
-    """
-    List all agents with their current status.
-
-    Optional filters: department, status, role
-    """
+@router.get("/stats/summary")
+async def get_stats():
     db = get_db()
-    persona_registry = PersonaRegistry()
-    persona_registry.load_all()
+    reg = PersonaRegistry()
+    reg.load_all()
+    states = db.get_all_agent_states()
 
-    agents = []
-    for persona in persona_registry.list_all():
-        # Apply filters
-        if department and persona.department.lower() != department.lower():
-            continue
-        if role and role.lower() not in persona.role.lower():
-            continue
+    status_counts = {"running": 0, "stopped": 0, "error": 0}
+    for s in states:
+        if s.status == "error":
+            status_counts["error"] += 1
+        elif s.status == "running":
+            status_counts["running"] += 1
 
-        # Get state from DB
-        state = db.get_agent_state(persona.email)
-        agent_status = state.status if state else "stopped"
+    status_counts["stopped"] += len(reg) - len(states)
 
-        if status and agent_status != status:
-            continue
+    # Country breakdown
+    countries = {}
+    for p in reg.list_all():
+        c = _get_country_for(p.email)
+        countries[c] = countries.get(c, 0) + 1
 
-        agents.append(
-            AgentSummary(
-                email=persona.email,
-                name=persona.name,
-                role=persona.role,
-                department=persona.department,
-                status=agent_status,
-                last_tick_at=state.last_tick_at.isoformat() if state and state.last_tick_at else None,
-                next_tick_at=state.next_tick_at.isoformat() if state and state.next_tick_at else None,
-                error_count=state.error_count if state else 0,
-            )
-        )
-
-    return agents
+    return {
+        "total_agents": len(reg),
+        "status_counts": status_counts,
+        "countries": countries,
+        "departments": sorted(set(p.department for p in reg.list_all())),
+    }
 
 
-@router.get("/{email:path}", response_model=AgentDetail)
-async def get_agent(email: str):
-    """Get detailed information about a specific agent."""
+@router.get("/feed")
+async def get_activity_feed(limit: int = Query(30, ge=1, le=100)):
+    """Recent activity across ALL agents for the live feed."""
     db = get_db()
-    persona_registry = PersonaRegistry()
-    persona_registry.load_all()
+    reg = PersonaRegistry()
+    reg.load_all()
 
-    persona = persona_registry.get_by_email(email)
-    if not persona:
-        raise HTTPException(status_code=404, detail=f"Agent not found: {email}")
+    entries = db.get_activity_log(limit=limit)
+    name_map = {p.email: p.name for p in reg.list_all()}
 
-    state = db.get_agent_state(email)
+    feed = []
+    for e in entries:
+        name = name_map.get(e.agent_email, e.agent_email.split("@")[0])
+        # Build human-readable description
+        desc = e.action_type
+        if e.action_data:
+            actions = e.action_data.get("actions_taken", [])
+            if actions:
+                types = [a.get("type", "") for a in actions]
+                email_count = sum(1 for t in types if t in ("send_email", "reply_email"))
+                if email_count:
+                    desc = f"Sent {email_count} email{'s' if email_count > 1 else ''}"
+                elif "no_action" in types:
+                    desc = "Checked inbox (no action needed)"
+                else:
+                    desc = ", ".join(t.replace("_", " ") for t in types[:3])
 
-    return AgentDetail(
-        email=persona.email,
-        name=persona.name,
-        role=persona.role,
-        department=persona.department,
-        job_title=persona.job_title,
-        office_location=persona.office_location,
-        status=state.status if state else "stopped",
-        last_tick_at=state.last_tick_at.isoformat() if state and state.last_tick_at else None,
-        next_tick_at=state.next_tick_at.isoformat() if state and state.next_tick_at else None,
-        error_count=state.error_count if state else 0,
-        last_error=state.last_error if state else None,
-        writing_style=persona.writing_style,
-        communication_style=persona.communication_style,
-        timezone=persona.timezone,
-        manager_email=persona.manager_email,
-    )
+        feed.append({
+            "id": e.id,
+            "name": name,
+            "email": e.agent_email,
+            "action": desc,
+            "result": e.result,
+            "error": e.error_message,
+            "timestamp": e.timestamp.isoformat(),
+        })
+
+    return feed
 
 
-@router.get("/{email:path}/activity", response_model=List[ActivityLogEntry])
+@router.get("/by-email/{email}/activity", response_model=List[ActivityLogEntry])
 async def get_agent_activity(
     email: str,
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
 ):
-    """Get activity log for a specific agent."""
     db = get_db()
-
     entries = db.get_activity_log(agent_email=email, limit=limit, offset=offset)
-
     return [
         ActivityLogEntry(
             id=e.id,
@@ -176,130 +185,76 @@ async def get_agent_activity(
     ]
 
 
-@router.post("/{email:path}/start", response_model=ActionResponse)
-async def start_agent(email: str):
-    """Start a specific agent."""
-    manager = get_process_manager()
+@router.get("/by-email/{email}", response_model=AgentDetail)
+async def get_agent(email: str):
+    db = get_db()
+    reg = PersonaRegistry()
+    reg.load_all()
 
-    # Verify agent exists
-    persona_registry = PersonaRegistry()
-    persona_registry.load_all()
-    if not persona_registry.get_by_email(email):
+    persona = reg.get_by_email(email)
+    if not persona:
         raise HTTPException(status_code=404, detail=f"Agent not found: {email}")
 
-    success = manager.start_agent(email)
+    state = db.get_agent_state(email)
+    country = _get_country_for(email)
 
-    return ActionResponse(
-        success=success,
-        message="Agent started" if success else "Failed to start agent",
-        agent_email=email,
+    return AgentDetail(
+        email=persona.email,
+        name=persona.name,
+        role=persona.role,
+        department=persona.department,
+        job_title=persona.job_title,
+        office_location=persona.office_location,
+        status=state.status if state else "stopped",
+        country=country,
+        flag=_get_flag(country),
+        local_time=_get_local_time(email),
+        last_tick_at=state.last_tick_at.isoformat() if state and state.last_tick_at else None,
+        error_count=state.error_count if state else 0,
+        last_error=state.last_error if state else None,
+        writing_style=persona.writing_style,
+        communication_style=persona.communication_style,
+        timezone=persona.timezone,
+        manager_email=persona.manager_email,
     )
 
 
-@router.post("/{email:path}/stop", response_model=ActionResponse)
-async def stop_agent(email: str):
-    """Stop a specific agent."""
-    manager = get_process_manager()
-    success = manager.stop_agent(email)
-
-    return ActionResponse(
-        success=success,
-        message="Agent stopped" if success else "Failed to stop agent",
-        agent_email=email,
-    )
+# ── CATCH-ALL list route (must be LAST) ──
 
 
-@router.post("/{email:path}/pause", response_model=ActionResponse)
-async def pause_agent(email: str):
-    """Pause a specific agent."""
-    manager = get_process_manager()
-    success = manager.pause_agent(email)
-
-    return ActionResponse(
-        success=success,
-        message="Agent paused" if success else "Failed to pause agent",
-        agent_email=email,
-    )
-
-
-@router.post("/{email:path}/resume", response_model=ActionResponse)
-async def resume_agent(email: str):
-    """Resume a paused agent."""
-    manager = get_process_manager()
-    success = manager.resume_agent(email)
-
-    return ActionResponse(
-        success=success,
-        message="Agent resumed" if success else "Failed to resume agent",
-        agent_email=email,
-    )
-
-
-@router.post("/start-all", response_model=BulkActionResponse)
-async def start_all_agents():
-    """Start all agents."""
-    manager = get_process_manager()
-    persona_registry = PersonaRegistry()
-    persona_registry.load_all()
-
-    emails = persona_registry.get_emails()
-    results = manager.start_all(emails)
-
-    success_count = sum(1 for v in results.values() if v)
-
-    return BulkActionResponse(
-        success=success_count > 0,
-        results={
-            "started": success_count,
-            "failed": len(results) - success_count,
-            "total": len(results),
-            "details": results,
-        },
-    )
-
-
-@router.post("/stop-all", response_model=BulkActionResponse)
-async def stop_all_agents():
-    """Stop all agents."""
-    manager = get_process_manager()
-    results = manager.stop_all()
-
-    success_count = sum(1 for v in results.values() if v)
-
-    return BulkActionResponse(
-        success=True,
-        results={
-            "stopped": success_count,
-            "failed": len(results) - success_count,
-            "total": len(results),
-            "details": results,
-        },
-    )
-
-
-@router.get("/stats/summary")
-async def get_stats():
-    """Get summary statistics."""
+@router.get("", response_model=List[AgentSummary])
+async def list_agents(
+    department: Optional[str] = Query(None),
+    status: Optional[str] = Query(None),
+):
     db = get_db()
-    persona_registry = PersonaRegistry()
-    persona_registry.load_all()
+    reg = PersonaRegistry()
+    reg.load_all()
 
-    states = db.get_all_agent_states()
+    agents = []
+    for persona in sorted(reg.list_all(), key=lambda p: p.name):
+        state = db.get_agent_state(persona.email)
+        agent_status = state.status if state else "stopped"
 
-    status_counts = {"running": 0, "paused": 0, "stopped": 0, "error": 0}
-    for state in states:
-        if state.status in status_counts:
-            status_counts[state.status] += 1
+        if department and persona.department.lower() != department.lower():
+            continue
+        if status and agent_status != status:
+            continue
 
-    # Count agents without state as stopped
-    total_personas = len(persona_registry)
-    tracked_count = len(states)
-    status_counts["stopped"] += total_personas - tracked_count
+        country = _get_country_for(persona.email)
 
-    return {
-        "total_agents": total_personas,
-        "status_counts": status_counts,
-        "departments": list(
-            set(p.department for p in persona_registry.list_all())
-        ),
-    }
+        agents.append(AgentSummary(
+            email=persona.email,
+            name=persona.name,
+            role=persona.role,
+            department=persona.department,
+            status=agent_status,
+            country=country,
+            flag=_get_flag(country),
+            local_time=_get_local_time(persona.email),
+            last_tick_at=state.last_tick_at.isoformat() if state and state.last_tick_at else None,
+            error_count=state.error_count if state else 0,
+            last_error=state.last_error if state else None,
+        ))
+
+    return agents

@@ -5,33 +5,32 @@
     "role": "Academic Writer",
     "department": "Creative Writing",
     "job_title": "Academic Writer",
-    "office_location": "London"
+    "office_location": "Dublin Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Literature Review",
     "languages": [
-      "['English (Native)'",
-      "'Irish (Conversational)'",
-      "'French (Conversational)']"
+      "English (Native)",
+      "Irish (Conversational)",
+      "French (Conversational)"
     ],
     "skills": [
-      "['Literature Reviews'",
-      "'Systematic Reviews'",
-      "'Meta-Analysis'",
-      "'Research Synthesis'",
-      "'Academic Databases']"
+      "Literature Reviews Systematic Reviews Meta-Analysis Research Synthesis Academic Databases"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Dublin"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Literature review specialist who excels at synthesizing vast bodies of research into coherent narratives. Expert in systematic review methodologies.",
+  "metadata": {
+    "country": "Ireland"
+  }
 }

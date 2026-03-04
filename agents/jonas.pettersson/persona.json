@@ -5,32 +5,31 @@
     "role": "Fact Checker",
     "department": "Quality Assurance",
     "job_title": "Fact Checker",
-    "office_location": "London"
+    "office_location": "Stockholm Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Academic Verification",
     "languages": [
-      "['Swedish (Native)'",
-      "'English (Fluent)']"
+      "Swedish (Native)",
+      "English (Fluent)"
     ],
     "skills": [
-      "['Academic Fact Checking'",
-      "'Citation Verification'",
-      "'Statistical Review'",
-      "'Scientific Claims'",
-      "'Source Credibility']"
+      "Academic Fact Checking Citation Verification Statistical Review Scientific Claims Source Credibility"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Stockholm"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Academic content fact checker verifying research claims and citations. Ensures scientific accuracy in academic writing.",
+  "metadata": {
+    "country": "Sweden"
+  }
 }

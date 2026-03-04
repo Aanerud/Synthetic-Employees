@@ -5,33 +5,32 @@
     "role": "Corporate Writer",
     "department": "Creative Writing",
     "job_title": "Corporate Writer",
-    "office_location": "London"
+    "office_location": "Copenhagen Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Internal Communications",
     "languages": [
-      "['Danish (Native)'",
-      "'English (Fluent)'",
-      "'Swedish (Professional)']"
+      "Danish (Native)",
+      "English (Fluent)",
+      "Swedish (Professional)"
     ],
     "skills": [
-      "['Internal Communications'",
-      "'Employee Engagement'",
-      "'Change Management'",
-      "'Nordic Corporate Culture'",
-      "'Intranet Content']"
+      "Internal Communications Employee Engagement Change Management Nordic Corporate Culture Intranet Content"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Copenhagen"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Internal communications specialist who brings the human touch to corporate messaging. Expert in employee engagement during change.",
+  "metadata": {
+    "country": "Denmark"
+  }
 }

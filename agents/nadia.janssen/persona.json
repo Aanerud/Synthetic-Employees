@@ -5,33 +5,32 @@
     "role": "Marketing Copywriter",
     "department": "Creative Writing",
     "job_title": "Marketing Copywriter",
-    "office_location": "London"
+    "office_location": "Brussels Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Social Media",
     "languages": [
-      "['French (Native)'",
-      "'Dutch (Fluent)'",
-      "'English (Fluent)']"
+      "French (Native)",
+      "Dutch (Fluent)",
+      "English (Fluent)"
     ],
     "skills": [
-      "['Social Media Copy'",
-      "'Community Management'",
-      "'Platform-Native Content'",
-      "'Viral Content'",
-      "'Influencer Briefs']"
+      "Social Media Copy Community Management Platform-Native Content Viral Content Influencer Briefs"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Brussels"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Social media copywriter who understands each platform unique language. Creates thumb-stopping content that sparks engagement.",
+  "metadata": {
+    "country": "Belgium"
+  }
 }

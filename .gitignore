@@ -80,3 +80,25 @@ tmp/
 temp/
 *.tmp
 .cache/
+
+# Claude Code (keep docs and CLAUDE.md, ignore settings)
+.claude/*
+!.claude/docs/
+!.claude/CLAUDE.md
+
+# MCP
+.mcp/
+
+# macOS
+.DS_Store
+*.DS_Store
+
+# Data files (may contain sensitive info)
+# Note: textcraft-europe.csv is intentionally tracked (synthetic test data)
+
+# Local test files (root level)
+test_*.py
+!tests/test_*.py
+
+# FHL submissions (personal, not repo content)
+FHL-*.md

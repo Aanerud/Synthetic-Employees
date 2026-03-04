@@ -1,244 +1,227 @@
 # Synthetic Employees
 
-Multi-agent orchestration system that simulates 10-20 AI employees working in Microsoft 365, powered by CrewAI and Claude.
+**AI agents that work in Microsoft 365 like real people.**
 
-## True Purpose
+---
 
-> **This is a Shadow M365 Tenant for E+D testing.**
+## The Problem
 
-While this project simulates a company with 95 AI employees, its **primary purpose** is:
+Test tenants have users but no behavior. Part 1 of this project populated a tenant with 95 realistic profiles. Part 2 gave those profiles an MCP server with 78 tools. But profiles and tools alone produce no signals. Nobody sends email. Nobody schedules meetings. Nobody collaborates.
 
-1. **People Search Testing** - Generate realistic people data and relationships
-2. **Copilot Testing** - Create authentic content for Copilot scenarios
-3. **Signal Measurement** - Produce measurable M365 activity patterns
+People Search, Copilot, and the M365 signal pipeline need traffic. Not synthetic data injected into a database, but genuine Graph API operations from real user accounts that flow through the same pipeline production traffic uses.
 
-### The Signal Generation Cycle
+## The Outcome
+
+Synthetic Employees makes the test tenant behave like a real company. Each of the 95 employees:
+
+- Checks their inbox on a schedule that matches their country and role
+- Reads emails, decides how to respond, and sends replies
+- Accepts or declines meeting invitations
+- Delegates work to colleagues when a client request arrives
+- Remembers what they have done and what remains unfinished
+
+Every action produces a real M365 signal. The system generates the traffic that People Search, Copilot, and signal measurement depend on.
+
+## How It Works
 
 ```
-User -> Email to KAM -> Project Created -> Tasks Delegated -> Team Collaborates
-                                                              |
-                              <- Deliverable <- Review <- Documents Created
-                                                              |
-                                              All activity = M365 signals
+Pre-tick:   Python fetches Victoria's inbox via MCP (her own auth token)
+                ↓
+Brain:      agency copilot thinks as Victoria (free via Copilot subscription)
+                ↓
+Post-tick:  Python executes Victoria's decisions via MCP (send email, accept meeting)
 ```
 
-Every action (emails, documents, shares, Teams messages) creates signals that E+D can measure and analyze.
+The LLM never touches Microsoft 365 directly. Python handles authentication and execution. The LLM handles reasoning. Each employee authenticates with their own token through the [MCP Microsoft Office](https://github.com/Aanerud/MCP-Microsoft-Office) adapter, which calls the Graph API.
 
-## Overview
+### The Three-Part System
 
-This project creates realistic workplace simulations where AI agents:
-- Check and respond to emails
-- Schedule and attend meetings
-- Collaborate on projects
-- Follow role-based behavior patterns
-- Operate during work hours (9am-5pm, weekdays)
+| Part | Project | Purpose |
+|------|---------|---------|
+| 1 | [M365-Agent-Provisioning](https://github.com/Aanerud/M365-Agent-Provisioning) | Populate the tenant: 95 users, rich profiles, all 13 people data labels |
+| 2 | [MCP Microsoft Office](https://github.com/Aanerud/MCP-Microsoft-Office) | Give agents tools: 78 Graph API operations via MCP protocol |
+| **3** | **Synthetic Employees** (this project) | **Give agents agency: schedule, think, act, remember** |
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  Synthetic Employees (Python + CrewAI)                 │
-│  ┌───────────┐  ┌───────────┐  ┌───────────┐          │
-│  │  Agent 1  │  │  Agent 2  │  │  Agent N  │          │
-│  │   (CEO)   │  │   (Dev)   │  │   (PM)    │          │
-│  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘          │
-│        │              │              │                  │
-│        └──────────────┴──────────────┘                  │
-│                       │                                 │
-│            ┌──────────▼──────────┐                      │
-│            │   MCP Client        │                      │
-│            │ (HTTP → mcp.nstop.no)│                      │
-│            └──────────┬──────────┘                      │
-└───────────────────────┼──────────────────────────────────┘
-                        │ Bearer Token Auth
-                        ▼
-┌─────────────────────────────────────────────────────────┐
-│  MCP Server (mcp.nstop.no)                              │
-│  → Microsoft Graph API → Microsoft 365                  │
-└─────────────────────────────────────────────────────────┘
+config.yaml
+     │
+  main.py ──▶ EmployeeScheduler (per-employee, timezone-aware)
+     │              │
+     │         ConcurrencyManager (max 15 concurrent, circuit breaker)
+     │              │
+     │         TaskSelector (morning routine / inbox / proactive / end of day)
+     │              │
+     │         ┌────┴─────────────────────────────┐
+     │         │                                   │
+     │    DataFetcher                         ContextAssembler
+     │    (MCP stdio → real inbox)            (DB → memory context)
+     │         │                                   │
+     │         └────────────┬──────────────────────┘
+     │                      │
+     │              AgencyCliRunner
+     │              (agency copilot --agent employee-<role>)
+     │                      │
+     │              ActionExecutor
+     │              (MCP stdio → send email, accept meeting)
+     │                      │
+     │              ResultParser → DB (activity log, memory, state)
 ```
 
-## Features
+### Per-Employee Scheduling
 
-- **Role-based behavior**: Each agent has unique responsibilities and communication patterns
-- **Work hours simulation**: Agents only active 9am-5pm on weekdays
-- **Rule-based + LLM hybrid**: Fast rule-based decisions with LLM fallback for complex scenarios
-- **MCP integration**: Secure access to Microsoft 365 via bearer tokens
-- **Scenario support**: Pre-built scenarios for testing (team meetings, email threads, etc.)
+Each employee runs on their own clock. An Italian editor starts at 09:00 CET with a long lunch at 12:30. A Swedish developer starts at 08:00 CET with fika breaks. A Spanish writer observes the afternoon gap. Fourteen European countries, each with distinct work patterns.
+
+### Agent Templates
+
+Eight role-specific templates in `.github/agents/` define how each employee thinks. A KAM reads a client email and delegates to writers. An editor reviews submissions and provides feedback. A proofreader catches errors and returns corrections. Each template includes:
+
+- Identity and persona (injected at runtime from persona files)
+- Inbox and calendar data (fetched live from M365 before each tick)
+- A constitution: ten rules that govern behavior
+- A JSON output format that maps decisions to executable actions
+
+### Memory
+
+Agents remember across ticks. The database tracks:
+
+- What emails they processed (to avoid re-reading)
+- What items they flagged for follow-up
+- What they know about colleagues and projects
+- What actions they took last cycle
+
+Each tick injects this context into the prompt, so the agent picks up where it left off.
 
 ## Quick Start
 
 ### Prerequisites
 
 - Python 3.10+
-- An M365 tenant with provisioned synthetic users
-- MCP server for Microsoft 365 access (see [MCP-Microsoft-Office](https://github.com/Aanerud/MCP-Microsoft-Office))
-- (Optional) Anthropic API key for Claude-powered behaviors
+- [MCP Microsoft Office](https://github.com/Aanerud/MCP-Microsoft-Office) server running at localhost:3000
+- [Agency CLI](https://aka.ms/agency) installed (`agency copilot` in PATH)
+- An M365 test tenant with provisioned users (Part 1)
 
-### Installation
+### Install
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/microsoft/Synthetic-Employees.git
+git clone <repo-url>
 cd Synthetic-Employees
-
-# 2. Create virtual environment
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# 3. Install dependencies
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-# 4. Configure agents
-# Copy the example and add your agent credentials
-cp config/agents.json.example config/agents.json
-# Edit config/agents.json with your M365 user details
-
-# 5. Configure environment
-cp .env.example .env
-# Edit .env with your MCP server URL and API keys
-
-# 6. Start the simulation
-python -m src.main start
-
-# 7. Monitor agents
-python -m src.main status
+cp .env.example .env        # Add your Azure AD credentials
+cp config/agents.json.example config/agents.json  # Add employee entries
 ```
 
-### Agent Configuration
+### Run
 
-The `config/agents.json` file contains your synthetic employee credentials. You can:
-- Manually create entries for each M365 user
-- Import from the included `textcraft-europe.csv` file using the CSV importer
+```bash
+# Dry run (no real actions)
+python -m src.main start --dry-run --duration 5m
 
-**Important**: Never commit `config/agents.json` - it contains credentials. The file is in `.gitignore`.
+# Single employee
+python -m src.main start --agents victoria.palmer@<tenant>.onmicrosoft.com
 
-### MCP Server Setup
+# All employees
+python -m src.main start
 
-This project requires an MCP server for Microsoft 365 access. Options:
+# Test MCP connectivity
+python -m src.main test-mcp
+```
 
-1. **Use the public MCP server**: Configure `MCP_SERVER_URL=https://mcp.nstop.no` in `.env`
-2. **Self-host**: Deploy [MCP-Microsoft-Office](https://github.com/Aanerud/MCP-Microsoft-Office)
+### Test
 
-## Documentation
+The test suite has three layers. Start with offline, then online, then scenario.
 
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)**: System design and agent behavior
-- **[SETUP.md](./SETUP.md)**: Installation and configuration
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)**: Running and monitoring agents
-- **[SCENARIOS.md](./SCENARIOS.md)**: Example scenarios to run
+```bash
+# 1. Offline tests (no server, no tokens, no internet)
+#    Validates scheduling, concurrency, task selection, JSON parsing,
+#    DB operations, and the full pipeline assembly.
+#    Expected: 11/11 passed
+python tests/test_agency_v2.py
+
+# 2. Online tests (requires MCP server at localhost:3000 + .env credentials)
+#    Authenticates as Victoria Palmer, reads real inbox, sends real email,
+#    verifies DataFetcher and ActionExecutor against live Graph API.
+#    Expected: 18/18 passed (11 offline + 7 online)
+python tests/test_agency_v2.py --online
+
+# 3. Multi-agent scenario (requires MCP server + .env)
+#    Victoria sends a project request to Anna (KAM).
+#    Anna's agent reads inbox and decides actions.
+#    Francois's agent reads inbox and responds.
+#    Three modes:
+python tests/test_scenario_e2e.py --dry-run        # Auth + fetch only
+python tests/test_scenario_e2e.py --skip-agency     # Full MCP, mock brain
+python tests/test_scenario_e2e.py                   # Full: Agency CLI + MCP
+
+# Other unit tests (pytest)
+pytest tests/test_communication_channel.py -v       # 18 tests
+pytest tests/test_rate_limiting.py -v               # 18 tests
+python tests/test_npc_lifecycle.py                  # Pulse, projects, KAM
+```
+
+If offline tests pass but online tests fail, check:
+- Is the MCP server running? (`curl http://localhost:3000`)
+- Is `.env` configured with valid Azure AD credentials?
+- Are you rate-limited? (The token exchange allows 20 requests per 15 minutes)
 
 ## Project Structure
 
 ```
 Synthetic-Employees/
+├── .github/agents/              8 role-specific agent templates
+├── config.yaml                  Central configuration (schedules, concurrency, rate limits)
+├── agents/                      95 persona folders (persona.json, background.md, etc.)
 ├── src/
-│   ├── main.py                 # CLI entry point
-│   ├── agents/
-│   │   ├── agent_registry.py   # Agent loading and management
-│   │   └── roles.py            # Role definitions and behaviors
-│   ├── crew/
-│   │   └── crew_config.py      # CrewAI configuration
-│   ├── mcp_client/
-│   │   └── client.py           # MCP HTTP client
+│   ├── main.py                  CLI entry point and async orchestrator
+│   ├── agency/
+│   │   ├── cli_runner.py        Agency CLI subprocess wrapper
+│   │   ├── data_fetcher.py      Pre-tick: fetch inbox/calendar via MCP
+│   │   ├── action_executor.py   Post-tick: execute JSON actions via MCP
+│   │   └── result_parser.py     Parse output, update DB
 │   ├── scheduler/
-│   │   └── scheduler.py        # Work hours and tick scheduler
+│   │   ├── employee_scheduler.py   Per-employee timezone-aware scheduling
+│   │   └── cultural_schedules.py   14 European country work patterns
+│   ├── concurrency/
+│   │   └── manager.py           Semaphore, priority queue, circuit breaker
+│   ├── tasks/
+│   │   ├── task_selector.py     Pick the right task for each wake-up
+│   │   └── task_types.py        Task definitions and instructions
+│   ├── memory/
+│   │   └── context_assembler.py Build prompt context from DB
+│   ├── mcp_client/
+│   │   ├── client.py            HTTP MCP client
+│   │   └── stdio_client.py      Stdio MCP client (real Graph API)
+│   ├── auth/
+│   │   ├── token_manager.py     MSAL ROPC authentication
+│   │   └── mcp_token_manager.py Graph token → MCP JWT exchange
+│   ├── database/
+│   │   ├── schema.sql           SQLite schema
+│   │   └── db_service.py        Database operations
 │   └── behaviors/
-│       └── rules.py            # Rule-based behavior engine
-├── config/
-│   └── agents.json             # Agent configuration (from Project 1)
-└── data/
-    └── agent_state.db          # SQLite state database
+│       ├── pulse.py             Scheduled behavior system
+│       ├── pulse_definitions.py Role-specific daily routines
+│       ├── communication_channel.py  Email vs Teams selection
+│       └── rate_limiter.py      Human-like rate limiting
+├── tests/
+│   ├── test_agency_v2.py        Main suite: 11 offline + 7 online tests
+│   ├── test_scenario_e2e.py     Multi-agent interaction scenario
+│   ├── test_communication_channel.py
+│   ├── test_rate_limiting.py
+│   └── test_npc_lifecycle.py
+└── textcraft-europe.csv         95 employee seed data
 ```
 
-## Example Usage
+## Related Projects
 
-### Run a Morning Routine
-
-```bash
-# All agents check email at 9am
-python -m src.main scenario morning-routine
-```
-
-### Simulate a Team Meeting
-
-```bash
-# CEO schedules meeting, team responds
-python -m src.main scenario team-meeting --participants "sarah.chen,david.kim,emily.johnson"
-```
-
-### Continuous Simulation
-
-```bash
-# Run agents continuously during work hours
-python -m src.main start --duration 8h
-```
-
-## Agent Behavior
-
-Each agent follows a behavior pattern based on their role:
-
-### CEO (Sarah Chen)
-- Checks email every 30 minutes
-- Schedules weekly team meetings
-- Responds to high-priority emails within 1 hour
-- Delegates tasks to department heads
-
-### Developers (David, Lisa, James)
-- Check email every hour
-- Respond to code review requests
-- Participate in standups
-- Update project status
-
-### Product Manager (Emily)
-- Reviews feature requests
-- Coordinates with engineering
-- Schedules planning meetings
-- Tracks project milestones
-
-## Monitoring
-
-View real-time agent activity:
-
-```bash
-# Show current status
-python -m src.main status
-
-# Show activity log
-python -m src.main logs --tail 50
-
-# Show statistics
-python -m src.main stats
-```
-
-## Requirements
-
-- Python 3.10+
-- M365 tenant with synthetic users provisioned
-- MCP server access ([MCP-Microsoft-Office](https://github.com/Aanerud/MCP-Microsoft-Office))
-- (Optional) Anthropic API key for Claude-powered advanced behaviors
-
-## Technology Stack
-
-- **CrewAI**: Multi-agent orchestration framework
-- **Python 3.10+**: Runtime environment
-- **SQLite**: Agent state persistence
-- **Schedule**: Work hours simulation
-- **Anthropic Claude**: LLM for complex decision-making (optional)
-
-## Contributing
-
-This is a simulation framework designed to be extended:
-
-1. Add new roles in `src/agents/roles.py`
-2. Create custom scenarios in `SCENARIOS.md`
-3. Extend behavior rules in `src/behaviors/rules.py`
-4. Add new MCP tools in `src/mcp_client/client.py`
+| Project | Role |
+|---------|------|
+| [M365-Agent-Provisioning](https://github.com/Aanerud/M365-Agent-Provisioning) | Part 1: Populate the tenant |
+| [MCP Microsoft Office](https://github.com/Aanerud/MCP-Microsoft-Office) | Part 2: Agentic API for M365 |
+| **Synthetic Employees** | Part 3: Agents that think and act |
 
 ## License
 
 MIT
-
-## Related Projects
-
-- **[MCP-Microsoft-Office](https://github.com/Aanerud/MCP-Microsoft-Office)**: MCP server providing Microsoft 365 access via Graph API
-- **Synthetic Users CSV**: The `textcraft-europe.csv` file contains 95 pre-defined synthetic employees for TextCraft Europe

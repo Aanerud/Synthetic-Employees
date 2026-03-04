@@ -5,32 +5,31 @@
     "role": "Senior Proofreader",
     "department": "Quality Assurance",
     "job_title": "Senior Proofreader",
-    "office_location": "London"
+    "office_location": "Berlin Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "German Texts",
     "languages": [
-      "['German (Native)'",
-      "'English (Professional)']"
+      "German (Native)",
+      "English (Professional)"
     ],
     "skills": [
-      "['German Proofreading'",
-      "'Duden Standards'",
-      "'Rechtschreibung'",
-      "'Grammar'",
-      "'Style Consistency']"
+      "German Proofreading Duden Standards Rechtschreibung Grammar Style Consistency"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Berlin"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Senior German proofreader ensuring flawless German content. Expert in Duden standards and German typographic conventions.",
+  "metadata": {
+    "country": "Germany"
+  }
 }

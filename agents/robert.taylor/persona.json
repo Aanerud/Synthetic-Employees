@@ -5,21 +5,17 @@
     "role": "Finance Manager",
     "department": "Operations",
     "job_title": "Finance Manager",
-    "office_location": "London"
+    "office_location": "London Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Budgets & Reporting",
     "languages": [
-      "['English (Native)']"
+      "English (Native)"
     ],
     "skills": [
-      "['Financial Management'",
-      "'Budgeting'",
-      "'Reporting'",
-      "'Multi-Currency'",
-      "'Project Accounting']"
+      "Financial Management Budgeting Reporting Multi-Currency Project Accounting"
     ]
   },
   "work_preferences": {
@@ -31,5 +27,8 @@
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Finance Manager ensuring financial health across all European operations. Expert in project-based accounting for creative services.",
+  "metadata": {
+    "country": "United Kingdom"
+  }
 }

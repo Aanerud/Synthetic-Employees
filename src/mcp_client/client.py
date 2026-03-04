@@ -1,5 +1,6 @@
 """MCP client for interacting with Microsoft 365 via MCP protocol."""
 
+import json
 import logging
 import os
 import uuid
@@ -96,10 +97,31 @@ class MCPClient:
                 raise MCPServerError(f"Tool error: {error.get('message', str(error))}")
 
             # Extract result from JSON-RPC response
-            if "result" in result:
-                return result["result"]
+            raw_result = result.get("result", result)
 
-            return result
+            # MCP server returns {content: [{type: "text", text: "..."}], isError: bool}
+            if isinstance(raw_result, dict) and "content" in raw_result:
+                if raw_result.get("isError"):
+                    error_text = ""
+                    for item in raw_result.get("content", []):
+                        error_text += item.get("text", "")
+                    raise MCPServerError(f"Tool error: {error_text}")
+
+                # Parse text content - may be JSON string
+                texts = []
+                for item in raw_result.get("content", []):
+                    if item.get("type") == "text":
+                        text = item.get("text", "")
+                        try:
+                            texts.append(json.loads(text))
+                        except (json.JSONDecodeError, TypeError):
+                            texts.append(text)
+
+                if len(texts) == 1:
+                    return texts[0]
+                return texts if texts else raw_result
+
+            return raw_result
 
         except requests.exceptions.RequestException as e:
             # Connection errors are retryable
@@ -111,11 +133,28 @@ class MCPClient:
     # Email Tools
 
     def get_inbox(self, limit: int = 10, filter_query: Optional[str] = None) -> List[Dict]:
-        """Get inbox messages."""
-        args = {"limit": limit}
-        if filter_query:
-            args["filter"] = filter_query
-        return self._call_tool("getInbox", args)
+        """Get inbox messages via REST API."""
+        try:
+            params = {"maxResults": limit}
+            if filter_query:
+                params["filter"] = filter_query
+            response = self.session.get(
+                f"{self.server_url}/api/v1/mail/messages",
+                params=params,
+                timeout=30,
+            )
+            response.raise_for_status()
+            data = response.json()
+            # Normalize: may be a list or a dict with messages key
+            if isinstance(data, list):
+                return data
+            if isinstance(data, dict) and "value" in data:
+                return data["value"]
+            if isinstance(data, dict) and "messages" in data:
+                return data["messages"]
+            return [data] if data else []
+        except requests.exceptions.RequestException as e:
+            raise MCPServerError(f"Failed to get inbox: {e}")
 
     def send_mail(
         self,
@@ -125,18 +164,40 @@ class MCPClient:
         cc: Optional[List[str]] = None,
         importance: Optional[str] = None,
     ) -> Dict:
-        """Send an email."""
-        args = {"to": to, "subject": subject, "body": body}
-        if cc:
-            args["cc"] = cc
-        if importance:
-            args["importance"] = importance
-        return self._call_tool("sendMail", args)
+        """Send an email via REST API."""
+        try:
+            payload = {"to": to, "subject": subject, "body": body}
+            if cc:
+                payload["cc"] = cc
+            if importance:
+                payload["importance"] = importance
+            response = self.session.post(
+                f"{self.server_url}/api/v1/mail/send",
+                json=payload,
+                timeout=30,
+            )
+            if response.status_code == 401:
+                raise MCPAuthenticationError("Invalid bearer token")
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            if isinstance(e, MCPAuthenticationError):
+                raise
+            raise MCPServerError(f"Failed to send mail: {e}")
 
     def reply_to_mail(self, message_id: str, body: str, reply_all: bool = False) -> Dict:
-        """Reply to an email."""
-        args = {"messageId": message_id, "body": body, "replyAll": reply_all}
-        return self._call_tool("replyToMail", args)
+        """Reply to an email via REST API."""
+        try:
+            payload = {"messageId": message_id, "body": body, "replyAll": reply_all}
+            response = self.session.post(
+                f"{self.server_url}/api/v1/mail/reply",
+                json=payload,
+                timeout=30,
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            raise MCPServerError(f"Failed to reply: {e}")
 
     def search_mail(
         self, query: str, limit: int = 10, folder: Optional[str] = None
@@ -149,7 +210,7 @@ class MCPClient:
 
     def mark_as_read(self, message_id: str) -> Dict:
         """Mark email as read."""
-        return self._call_tool("markAsRead", {"messageId": message_id})
+        return self._call_tool("markEmailRead", {"messageId": message_id, "isRead": True})
 
     def delete_mail(self, message_id: str) -> Dict:
         """Delete an email."""
@@ -207,17 +268,50 @@ class MCPClient:
 
     def respond_to_event(self, event_id: str, response: str, comment: Optional[str] = None) -> Dict:
         """Respond to meeting invite (accept/decline/tentative)."""
-        args = {"eventId": event_id, "response": response}
+        # Server uses separate tools per response type
+        tool_map = {
+            "accept": "acceptEvent",
+            "decline": "declineEvent",
+            "tentativelyAccept": "tentativelyAcceptEvent",
+            "tentative": "tentativelyAcceptEvent",
+        }
+        tool = tool_map.get(response, "acceptEvent")
+        args = {"eventId": event_id}
         if comment:
             args["comment"] = comment
-        return self._call_tool("respondToEvent", args)
+        return self._call_tool(tool, args)
 
     # Search Tools
 
     def search_all(self, query: str, limit: int = 10) -> Dict:
         """Unified search across emails, files, and calendar."""
         args = {"query": query, "limit": limit}
-        return self._call_tool("searchAll", args)
+        return self._call_tool("search", args)
+
+    # People Tools
+
+    def search_people(self, query: str, limit: int = 10) -> List[Dict]:
+        """Search for people in the organization."""
+        args = {"query": query, "limit": limit}
+        return self._call_tool("searchPeople", args)
+
+    def find_people(self, name: Optional[str] = None, skills: Optional[List[str]] = None, limit: int = 10) -> List[Dict]:
+        """Find people by name or skills."""
+        args = {"limit": limit}
+        if name:
+            args["name"] = name
+        if skills:
+            args["skills"] = skills
+        return self._call_tool("findPeople", args)
+
+    def get_relevant_people(self, limit: int = 10) -> List[Dict]:
+        """Get people relevant to the current user."""
+        args = {"limit": limit}
+        return self._call_tool("getRelevantPeople", args)
+
+    def get_person_by_id(self, person_id: str) -> Dict:
+        """Get a specific person by ID."""
+        return self._call_tool("getPersonById", {"personId": person_id})
 
     # File Tools
 

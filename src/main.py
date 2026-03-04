@@ -1,365 +1,704 @@
 #!/usr/bin/env python3
-"""Main entry point for Synthetic Employees system."""
+"""Main entry point for Synthetic Employees system.
+
+Supports two modes:
+  - Legacy: Direct MCP API calls (original implementation)
+  - Agency: CLI-based agent execution via `agency copilot` (v2)
+"""
 
 import argparse
+import asyncio
+import json
+import logging
 import os
+import signal
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Dict
+
+import yaml
 from dotenv import load_dotenv
 
 from src.agents.agent_registry import AgentRegistry
-from src.agents.roles import get_role
-from src.behaviors.rules import behavior_engine
-from src.mcp_client.client import MCPClient
-from src.scenarios.email_exchange import run_email_exchange
-from src.scheduler.scheduler import WorkScheduler
+from src.agents.persona_loader import PersonaRegistry, to_agency_input_vars
+from src.agency.action_executor import ActionExecutor
+from src.agency.cli_runner import AgencyCliRunner
+from src.agency.data_fetcher import DataFetcher
+from src.agency.result_parser import ResultParser
+from src.concurrency.manager import ConcurrencyManager
+from src.database.db_service import DatabaseService
+from src.auth.mcp_token_manager import MCPTokenManager
+from src.memory.context_assembler import ContextAssembler
+from src.scheduler.employee_scheduler import EmployeeScheduler
+from src.tasks.task_selector import TaskSelector
+from src.tasks.task_types import get_task_instructions
 
 # Load environment variables
 load_dotenv()
 
+logger = logging.getLogger(__name__)
 
-class SyntheticEmployees:
-    """Main orchestrator for synthetic employees simulation."""
 
-    def __init__(self):
-        self.agent_registry = AgentRegistry()
-        self.scheduler = None
+def load_config(config_path: str = "config.yaml") -> dict:
+    """Load configuration from YAML file with .env fallbacks."""
+    if Path(config_path).exists():
+        with open(config_path, "r") as f:
+            return yaml.safe_load(f) or {}
+    return {}
+
+
+class AgencyOrchestrator:
+    """Async orchestrator using Agency CLI as the agent brain.
+
+    This is the v2 architecture that replaces direct LLM API calls
+    with `agency copilot` subprocess invocations.
+    """
+
+    def __init__(self, config: dict):
+        self.config = config
         self.running = False
+        self.authed_employees: set = set()  # Emails with valid MCP tokens
+        self.auth_queue: list = []  # Emails waiting for auth
+        self.onboarding_total: int = 0
+        self.tick_count: int = 0
+        self.action_count: int = 0
+        self.error_count_session: int = 0
+        self._status_callback = None  # Optional callback for dashboard
+
+        # Core components
+        agency_cfg = config.get("agency", {})
+        concurrency_cfg = config.get("concurrency", {})
+        scheduling_cfg = config.get("scheduling", {})
+        db_cfg = config.get("database", {})
+
+        self.db = DatabaseService(db_cfg.get("path"))
+        self.persona_registry = PersonaRegistry()
+        self.agent_registry = AgentRegistry()
+
+        self.scheduler = EmployeeScheduler(
+            variance_percent=scheduling_cfg.get("variance_percent", 20),
+            enable_weekends=scheduling_cfg.get("enable_weekends", False),
+        )
+
+        self.concurrency = ConcurrencyManager(
+            max_concurrent=concurrency_cfg.get("max_concurrent", 15),
+            circuit_breaker_threshold=concurrency_cfg.get(
+                "circuit_breaker_threshold", 3
+            ),
+            circuit_breaker_cooldown=concurrency_cfg.get(
+                "circuit_breaker_cooldown", 3600
+            ),
+            debounce_seconds=concurrency_cfg.get("debounce_seconds", 300),
+        )
+
+        self.runner = AgencyCliRunner(
+            binary_path=agency_cfg.get("binary_path", "agency"),
+            default_backend=agency_cfg.get("default_backend", "copilot"),
+            premium_backend=agency_cfg.get("premium_backend", "claude"),
+            premium_roles=agency_cfg.get("premium_roles", []),
+            default_timeout=agency_cfg.get("default_timeout", 120),
+            role_timeouts=agency_cfg.get("role_timeouts", {}),
+            mcp_servers=agency_cfg.get("mcp_servers", ["workiq"]),
+            agent_directory=agency_cfg.get(
+                "agent_directory", ".github/agents"
+            ),
+        )
+
+        self.token_manager = MCPTokenManager()
+        self.context_assembler = ContextAssembler(self.db)
+        self.result_parser = ResultParser(self.db)
+        self.task_selector = TaskSelector(self.scheduler)
 
     def initialize(self):
-        """Initialize the system."""
-        print("🚀 Initializing Synthetic Employees System\n")
+        """Load personas and register employees with scheduler."""
+        print("Initializing Agency Orchestrator\n")
 
-        # Load agents
+        # Load personas
+        count = self.persona_registry.load_all()
+        print(f"  Loaded {count} personas")
+
+        # Load agent registry (for MCP bearer tokens)
         try:
             self.agent_registry.load_agents()
-        except FileNotFoundError as e:
-            print(f"❌ Error: {e}")
-            print("\nPlease ensure config/agents.json exists.")
-            print("Run this from the M365-Agent-Provisioning project:")
-            print("  npm run export-to-synthetic-employees\n")
-            sys.exit(1)
+            print(
+                f"  Loaded {len(self.agent_registry.agents)} agent configs"
+            )
+        except FileNotFoundError:
+            print(
+                "  Warning: config/agents.json not found. "
+                "MCP auth will not be available."
+            )
 
-        # Create scheduler
-        self.scheduler = WorkScheduler(self.agent_registry)
+        # Register each persona with the scheduler
+        registered = 0
+        for persona in self.persona_registry:
+            # Get country from CSV data if available
+            country = self._resolve_country(persona)
 
-        print(f"✓ Loaded {len(self.agent_registry.agents)} agents")
-        print(f"✓ Work hours: {self.scheduler.work_start_hour}:00 - {self.scheduler.work_end_hour}:00")
-        print(f"✓ Timezone: {self.scheduler.timezone}")
+            # Only use persona timezone if it differs from the default
+            # (all personas currently default to Europe/London regardless of country)
+            tz_override = persona.timezone
+            if tz_override == "Europe/London" and country != "United Kingdom":
+                tz_override = None  # Let cultural schedule determine timezone
+
+            self.scheduler.register_employee(
+                email=persona.email,
+                country=country,
+                role=persona.role or persona.job_title,
+                check_frequency_minutes=persona.email_check_frequency_minutes,
+                timezone_override=tz_override,
+            )
+            registered += 1
+
+        print(f"  Registered {registered} employees with scheduler")
+        active = len(self.scheduler.get_active_employees())
+        print(f"  Currently in work hours: {active} employees")
         print()
 
-    def tick_agent(self, agent_config, dry_run=False):
-        """Process one tick for an agent."""
-        role = get_role(agent_config.role)
+    def _load_csv_country_map(self) -> Dict[str, str]:
+        """Load email -> country mapping from textcraft-europe.csv."""
+        import csv
 
-        print(f"[{datetime.now().strftime('%H:%M:%S')}] {agent_config.name} ({agent_config.role})")
+        csv_path = Path("textcraft-europe.csv")
+        if not csv_path.exists():
+            return {}
 
-        if dry_run:
-            print(f"  → Would check inbox (every {role.email_check_frequency_minutes} min)")
+        mapping = {}
+        with open(csv_path, "r", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                email = row.get("email", "")
+                country = row.get("country", "")
+                if email and country:
+                    mapping[email.lower()] = country
+        return mapping
+
+    def _resolve_country(self, persona) -> str:
+        """Resolve country from CSV data."""
+        if not hasattr(self, "_csv_countries"):
+            self._csv_countries = self._load_csv_country_map()
+
+        country = self._csv_countries.get(persona.email.lower())
+        if country:
+            return country
+
+        return "United Kingdom"
+
+    async def auth_batch(self, batch_size: int = 12) -> int:
+        """Authenticate a batch of employees. Returns count authed."""
+        if not self.auth_queue:
+            return 0
+
+        batch = self.auth_queue[:batch_size]
+        authed = 0
+
+        for email in batch:
+            try:
+                self.token_manager.get_mcp_token(email)
+                self.authed_employees.add(email)
+                self.auth_queue.remove(email)
+                authed += 1
+                logger.info("Authed %s (%d/%d)", email.split("@")[0], len(self.authed_employees), self.onboarding_total)
+                await asyncio.sleep(0.5)  # Small delay between auths
+            except Exception as exc:
+                logger.warning("Auth failed for %s: %s", email.split("@")[0], exc)
+                # Move to end of queue for retry next batch
+                self.auth_queue.remove(email)
+                self.auth_queue.append(email)
+
+        return authed
+
+    async def _progressive_auth_loop(self):
+        """Background task: auth employees in batches every 15 minutes."""
+        # First batch immediately
+        count = await self.auth_batch(12)
+        logger.info("First batch: %d employees authed", count)
+
+        # Subsequent batches every 15 minutes
+        while self.running and self.auth_queue:
+            await asyncio.sleep(900)  # 15 minutes
+            if not self.running:
+                break
+            count = await self.auth_batch(12)
+            logger.info("Batch auth: %d more employees (%d/%d total)", count, len(self.authed_employees), self.onboarding_total)
+
+    def get_status(self) -> dict:
+        """Get current orchestrator status for dashboard."""
+        active = self.scheduler.get_active_employees()
+        return {
+            "running": self.running,
+            "authed": len(self.authed_employees),
+            "total": self.onboarding_total,
+            "active_in_work_hours": len(active),
+            "ticks": self.tick_count,
+            "actions": self.action_count,
+            "errors": self.error_count_session,
+            "auth_queue_remaining": len(self.auth_queue),
+        }
+
+    async def _execute_employee_tick(self, email: str) -> None:
+        """Execute one tick for a single employee.
+
+        Pipeline:
+        1. Pre-tick: Fetch inbox/calendar via MCPClient (per-employee token)
+        2. Brain: Agency CLI decides what to do (free via Copilot)
+        3. Post-tick: Execute decided actions via MCPClient (per-employee token)
+        """
+        persona = self.persona_registry.get_by_email(email)
+        if not persona:
+            logger.warning("No persona found for %s", email)
             return
 
-        # Create MCP client
-        mcp_client = MCPClient(agent_config.mcp_bearer_token)
+        role = persona.role or persona.job_title
+
+        # ---- PRE-TICK: Fetch M365 data as this employee via stdio adapter ----
+        inbox_data = "No inbox data available."
+        calendar_data = "No calendar data available."
+        mcp_client = None
 
         try:
-            # Check inbox
-            inbox = mcp_client.get_inbox(limit=10)
-            unread_count = sum(1 for email in inbox if not email.get("isRead", False))
+            mcp_client = self.token_manager.get_stdio_client(email)
+            fetcher = DataFetcher(mcp_client)
+            m365_data = fetcher.fetch_all(inbox_limit=10)
+            inbox_data = m365_data["inbox"]
+            calendar_data = m365_data["calendar"]
+        except Exception as exc:
+            logger.warning("Pre-tick fetch failed for %s: %s", email, exc)
+            inbox_data = f"[Error fetching inbox: {exc}]"
 
-            print(f"  → Checked inbox: {unread_count} unread")
+        # Check for pending items from previous cycles
+        state = self.db.get_employee_state(email)
+        has_pending = False
+        pending_desc = None
+        if state:
+            try:
+                pending = json.loads(state.get("pending_items", "[]"))
+                has_pending = bool(pending)
+                if pending:
+                    pending_desc = "; ".join(
+                        item.get("description", str(item))
+                        if isinstance(item, dict)
+                        else str(item)
+                        for item in pending[:3]
+                    )
+            except (json.JSONDecodeError, TypeError):
+                pass
 
-            # Process unread emails
-            for email in inbox:
-                if email.get("isRead", False):
-                    continue
+        # Select task
+        task = self.task_selector.select_task(
+            email=email,
+            role=role,
+            has_pending_items=has_pending,
+            pending_description=pending_desc,
+        )
 
-                should_respond, reason = behavior_engine.should_respond_to_email(
-                    agent_config, role, email
+        # Build input variables from persona + M365 data
+        input_vars = to_agency_input_vars(persona)
+        input_vars["TaskType"] = task.task_type.value
+        input_vars["TaskInstructions"] = task.instructions
+        input_vars["InboxData"] = inbox_data
+        input_vars["CalendarData"] = calendar_data
+
+        # Build memory context
+        memory_context = self.context_assembler.build_context(email)
+        input_vars["MemoryContext"] = memory_context
+
+        # Build prompt
+        prompt = (
+            f"Perform your {task.task_type.value} task. "
+            f"Review your inbox and calendar data, then decide what "
+            f"actions to take. Output your decisions as JSON."
+        )
+
+        ts = datetime.now().strftime("%H:%M:%S")
+        print(
+            f"  [{ts}] {persona.name} ({role}) -> {task.task_type.value}"
+        )
+
+        # ---- BRAIN: Agency CLI decides what to do (free via Copilot) ----
+        result = await self.runner.execute(
+            agent_email=email,
+            role=role,
+            prompt=prompt,
+            input_vars=input_vars,
+        )
+
+        # Process result and update DB state
+        summary = self.result_parser.process_result(email, result)
+
+        # ---- POST-TICK: Execute decided actions via stdio MCPClient ----
+        actions_executed = 0
+        if result.exit_code == 0 and result.parsed_ok and mcp_client:
+            actions = result.actions_taken
+            if actions:
+                executor = ActionExecutor(mcp_client)
+                action_results = executor.execute_actions(actions, email)
+                actions_executed = sum(
+                    1 for r in action_results if r.get("status") == "success"
+                )
+                logger.info(
+                    "Executed %d/%d actions for %s",
+                    actions_executed,
+                    len(actions),
+                    email,
                 )
 
-                if should_respond:
-                    subject = email.get("subject", "(no subject)")[:50]
-                    print(f"     ✉ Would respond to: {subject}... (Reason: {reason})")
-                    # In full implementation, would generate and send response here
+        # Close stdio client
+        if mcp_client:
+            try:
+                mcp_client.close()
+            except Exception:
+                pass
 
-            # Check calendar
-            events = mcp_client.get_events(timeframe="today")
-            print(f"  → Calendar: {len(events)} events today")
+        # Track stats
+        self.tick_count += 1
+        self.action_count += actions_executed
 
-        except Exception as e:
-            print(f"  ✗ Error: {str(e)}")
+        # Mark ticked in scheduler
+        self.scheduler.mark_ticked(email)
 
-    def start(self, duration_minutes=None, dry_run=False, agents=None):
-        """Start the simulation."""
+        if result.exit_code == 0:
+            print(
+                f"           Done: {actions_executed} actions executed "
+                f"({result.duration_seconds:.1f}s)"
+            )
+        else:
+            print(f"           Error: {result.error}")
+
+    async def start(
+        self,
+        duration_minutes: int = None,
+        agents_filter: list = None,
+        dry_run: bool = False,
+    ):
+        """Start the async Agency orchestration loop."""
         print("\n" + "=" * 60)
-        print("Starting Synthetic Employees")
+        print("Starting Synthetic Employees (Agency Mode)")
         print("=" * 60)
-        print(f"Mode: {'DRY RUN' if dry_run else 'LIVE'}")
-        print(f"Duration: {duration_minutes if duration_minutes else 'Continuous'}")
+        print(f"  Backend: {self.runner.default_backend}")
+        print(f"  Max concurrent: {self.concurrency._max_concurrent}")
+        print(
+            f"  Employees: {self.scheduler.employee_count} registered"
+        )
+        print(f"  Mode: {'DRY RUN' if dry_run else 'LIVE'}")
+        print(
+            f"  Duration: {duration_minutes}min"
+            if duration_minutes
+            else "  Duration: Continuous"
+        )
         print("=" * 60 + "\n")
 
-        start_time = datetime.now()
         self.running = True
+        start_time = datetime.now()
+        check_interval = self.config.get("scheduling", {}).get(
+            "check_interval_seconds", 60
+        )
+
+        # Build auth queue - KAMs and their teams first
+        all_personas = list(self.persona_registry)
+        if agents_filter:
+            all_personas = [p for p in all_personas if p.email in agents_filter]
+
+        # Prioritize: KAMs first, then editors, writers, proofreaders, then rest
+        priority_order = {
+            "key account": 0, "account director": 0, "account manager": 0,
+            "editorial director": 1, "editor": 2,
+            "writer": 3, "proofreader": 4,
+            "ceo": 1, "coo": 1, "cfo": 1, "cco": 1,
+        }
+
+        def _priority(p):
+            role_lower = (p.role or p.job_title or "").lower()
+            for key, pri in priority_order.items():
+                if key in role_lower:
+                    return pri
+            return 9
+
+        all_personas.sort(key=_priority)
+        self.auth_queue = [p.email for p in all_personas]
+        self.onboarding_total = len(self.auth_queue)
+
+        # Start concurrency workers
+        await self.concurrency.start_workers()
+
+        # Start progressive auth in background
+        if not dry_run:
+            auth_task = asyncio.create_task(self._progressive_auth_loop())
 
         try:
             while self.running:
-                # Wait if outside work hours
-                if not self.scheduler.is_work_hours():
-                    print("\n⏰ Outside work hours. Waiting...")
-                    self.scheduler.wait_for_work_hours()
+                # Get employees due for a tick
+                due = self.scheduler.get_employees_due_for_tick()
 
-                # Get agents to tick
-                agents_to_tick = self.scheduler.get_agents_to_tick()
+                # Only tick employees that are authed (or all in dry-run)
+                if not dry_run:
+                    due = [s for s in due if s.email in self.authed_employees]
 
-                if agents:
-                    # Filter to specific agents
-                    agents_to_tick = [a for a in agents_to_tick if a.email in agents]
+                if agents_filter:
+                    due = [
+                        s for s in due if s.email in agents_filter
+                    ]
 
-                # Tick agents
-                for agent_config in agents_to_tick:
-                    self.tick_agent(agent_config, dry_run=dry_run)
-                    self.scheduler.mark_ticked(agent_config)
+                # Submit to concurrency manager
+                for schedule in due:
+                    email = schedule.email
+
+                    if dry_run:
+                        ts = datetime.now().strftime("%H:%M:%S")
+                        print(
+                            f"  [{ts}] Would tick: {email} "
+                            f"({schedule.role})"
+                        )
+                        self.scheduler.mark_ticked(email)
+                        continue
+
+                    # Determine priority
+                    priority = 5  # normal
+                    if self.scheduler.is_first_check_in_today(email):
+                        priority = 3  # morning routine
+                    elif self.scheduler.is_end_of_day(email):
+                        priority = 9  # end of day
+
+                    # Submit (closure captures email)
+                    _email = email
+                    await self.concurrency.submit(
+                        employee_email=_email,
+                        coroutine_factory=lambda e=_email: self._execute_employee_tick(e),
+                        priority=priority,
+                    )
 
                 # Check duration
                 if duration_minutes:
-                    elapsed = (datetime.now() - start_time).total_seconds() / 60
+                    elapsed = (
+                        datetime.now() - start_time
+                    ).total_seconds() / 60
                     if elapsed >= duration_minutes:
-                        print(f"\n✓ Completed {duration_minutes} minute simulation")
+                        print(
+                            f"\n  Completed {duration_minutes} minute simulation"
+                        )
                         break
 
                 # Sleep until next check
-                self.scheduler.sleep_until_next_check()
+                await asyncio.sleep(check_interval)
 
-        except KeyboardInterrupt:
-            print("\n\n⚠ Interrupted by user")
+        except asyncio.CancelledError:
+            print("\n  Cancelled")
         finally:
             self.running = False
-            print("\n✨ Simulation stopped\n")
+            await self.concurrency.shutdown()
 
-    def status(self):
-        """Show current status."""
-        status = self.scheduler.get_status()
+            stats = self.concurrency.stats
+            print(f"\n  Simulation stopped")
+            print(
+                f"  Stats: {stats.total_completed} completed, "
+                f"{stats.total_failed} failed, "
+                f"{stats.total_skipped_circuit} circuit-broken"
+            )
+            print()
 
-        print("\nSynthetic Employees Status")
-        print("=" * 60)
-        print(f"Status: {'Running' if self.running else 'Stopped'}")
-        print(f"Current Time: {status['current_time']}")
-        print(f"Work Hours: {status['work_hours']} {status['timezone']}")
-        print(f"In Work Hours: {'Yes' if status['is_work_hours'] else 'No'}")
-        print(f"\nAgents: {status['agents_total']} loaded, {status['agents_ticked']} active")
-        print(f"Time Acceleration: {status['time_acceleration']}x")
-        print()
 
-    def list_agents(self):
-        """List all agents."""
-        self.agent_registry.list_agents()
+# =============================================================================
+# CLI
+# =============================================================================
 
-    def test_mcp(self):
-        """Test MCP connectivity for all agents."""
-        print("\nTesting MCP connectivity for all agents...\n")
 
-        success_count = 0
-        fail_count = 0
-
-        for agent in self.agent_registry.agents:
-            mcp_client = MCPClient(agent.mcp_bearer_token)
-            result = mcp_client.test_connection()
-
-            if result["status"] == "success":
-                print(f"✓ {agent.email} - Token valid, inbox accessible")
-                success_count += 1
-            else:
-                print(f"✗ {agent.email} - {result['error']}: {result['message']}")
-                fail_count += 1
-
-        print(f"\n{success_count}/{len(self.agent_registry.agents)} agents connected successfully")
-
-        if fail_count > 0:
-            print(f"\n⚠ {fail_count} agents failed connection")
-            print("Regenerate tokens in M365-Agent-Provisioning project:")
-            print("  npm run generate-tokens\n")
-
-    def email_exchange(self):
-        """Run the email exchange scenario between Victoria and François."""
-        print("\nRunning Email Exchange Scenario")
-        print("Victoria Palmer <-> François Moreau\n")
-
-        result = run_email_exchange(self.agent_registry)
-
-        if result.success:
-            print(f"\n✓ Scenario completed successfully")
-        else:
-            print(f"\n✗ Scenario failed: {result.error}")
-            print(f"  Steps completed: {result.steps_completed}/{result.total_steps}")
-
-        return result
+def parse_duration(s: str) -> int:
+    """Parse duration string to minutes."""
+    s = s.lower()
+    if "h" in s:
+        return int(s.replace("h", "")) * 60
+    if "m" in s:
+        return int(s.replace("m", ""))
+    if "d" in s:
+        return int(s.replace("d", "")) * 60 * 24
+    return int(s)
 
 
 def main():
     """Main CLI entry point."""
-    parser = argparse.ArgumentParser(description="Synthetic Employees - Multi-agent simulation system")
+    parser = argparse.ArgumentParser(
+        description="Synthetic Employees - Agency CLI Agent System"
+    )
+    subparsers = parser.add_subparsers(dest="command", help="Command")
 
-    subparsers = parser.add_subparsers(dest="command", help="Command to execute")
+    # Start command (Agency mode - default)
+    start_p = subparsers.add_parser(
+        "start", help="Start the simulation (Agency CLI mode)"
+    )
+    start_p.add_argument("--duration", type=str, help="Duration (8h, 30m)")
+    start_p.add_argument(
+        "--dry-run", action="store_true", help="Simulate without executing"
+    )
+    start_p.add_argument(
+        "--agents", type=str, help="Comma-separated agent emails"
+    )
+    start_p.add_argument(
+        "--config", type=str, default="config.yaml", help="Config file"
+    )
 
-    # Start command
-    start_parser = subparsers.add_parser("start", help="Start the simulation")
-    start_parser.add_argument("--duration", type=str, help="Duration (e.g., 8h, 30m)")
-    start_parser.add_argument("--dry-run", action="store_true", help="Simulate without real API calls")
-    start_parser.add_argument("--agents", type=str, help="Comma-separated list of agent emails")
-    start_parser.add_argument("--acceleration", type=float, help="Time acceleration factor")
-
-    # Status command
+    # Status
     subparsers.add_parser("status", help="Show current status")
 
-    # List agents command
+    # List agents
     subparsers.add_parser("list-agents", help="List all agents")
 
-    # Test MCP command
+    # Test MCP
     subparsers.add_parser("test-mcp", help="Test MCP connectivity")
 
-    # Email exchange scenario command
-    subparsers.add_parser("email-exchange", help="Run email exchange scenario (Victoria <-> François)")
+    # Import CSV
+    import_p = subparsers.add_parser(
+        "import-csv", help="Import agents from CSV"
+    )
+    import_p.add_argument("--file", type=str, required=True)
+    import_p.add_argument("--output", type=str, default="agents")
+    import_p.add_argument("--domain", type=str)
 
-    # Import CSV command
-    import_csv_parser = subparsers.add_parser("import-csv", help="Import agents from CSV file")
-    import_csv_parser.add_argument("--file", type=str, required=True, help="Path to CSV file")
-    import_csv_parser.add_argument("--output", type=str, default="agents", help="Output directory for persona folders")
-    import_csv_parser.add_argument("--domain", type=str, help="Email domain (only needed if CSV lacks email column)")
+    # Serve
+    serve_p = subparsers.add_parser("serve", help="Start web dashboard")
+    serve_p.add_argument("--host", default="0.0.0.0")
+    serve_p.add_argument("--port", type=int, default=8000)
+    serve_p.add_argument("--reload", action="store_true")
 
-    # Serve command (web dashboard)
-    serve_parser = subparsers.add_parser("serve", help="Start the web dashboard")
-    serve_parser.add_argument("--host", type=str, default="0.0.0.0", help="Host to bind to")
-    serve_parser.add_argument("--port", type=int, default=8000, help="Port to listen on")
-    serve_parser.add_argument("--reload", action="store_true", help="Enable auto-reload for development")
+    # Test token exchange
+    token_p = subparsers.add_parser(
+        "test-token-exchange", help="Test token exchange"
+    )
+    token_p.add_argument("--user", type=str, required=True)
+    token_p.add_argument("--password", type=str)
 
-    # Test token exchange command
-    test_token_parser = subparsers.add_parser("test-token-exchange", help="Test token exchange for a user")
-    test_token_parser.add_argument("--user", type=str, required=True, help="User email to test")
-    test_token_parser.add_argument("--password", type=str, help="User password (uses DEFAULT_PASSWORD if not set)")
-
-    # Version command
-    subparsers.add_parser("--version", help="Show version")
+    # Version
+    subparsers.add_parser("version", help="Show version")
 
     args = parser.parse_args()
 
-    # Handle no command
     if not args.command:
         parser.print_help()
         return
 
-    # Handle version
-    if args.command == "--version":
-        print("Synthetic Employees v1.0.0")
+    if args.command == "version":
+        print("Synthetic Employees v2.0.0 (Agency CLI)")
         return
 
-    # Initialize system
-    system = SyntheticEmployees()
-    system.initialize()
+    # Setup logging
+    log_cfg = load_config(
+        getattr(args, "config", "config.yaml")
+    ).get("logging", {})
+    logging.basicConfig(
+        level=getattr(logging, log_cfg.get("level", "INFO")),
+        format="%(asctime)s %(name)s %(levelname)s %(message)s",
+    )
 
-    # Execute command
     if args.command == "start":
-        # Parse duration
-        duration_minutes = None
-        if args.duration:
-            duration_str = args.duration.lower()
-            if "h" in duration_str:
-                duration_minutes = int(duration_str.replace("h", "")) * 60
-            elif "m" in duration_str:
-                duration_minutes = int(duration_str.replace("m", ""))
-            elif "d" in duration_str:
-                duration_minutes = int(duration_str.replace("d", "")) * 60 * 24
+        duration = parse_duration(args.duration) if args.duration else None
+        agents_filter = args.agents.split(",") if args.agents else None
 
-        # Parse agents filter
-        agents = args.agents.split(",") if args.agents else None
+        config = load_config(args.config)
+        orchestrator = AgencyOrchestrator(config)
+        orchestrator.initialize()
 
-        system.start(duration_minutes=duration_minutes, dry_run=args.dry_run, agents=agents)
+        loop = asyncio.new_event_loop()
+
+        def _signal_handler():
+            orchestrator.running = False
+
+        loop.add_signal_handler(signal.SIGINT, _signal_handler)
+
+        try:
+            loop.run_until_complete(
+                orchestrator.start(
+                    duration_minutes=duration,
+                    agents_filter=agents_filter,
+                    dry_run=args.dry_run,
+                )
+            )
+        finally:
+            loop.close()
 
     elif args.command == "status":
-        system.status()
+        config = load_config()
+        orchestrator = AgencyOrchestrator(config)
+        orchestrator.initialize()
+        active = orchestrator.scheduler.get_active_employees()
+        print(f"\nSynthetic Employees Status")
+        print("=" * 60)
+        print(f"  Employees registered: {orchestrator.scheduler.employee_count}")
+        print(f"  Currently active: {len(active)}")
+        print()
 
     elif args.command == "list-agents":
-        system.list_agents()
+        registry = PersonaRegistry()
+        count = registry.load_all()
+        print(f"\n{count} agents loaded:\n")
+        for persona in sorted(registry.list_all(), key=lambda p: p.name):
+            print(
+                f"  {persona.name:30s} {persona.role:25s} "
+                f"{persona.office_location:15s} {persona.timezone}"
+            )
+        print()
 
     elif args.command == "test-mcp":
-        system.test_mcp()
-
-    elif args.command == "email-exchange":
-        system.email_exchange()
+        print("\nTesting MCP connectivity via stdio adapter...\n")
+        from src.auth.mcp_token_manager import MCPTokenManager as TM
+        tm = TM()
+        registry = PersonaRegistry()
+        registry.load_all()
+        ok = fail = 0
+        for persona in list(registry)[:5]:  # Test first 5
+            try:
+                client = tm.get_stdio_client(persona.email)
+                inbox = client.get_inbox(limit=1)
+                client.close()
+                print(f"  OK: {persona.name} ({persona.email})")
+                ok += 1
+            except Exception as e:
+                print(f"  FAIL: {persona.name} - {e}")
+                fail += 1
+        print(f"\n{ok}/{ok+fail} connected")
 
     elif args.command == "import-csv":
-        # Import CSV without initializing full system
         from src.agents.csv_importer import import_csv
 
-        csv_file = args.file
-        output_dir = args.output
-        domain = args.domain or os.getenv("EMAIL_DOMAIN", "textcraft.onmicrosoft.com")
-
-        print(f"Importing agents from {csv_file}...")
+        domain = args.domain or os.getenv(
+            "EMAIL_DOMAIN", "textcraft.onmicrosoft.com"
+        )
+        print(f"Importing agents from {args.file}...")
         try:
-            personas = import_csv(csv_file, output_dir, domain)
-            print(f"\nSuccessfully created {len(personas)} persona folders in {output_dir}/")
-            for p in personas[:10]:  # Show first 10
-                print(f"  - {p['name']} ({p['role']}) -> {p['folder']}")
-            if len(personas) > 10:
-                print(f"  ... and {len(personas) - 10} more")
-        except FileNotFoundError:
-            print(f"Error: CSV file not found: {csv_file}")
-            sys.exit(1)
+            personas = import_csv(args.file, args.output, domain)
+            print(f"\nCreated {len(personas)} persona folders")
         except Exception as e:
-            print(f"Error importing CSV: {e}")
+            print(f"Error: {e}")
             sys.exit(1)
 
     elif args.command == "serve":
-        # Start web dashboard
         try:
             import uvicorn
-            from src.web.app import app
         except ImportError:
-            print("Error: FastAPI/uvicorn not installed. Run: pip install fastapi uvicorn")
+            print("Error: pip install fastapi uvicorn")
             sys.exit(1)
 
-        host = args.host
-        port = args.port
-
-        print(f"Starting Synthetic Employees Dashboard at http://{host}:{port}")
+        print(f"Starting dashboard at http://{args.host}:{args.port}")
         uvicorn.run(
             "src.web.app:app",
-            host=host,
-            port=port,
+            host=args.host,
+            port=args.port,
             reload=args.reload,
         )
 
     elif args.command == "test-token-exchange":
-        # Test token exchange
         from src.auth.mcp_token_manager import MCPTokenManager
 
-        user_email = args.user
         password = args.password or os.getenv("DEFAULT_PASSWORD")
-
         if not password:
-            print("Error: Password required. Set DEFAULT_PASSWORD env var or use --password")
+            print("Error: Set DEFAULT_PASSWORD or use --password")
             sys.exit(1)
 
-        print(f"Testing token exchange for {user_email}...")
-
+        print(f"Testing token exchange for {args.user}...")
         try:
             manager = MCPTokenManager()
-            mcp_token = manager.get_mcp_token(user_email, password)
-
-            print(f"\nToken exchange successful!")
-            print(f"  User ID: {mcp_token.user_id}")
-            print(f"  User Email: {mcp_token.user_email}")
-            print(f"  User Name: {mcp_token.user_name}")
-            print(f"  Token Type: {mcp_token.token_type}")
-            print(f"  Expires At: {mcp_token.expires_at}")
-            print(f"  Token Preview: {mcp_token.access_token[:50]}...")
-
-        except ValueError as e:
-            print(f"\nToken exchange failed: {e}")
-            sys.exit(1)
+            token = manager.get_mcp_token(args.user, password)
+            print(f"\n  Success! Token: {token.access_token[:50]}...")
         except Exception as e:
-            print(f"\nError: {e}")
+            print(f"\n  Failed: {e}")
             sys.exit(1)
 
 

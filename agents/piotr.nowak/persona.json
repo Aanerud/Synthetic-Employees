@@ -5,33 +5,32 @@
     "role": "Technical Writer",
     "department": "Creative Writing",
     "job_title": "Technical Writer",
-    "office_location": "London"
+    "office_location": "Warsaw Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Engineering Specs",
     "languages": [
-      "['Polish (Native)'",
-      "'English (Fluent)'",
-      "'German (Conversational)']"
+      "Polish (Native)",
+      "English (Fluent)",
+      "German (Conversational)"
     ],
     "skills": [
-      "['Engineering Specifications'",
-      "'Technical Standards'",
-      "'CAD Documentation'",
-      "'Manufacturing Processes'",
-      "'Quality Documentation']"
+      "Engineering Specifications Technical Standards CAD Documentation Manufacturing Processes Quality Documentation"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Warsaw"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Engineering specification writer with manufacturing background. Creates documentation that bridges design and production.",
+  "metadata": {
+    "country": "Poland"
+  }
 }

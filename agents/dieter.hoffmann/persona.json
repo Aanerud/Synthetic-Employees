@@ -5,32 +5,31 @@
     "role": "Marketing Copywriter",
     "department": "Creative Writing",
     "job_title": "Marketing Copywriter",
-    "office_location": "London"
+    "office_location": "Berlin Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Digital Marketing",
     "languages": [
-      "['German (Native)'",
-      "'English (Fluent)']"
+      "German (Native)",
+      "English (Fluent)"
     ],
     "skills": [
-      "['Digital Copywriting'",
-      "'SEO Content'",
-      "'Performance Marketing'",
-      "'A/B Testing Copy'",
-      "'Conversion Optimization']"
+      "Digital Copywriting SEO Content Performance Marketing A/B Testing Copy Conversion Optimization"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Berlin"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Digital marketing copy specialist who combines creativity with data. Expert in writing copy that converts while maintaining brand voice.",
+  "metadata": {
+    "country": "Germany"
+  }
 }

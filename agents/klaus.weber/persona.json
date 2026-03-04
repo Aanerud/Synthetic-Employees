@@ -5,32 +5,31 @@
     "role": "Senior Editor",
     "department": "Editorial",
     "job_title": "Senior Editor",
-    "office_location": "London"
+    "office_location": "Berlin Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Documentation",
     "languages": [
-      "['German (Native)'",
-      "'English (Fluent)']"
+      "German (Native)",
+      "English (Fluent)"
     ],
     "skills": [
-      "['Technical Editing'",
-      "'Documentation Standards'",
-      "'Information Architecture'",
-      "'DITA'",
-      "'Structured Authoring']"
+      "Technical Editing Documentation Standards Information Architecture DITA Structured Authoring"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 45,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Berlin"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Technical documentation expert ensuring clarity and precision in complex technical content. Background in engineering and technical communication.",
+  "metadata": {
+    "country": "Germany"
+  }
 }

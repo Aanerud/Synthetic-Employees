@@ -1124,6 +1124,432 @@ class DatabaseService:
             ).fetchall()
             return [dict(row) for row in rows]
 
+    # ==========================================================================
+    # Conversation Memory Operations
+    # ==========================================================================
+
+    def get_conversation_memory(
+        self, agent_email: str, conversation_id: str
+    ) -> Optional[Dict[str, Any]]:
+        """Get conversation memory for a specific conversation."""
+        with self._get_connection() as conn:
+            row = conn.execute(
+                """
+                SELECT * FROM conversation_memory
+                WHERE agent_email = ? AND conversation_id = ?
+                """,
+                (agent_email, conversation_id),
+            ).fetchone()
+            return dict(row) if row else None
+
+    def get_recent_conversation_memories(
+        self,
+        agent_email: str,
+        hours: int = 24,
+        context_type: Optional[str] = None,
+        limit: int = 10,
+    ) -> List[Dict[str, Any]]:
+        """Get recent conversation memories for an agent."""
+        cutoff = (
+            datetime.now()
+            .__sub__(__import__("datetime").timedelta(hours=hours))
+            .isoformat()
+        )
+
+        query = """
+            SELECT * FROM conversation_memory
+            WHERE agent_email = ? AND last_interaction_at >= ?
+        """
+        params: List[Any] = [agent_email, cutoff]
+
+        if context_type:
+            query += " AND context_type = ?"
+            params.append(context_type)
+
+        query += " ORDER BY last_interaction_at DESC LIMIT ?"
+        params.append(limit)
+
+        with self._get_connection() as conn:
+            rows = conn.execute(query, params).fetchall()
+            return [dict(row) for row in rows]
+
+    def get_conversation_memories_by_participant(
+        self,
+        agent_email: str,
+        participant_email: str,
+        limit: int = 10,
+    ) -> List[Dict[str, Any]]:
+        """Get conversation memories involving a specific participant."""
+        # SQLite JSON search for participant in participants array
+        with self._get_connection() as conn:
+            rows = conn.execute(
+                """
+                SELECT * FROM conversation_memory
+                WHERE agent_email = ?
+                AND participants LIKE ?
+                ORDER BY last_interaction_at DESC
+                LIMIT ?
+                """,
+                (agent_email, f'%"{participant_email}"%', limit),
+            ).fetchall()
+            return [dict(row) for row in rows]
+
+    def upsert_conversation_memory(
+        self,
+        agent_email: str,
+        conversation_id: str,
+        participants: List[str],
+        context_type: str,
+        summary: Optional[str] = None,
+        key_points: Optional[List[str]] = None,
+        sentiment: Optional[str] = None,
+        message_count: int = 1,
+    ) -> None:
+        """Create or update conversation memory."""
+        with self._get_connection() as conn:
+            conn.execute(
+                """
+                INSERT INTO conversation_memory (
+                    agent_email, conversation_id, participants, context_type,
+                    summary, key_points, sentiment, message_count, last_interaction_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(agent_email, conversation_id) DO UPDATE SET
+                    participants = excluded.participants,
+                    summary = excluded.summary,
+                    key_points = excluded.key_points,
+                    sentiment = excluded.sentiment,
+                    message_count = excluded.message_count,
+                    last_interaction_at = excluded.last_interaction_at
+                """,
+                (
+                    agent_email,
+                    conversation_id,
+                    json.dumps(participants),
+                    context_type,
+                    summary,
+                    json.dumps(key_points) if key_points else None,
+                    sentiment,
+                    message_count,
+                    datetime.now().isoformat(),
+                ),
+            )
+
+    def delete_conversation_memory(
+        self, agent_email: str, conversation_id: str
+    ) -> None:
+        """Delete conversation memory."""
+        with self._get_connection() as conn:
+            conn.execute(
+                """
+                DELETE FROM conversation_memory
+                WHERE agent_email = ? AND conversation_id = ?
+                """,
+                (agent_email, conversation_id),
+            )
+
+    # ==========================================================================
+    # Agent Knowledge Operations
+    # ==========================================================================
+
+    def get_agent_knowledge(
+        self,
+        agent_email: str,
+        knowledge_type: str,
+        subject: str,
+    ) -> Optional[Dict[str, Any]]:
+        """Get specific knowledge for an agent."""
+        with self._get_connection() as conn:
+            row = conn.execute(
+                """
+                SELECT * FROM agent_knowledge
+                WHERE agent_email = ? AND knowledge_type = ? AND subject = ?
+                """,
+                (agent_email, knowledge_type, subject),
+            ).fetchone()
+            return dict(row) if row else None
+
+    def get_agent_knowledge_by_type(
+        self,
+        agent_email: str,
+        knowledge_type: str,
+        min_confidence: float = 0.0,
+        limit: int = 20,
+    ) -> List[Dict[str, Any]]:
+        """Get all knowledge of a specific type for an agent."""
+        with self._get_connection() as conn:
+            rows = conn.execute(
+                """
+                SELECT * FROM agent_knowledge
+                WHERE agent_email = ? AND knowledge_type = ? AND confidence >= ?
+                ORDER BY confidence DESC, use_count DESC
+                LIMIT ?
+                """,
+                (agent_email, knowledge_type, min_confidence, limit),
+            ).fetchall()
+            return [dict(row) for row in rows]
+
+    def upsert_agent_knowledge(
+        self,
+        agent_email: str,
+        knowledge_type: str,
+        subject: str,
+        content: str,
+        confidence: float = 0.5,
+        source: Optional[str] = None,
+        source_type: Optional[str] = None,
+    ) -> None:
+        """Create or update agent knowledge."""
+        with self._get_connection() as conn:
+            conn.execute(
+                """
+                INSERT INTO agent_knowledge (
+                    agent_email, knowledge_type, subject, content,
+                    confidence, source, source_type
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(agent_email, knowledge_type, subject) DO UPDATE SET
+                    content = excluded.content,
+                    confidence = excluded.confidence,
+                    source = excluded.source,
+                    source_type = excluded.source_type
+                """,
+                (
+                    agent_email,
+                    knowledge_type,
+                    subject,
+                    content,
+                    confidence,
+                    source,
+                    source_type,
+                ),
+            )
+
+    def increment_knowledge_use_count(
+        self,
+        agent_email: str,
+        knowledge_type: str,
+        subject: str,
+    ) -> None:
+        """Increment the use count for a knowledge item."""
+        with self._get_connection() as conn:
+            conn.execute(
+                """
+                UPDATE agent_knowledge
+                SET use_count = use_count + 1, last_used_at = ?
+                WHERE agent_email = ? AND knowledge_type = ? AND subject = ?
+                """,
+                (datetime.now().isoformat(), agent_email, knowledge_type, subject),
+            )
+
+    def search_agent_knowledge(
+        self,
+        agent_email: str,
+        query: str,
+        knowledge_types: Optional[List[str]] = None,
+        limit: int = 10,
+    ) -> List[Dict[str, Any]]:
+        """Search agent knowledge by content or subject."""
+        search_term = f"%{query}%"
+
+        if knowledge_types:
+            placeholders = ",".join("?" * len(knowledge_types))
+            type_filter = f"AND knowledge_type IN ({placeholders})"
+            params: List[Any] = [agent_email, search_term, search_term] + knowledge_types + [limit]
+        else:
+            type_filter = ""
+            params = [agent_email, search_term, search_term, limit]
+
+        with self._get_connection() as conn:
+            rows = conn.execute(
+                f"""
+                SELECT * FROM agent_knowledge
+                WHERE agent_email = ?
+                AND (subject LIKE ? OR content LIKE ?)
+                {type_filter}
+                ORDER BY confidence DESC, use_count DESC
+                LIMIT ?
+                """,
+                params,
+            ).fetchall()
+            return [dict(row) for row in rows]
+
+    def delete_agent_knowledge(
+        self,
+        agent_email: str,
+        knowledge_type: str,
+        subject: str,
+    ) -> None:
+        """Delete specific knowledge for an agent."""
+        with self._get_connection() as conn:
+            conn.execute(
+                """
+                DELETE FROM agent_knowledge
+                WHERE agent_email = ? AND knowledge_type = ? AND subject = ?
+                """,
+                (agent_email, knowledge_type, subject),
+            )
+
+    def cleanup_old_knowledge(
+        self,
+        agent_email: str,
+        days: int = 90,
+        min_confidence: float = 0.3,
+    ) -> int:
+        """Delete old, low-confidence, unused knowledge. Returns count deleted."""
+        cutoff = (
+            datetime.now()
+            .__sub__(__import__("datetime").timedelta(days=days))
+            .isoformat()
+        )
+        with self._get_connection() as conn:
+            cursor = conn.execute(
+                """
+                DELETE FROM agent_knowledge
+                WHERE agent_email = ?
+                AND confidence < ?
+                AND use_count = 0
+                AND updated_at < ?
+                """,
+                (agent_email, min_confidence, cutoff),
+            )
+            return cursor.rowcount
+
+    def cleanup_old_conversation_memories(
+        self,
+        agent_email: str,
+        days: int = 30,
+    ) -> int:
+        """Delete old conversation memories. Returns count deleted."""
+        cutoff = (
+            datetime.now()
+            .__sub__(__import__("datetime").timedelta(days=days))
+            .isoformat()
+        )
+        with self._get_connection() as conn:
+            cursor = conn.execute(
+                """
+                DELETE FROM conversation_memory
+                WHERE agent_email = ?
+                AND last_interaction_at < ?
+                """,
+                (agent_email, cutoff),
+            )
+            return cursor.rowcount
+
+
+    # ==========================================================================
+    # Employee State Operations (Agency CLI integration)
+    # ==========================================================================
+
+    def get_employee_state(self, email: str) -> Optional[Dict[str, Any]]:
+        """Get employee state for Agency CLI tracking."""
+        with self._get_connection() as conn:
+            row = conn.execute(
+                "SELECT * FROM employee_state WHERE email = ?", (email,)
+            ).fetchone()
+            return dict(row) if row else None
+
+    def upsert_employee_state(
+        self,
+        email: str,
+        last_check_in: Optional[str] = None,
+        processed_email_ids: Optional[str] = None,
+        processed_teams_ids: Optional[str] = None,
+        pending_items: Optional[str] = None,
+        consecutive_failures: Optional[int] = None,
+        circuit_breaker_until: Optional[str] = None,
+    ) -> None:
+        """Create or update employee state."""
+        with self._get_connection() as conn:
+            conn.execute(
+                """
+                INSERT INTO employee_state (email, last_check_in, processed_email_ids,
+                    processed_teams_ids, pending_items, consecutive_failures, circuit_breaker_until)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(email) DO UPDATE SET
+                    last_check_in = COALESCE(excluded.last_check_in, employee_state.last_check_in),
+                    processed_email_ids = COALESCE(excluded.processed_email_ids, employee_state.processed_email_ids),
+                    processed_teams_ids = COALESCE(excluded.processed_teams_ids, employee_state.processed_teams_ids),
+                    pending_items = COALESCE(excluded.pending_items, employee_state.pending_items),
+                    consecutive_failures = COALESCE(excluded.consecutive_failures, employee_state.consecutive_failures),
+                    circuit_breaker_until = COALESCE(excluded.circuit_breaker_until, employee_state.circuit_breaker_until)
+                """,
+                (
+                    email,
+                    last_check_in,
+                    processed_email_ids or "[]",
+                    processed_teams_ids or "[]",
+                    pending_items or "[]",
+                    consecutive_failures or 0,
+                    circuit_breaker_until,
+                ),
+            )
+
+    def increment_error_count(self, email: str, error: str) -> None:
+        """Increment error count in agent_state."""
+        with self._get_connection() as conn:
+            conn.execute(
+                """
+                UPDATE agent_state
+                SET error_count = error_count + 1, last_error = ?
+                WHERE email = ?
+                """,
+                (error, email),
+            )
+
+    def get_recent_conversations(
+        self, email: str, since: str, limit: int = 5
+    ) -> List[Dict[str, Any]]:
+        """Get recent conversations for context assembly."""
+        return self.get_recent_conversation_memories(
+            agent_email=email,
+            hours=48,
+            limit=limit,
+        )
+
+    def get_tasks_for_agent(
+        self, email: str, limit: int = 10
+    ) -> List[Dict[str, Any]]:
+        """Get active tasks assigned to an agent."""
+        return self.get_tasks_assigned_to(email)[:limit]
+
+    def get_knowledge_for_agent(
+        self, email: str, limit: int = 10
+    ) -> List[Dict[str, Any]]:
+        """Get all knowledge for an agent for context assembly."""
+        with self._get_connection() as conn:
+            rows = conn.execute(
+                """
+                SELECT * FROM agent_knowledge
+                WHERE agent_email = ?
+                ORDER BY use_count DESC, confidence DESC
+                LIMIT ?
+                """,
+                (email, limit),
+            ).fetchall()
+            return [dict(row) for row in rows]
+
+    def update_agent_metrics(
+        self,
+        agent_email: str,
+        metric_date: str,
+        emails_sent_delta: int = 0,
+        tick_count_delta: int = 0,
+    ) -> None:
+        """Update agent metrics with deltas."""
+        with self._get_connection() as conn:
+            conn.execute(
+                """
+                INSERT INTO agent_metrics (agent_email, metric_date, emails_sent, tick_count)
+                VALUES (?, ?, ?, ?)
+                ON CONFLICT(agent_email, metric_date) DO UPDATE SET
+                    emails_sent = emails_sent + excluded.emails_sent,
+                    tick_count = tick_count + excluded.tick_count
+                """,
+                (agent_email, metric_date, emails_sent_delta, tick_count_delta),
+            )
+
 
 # Global database instance
 _db: Optional[DatabaseService] = None

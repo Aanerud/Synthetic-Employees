@@ -5,33 +5,32 @@
     "role": "CEO",
     "department": "Executive",
     "job_title": "CEO",
-    "office_location": "London"
+    "office_location": "Milan Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "Leadership",
     "languages": [
-      "['Italian (Native)'",
-      "'English (Fluent)'",
-      "'French (Professional)']"
+      "Italian (Native)",
+      "English (Fluent)",
+      "French (Professional)"
     ],
     "skills": [
-      "['Strategic Planning'",
-      "'Business Development'",
-      "'Publishing Industry'",
-      "'Team Leadership'",
-      "'Corporate Communications']"
+      "Strategic Planning Business Development Publishing Industry Team Leadership Corporate Communications"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 30,
     "response_time_sla_hours": 1,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Rome"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "Founder and CEO of TextCraft Europe with 20+ years in publishing and content creation. Built the company from a small Milan studio to a pan-European writing collective serving Fortune 500 clients.",
+  "metadata": {
+    "country": "Italy"
+  }
 }

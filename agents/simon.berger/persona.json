@@ -5,33 +5,32 @@
     "role": "IT Support Specialist",
     "department": "Operations",
     "job_title": "IT Support Specialist",
-    "office_location": "London"
+    "office_location": "Zurich Office"
   },
   "personality": {
     "writing_style": "Professional",
     "communication_style": "Clear and concise",
     "specialization": "User Support",
     "languages": [
-      "['German (Native)'",
-      "'English (Fluent)'",
-      "'French (Professional)']"
+      "German (Native)",
+      "English (Fluent)",
+      "French (Professional)"
     ],
     "skills": [
-      "['IT Support'",
-      "'User Training'",
-      "'Helpdesk'",
-      "'Software Installation'",
-      "'Remote Support']"
+      "IT Support User Training Helpdesk Software Installation Remote Support"
     ]
   },
   "work_preferences": {
     "email_check_frequency_minutes": 60,
     "response_time_sla_hours": 4,
-    "timezone": "Europe/London"
+    "timezone": "Europe/Zurich"
   },
   "relationships": {
     "manager_email": null,
     "auto_accept_meetings_from": []
   },
-  "about_me": ""
+  "about_me": "IT support specialist keeping everyone productive. Expert in supporting creative professionals with their technical needs.",
+  "metadata": {
+    "country": "Switzerland"
+  }
 }
