@@ -1,0 +1,29 @@
+name: "fire_drill"
+description: "Mandatory fire evacuation drill"
+category: "emergency"
+
+time_window: [10, 15]
+probability: 0.005         # Very rare (~once per month if checking hourly)
+cooldown_minutes: 43200    # Once per month
+requires_workday: true
+
+scope: "all_active"
+
+actions:
+  - type: "teams_channel_message"
+    channel: "general"
+    pick_agents: 5
+    templates:
+      - "🚨 FIRE DRILL - Please evacuate the building immediately. This is a scheduled drill."
+      - "Fire drill! Everyone out. Don't forget your badge to get back in."
+      - "Here we go again... grabbing my jacket and heading out. 🚨"
+      - "Anyone know how long this drill will take? I have a deadline at 3."
+      - "Made it to the assembly point. Beautiful weather at least! ☀️"
+
+  - type: "send_email"
+    to: "all_active"
+    pick_agents: 1
+    templates:
+      - "As a reminder, today's fire drill is scheduled for the next 20 minutes. Please ensure all team members evacuate promptly. Meeting points are posted in the lobby."
+    subject_templates:
+      - "Fire Drill Notification"

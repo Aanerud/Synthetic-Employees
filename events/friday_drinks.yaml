@@ -1,0 +1,25 @@
+name: "friday_drinks"
+description: "End of week social gathering"
+category: "social"
+
+time_window: [15, 17]
+probability: 0.7          # High probability on Fridays
+cooldown_minutes: 10080    # Once per week
+requires_workday: true
+day_of_week: 4            # Friday (0=Monday)
+
+scope: "all_active"
+
+actions:
+  - type: "teams_channel_message"
+    channel: "general"
+    pick_agents: 8
+    templates:
+      - "Friday drinks in 30 minutes! Who's joining? 🍻"
+      - "Anyone up for a drink after work? It's been a long week."
+      - "I'm in! See you at the usual spot 🍷"
+      - "Count me in for Friday drinks! 🙋"
+      - "Can't make it this week, have to pick up the kids. Have one for me! 🍺"
+      - "I'll be there! First round is on the team that shipped this week 😄"
+      - "Every Friday I tell myself I'll skip drinks. Every Friday I'm there."
+      - "Bringing homemade snacks today! See everyone downstairs at 5."

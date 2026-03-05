@@ -1,0 +1,22 @@
+name: "bad_coffee"
+description: "The office coffee machine breaks down, causing a wave of complaints"
+category: "office_life"
+
+time_window: [9, 11]
+probability: 0.03
+cooldown_minutes: 10080   # Once per week
+requires_workday: true
+
+scope: "all_active"
+
+actions:
+  - type: "teams_channel_message"
+    channel: "general"
+    pick_agents: 4
+    templates:
+      - "Has anyone else noticed the coffee machine is making weird noises? Mine tasted like motor oil this morning."
+      - "Coffee machine update: it's dead. Who's up for a coffee run? ☕"
+      - "The coffee situation is unacceptable. I'm filing a formal complaint with facilities."
+      - "Day 1 without functioning coffee. Morale is low. Productivity declining."
+      - "I brought my own French press today. If anyone wants real coffee, come to my desk."
+      - "Plot twist: the coffee machine works fine, someone just forgot to add water. Again."

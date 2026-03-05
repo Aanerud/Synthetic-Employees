@@ -1,0 +1,22 @@
+name: "birthday_party"
+description: "Someone's birthday - cake in the kitchen!"
+category: "social"
+
+time_window: [14, 16]
+probability: 0.03
+cooldown_minutes: 1440    # Once per day
+requires_workday: true
+
+scope: "all_active"
+
+actions:
+  - type: "teams_channel_message"
+    channel: "general"
+    pick_agents: 6
+    templates:
+      - "Happy birthday {RandomColleague}! 🎂 Cake in the kitchen in 10 minutes!"
+      - "Happy birthday! 🎉🎂 Everyone head to the kitchen!"
+      - "Is that cake I smell? Happy birthday to whoever's celebrating today! 🍰"
+      - "Happy birthday! I got you something from the team. Check the kitchen! 🎁"
+      - "Happy birthday 🎂 Sorry I can't make it to the kitchen, but saving me a slice?"
+      - "The cake looks amazing! Who made it? Happy birthday! 🎉"

@@ -26,9 +26,12 @@ agency:
   agent_directory: ".github/agents"    # Where agent templates live
   mcp_servers: []                      # No MCP servers - M365 access via Python MCPClient
 
+# Tenant domain (for detecting external vs internal emails)
+tenant_domain: "a830edad9050849coep9vqp9bog.onmicrosoft.com"
+
 # Concurrency Control
 concurrency:
-  max_concurrent: 15                   # Max simultaneous Agency CLI processes
+  max_concurrent: 3                    # Agency CLI sessions (keep low to avoid conflicts)                   # Max simultaneous Agency CLI processes
   circuit_breaker_threshold: 3         # Consecutive failures before cooldown
   circuit_breaker_cooldown: 3600       # Cooldown duration in seconds (1 hour)
   debounce_seconds: 300                # Min seconds between same-employee executions

@@ -495,6 +495,12 @@
             try {
                 const res = await fetch('/api/agents');
                 agents = await res.json();
+                // Set defaults for WebSocket fields
+                agents.forEach(a => {
+                    a._active = false;
+                    a._authed = false;
+                    a._wsStatus = a.status || 'stopped';
+                });
                 populateFilters();
                 renderAgents();
                 updateStats();
@@ -617,13 +623,21 @@
 
             grid.innerHTML = filtered.map(a => {
                 const isActive = a._active || activeEmails.has(a.email);
-                const isAuthed = a._authed;
-                const hasError = a.status === 'error';
-                let cls = isActive ? (isAuthed ? 'active' : 'off') : 'off';
+                const isAuthed = a._authed || false;
+                const wsStatus = a._wsStatus || '';
+                const hasError = wsStatus === 'error' || a.status === 'error';
+                let cls = 'off';
+                if (isActive && isAuthed) cls = 'active';
+                else if (isActive && !isAuthed && companyRunning) cls = 'off'; // onboarding
                 if (hasError) cls = 'error';
+                if (wsStatus === 'thinking' || wsStatus === 'fetching') cls = 'thinking';
 
                 let doingText = '';
                 if (!isActive) doingText = '';
+                else if (wsStatus === 'fetching') { doingText = 'Reading inbox...'; cls = 'thinking'; }
+                else if (wsStatus === 'thinking') { doingText = 'Thinking...'; cls = 'thinking'; }
+                else if (wsStatus === 'executing') { doingText = 'Sending actions...'; cls = 'active'; }
+                else if (wsStatus === 'error') { doingText = 'Error'; cls = 'error'; }
                 else if (isAuthed) doingText = 'Online';
                 else if (companyRunning) doingText = 'Onboarding...';
                 else doingText = 'Ready';

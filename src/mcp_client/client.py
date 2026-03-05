@@ -210,7 +210,7 @@ class MCPClient:
 
     def mark_as_read(self, message_id: str) -> Dict:
         """Mark email as read."""
-        return self._call_tool("markEmailRead", {"messageId": message_id, "isRead": True})
+        return self._call_tool("markEmailRead", {"id": message_id, "isRead": True})
 
     def delete_mail(self, message_id: str) -> Dict:
         """Delete an email."""

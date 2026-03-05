@@ -56,6 +56,9 @@ inputs:
   - name: MemoryContext
     type: string
     role: required
+  - name: TenantDomain
+    type: string
+    role: required
 ```
 
 # Identity

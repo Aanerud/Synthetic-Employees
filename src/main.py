@@ -29,6 +29,7 @@ from src.agency.result_parser import ResultParser
 from src.concurrency.manager import ConcurrencyManager
 from src.database.db_service import DatabaseService
 from src.auth.mcp_token_manager import MCPTokenManager
+from src.behaviors.office_events import OfficeEventEngine
 from src.memory.context_assembler import ContextAssembler
 from src.scheduler.employee_scheduler import EmployeeScheduler
 from src.tasks.task_selector import TaskSelector
@@ -109,6 +110,7 @@ class AgencyOrchestrator:
         self.context_assembler = ContextAssembler(self.db)
         self.result_parser = ResultParser(self.db)
         self.task_selector = TaskSelector(self.scheduler)
+        self.event_engine = OfficeEventEngine(events_dir="events")
 
     def initialize(self):
         """Load personas and register employees with scheduler."""
@@ -197,6 +199,7 @@ class AgencyOrchestrator:
                 self.token_manager.get_mcp_token(email)
                 self.authed_employees.add(email)
                 self.auth_queue.remove(email)
+                self.db.upsert_agent_state(email, status="running")
                 authed += 1
                 logger.info("Authed %s (%d/%d)", email.split("@")[0], len(self.authed_employees), self.onboarding_total)
                 await asyncio.sleep(0.5)  # Small delay between auths
@@ -210,13 +213,13 @@ class AgencyOrchestrator:
 
     async def _progressive_auth_loop(self):
         """Background task: auth employees in batches every 15 minutes."""
-        # First batch immediately
-        count = await self.auth_batch(12)
+        # Auth all employees at once (rate limit raised to 200)
+        count = await self.auth_batch(100)
         logger.info("First batch: %d employees authed", count)
 
-        # Subsequent batches every 15 minutes
+        # If any failed, retry remaining every 2 minutes
         while self.running and self.auth_queue:
-            await asyncio.sleep(900)  # 15 minutes
+            await asyncio.sleep(120)  # 2 minutes
             if not self.running:
                 break
             count = await self.auth_batch(12)
@@ -252,6 +255,7 @@ class AgencyOrchestrator:
         role = persona.role or persona.job_title
 
         # ---- PRE-TICK: Fetch M365 data as this employee via stdio adapter ----
+        self.db.upsert_agent_state(email, status="fetching")
         inbox_data = "No inbox data available."
         calendar_data = "No calendar data available."
         mcp_client = None
@@ -298,6 +302,7 @@ class AgencyOrchestrator:
         input_vars["TaskInstructions"] = task.instructions
         input_vars["InboxData"] = inbox_data
         input_vars["CalendarData"] = calendar_data
+        input_vars["TenantDomain"] = self.config.get("tenant_domain", "a830edad9050849coep9vqp9bog.onmicrosoft.com")
 
         # Build memory context
         memory_context = self.context_assembler.build_context(email)
@@ -316,6 +321,7 @@ class AgencyOrchestrator:
         )
 
         # ---- BRAIN: Agency CLI decides what to do (free via Copilot) ----
+        self.db.upsert_agent_state(email, status="thinking")
         result = await self.runner.execute(
             agent_email=email,
             role=role,
@@ -329,6 +335,7 @@ class AgencyOrchestrator:
         # ---- POST-TICK: Execute decided actions via stdio MCPClient ----
         actions_executed = 0
         if result.exit_code == 0 and result.parsed_ok and mcp_client:
+            self.db.upsert_agent_state(email, status="executing")
             actions = result.actions_taken
             if actions:
                 executor = ActionExecutor(mcp_client)
@@ -357,12 +364,17 @@ class AgencyOrchestrator:
         # Mark ticked in scheduler
         self.scheduler.mark_ticked(email)
 
+        # Update final status
+        self.db.upsert_agent_state(email, status="running")
+
         if result.exit_code == 0:
             print(
                 f"           Done: {actions_executed} actions executed "
                 f"({result.duration_seconds:.1f}s)"
             )
         else:
+            self.error_count_session += 1
+            self.db.upsert_agent_state(email, status="error", last_error=result.error)
             print(f"           Error: {result.error}")
 
     async def start(
@@ -438,6 +450,34 @@ class AgencyOrchestrator:
                     due = [
                         s for s in due if s.email in agents_filter
                     ]
+
+                # Check office events (no Agency CLI needed - fast)
+                if not dry_run and self.authed_employees:
+                    active_info = []
+                    for s in due:
+                        p = self.persona_registry.get_by_email(s.email)
+                        if p:
+                            active_info.append({
+                                "email": s.email,
+                                "name": p.name,
+                                "role": p.role or p.job_title,
+                                "department": p.department,
+                                "country": self._resolve_country(p),
+                            })
+                    fired = self.event_engine.check_and_fire(active_info)
+                    if fired:
+                        logger.info("Office events fired: %d actions", len(fired))
+                        for ev in fired:
+                            self.db.log_activity(
+                                agent_email=ev["agent_email"],
+                                action_type=f"event:{ev['event']}",
+                                action_data=ev,
+                                result="success",
+                            )
+                            self.action_count += 1
+                            print(f"  [EVENT] {ev['agent_name']}: {ev['event']} - {ev['message'][:60]}")
+
+                logger.info("Tick loop: %d due, %d authed, submitting...", len(due), len(self.authed_employees))
 
                 # Submit to concurrency manager
                 for schedule in due:

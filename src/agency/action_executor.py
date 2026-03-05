@@ -138,7 +138,7 @@ class ActionExecutor:
         }
 
     def _mark_read(self, action: Dict) -> Dict:
-        message_id = action.get("message_id", "")
+        message_id = action.get("message_id") or action.get("id", "")
         if not message_id:
             return {
                 "action": "mark_read",

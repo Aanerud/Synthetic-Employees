@@ -1,0 +1,27 @@
+name: "call_in_sick"
+description: "An employee calls in sick, notifies their manager"
+category: "hr"
+
+time_window: [7, 10]
+probability: 0.04
+cooldown_minutes: 1440    # Once per day
+requires_workday: true
+
+scope: "random:1"
+exclude_roles:
+  - "CEO"
+  - "COO"
+  - "CFO"
+
+actions:
+  - type: "send_email"
+    to: "manager"
+    pick_agents: 1
+    templates:
+      - "Hi, I'm not feeling well today and won't be able to come in. I'll try to check emails from home if I feel better later. Sorry for the short notice."
+      - "Good morning, I woke up with a terrible headache and need to take the day off. I've rescheduled my meetings. Will be back tomorrow."
+      - "I need to call in sick today. I think it's the flu going around the office. Will keep you posted on tomorrow."
+    subject_templates:
+      - "Sick day - {Name}"
+      - "Out sick today"
+      - "Taking a sick day"

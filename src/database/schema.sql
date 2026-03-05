@@ -5,7 +5,7 @@
 -- Tracks current state of each agent
 CREATE TABLE IF NOT EXISTS agent_state (
     email TEXT PRIMARY KEY,
-    status TEXT NOT NULL DEFAULT 'stopped' CHECK (status IN ('stopped', 'running', 'paused', 'error')),
+    status TEXT NOT NULL DEFAULT 'stopped' CHECK (status IN ('stopped', 'running', 'paused', 'error', 'fetching', 'thinking', 'executing')),
     last_tick_at TEXT,
     next_tick_at TEXT,
     error_count INTEGER DEFAULT 0,

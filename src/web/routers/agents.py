@@ -233,6 +233,9 @@ async def list_agents(
 
     agents = []
     for persona in sorted(reg.list_all(), key=lambda p: p.name):
+        # Skip template personas
+        if "_template" in persona.folder_path or "michael.scott" in persona.email.lower():
+            continue
         state = db.get_agent_state(persona.email)
         agent_status = state.status if state else "stopped"
 
