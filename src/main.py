@@ -260,12 +260,30 @@ class AgencyOrchestrator:
         calendar_data = "No calendar data available."
         mcp_client = None
 
+        def _sync_fetch():
+            """Run stdio client in thread (it's sync/blocking)."""
+            c = self.token_manager.get_stdio_client(email)
+            f = DataFetcher(c)
+            data = f.fetch_all(inbox_limit=10)
+            return c, data
+
         try:
-            mcp_client = self.token_manager.get_stdio_client(email)
-            fetcher = DataFetcher(mcp_client)
-            m365_data = fetcher.fetch_all(inbox_limit=10)
+            loop = asyncio.get_event_loop()
+            mcp_client, m365_data = await asyncio.wait_for(
+                loop.run_in_executor(None, _sync_fetch),
+                timeout=30,
+            )
             inbox_data = m365_data["inbox"]
             calendar_data = m365_data["calendar"]
+        except asyncio.TimeoutError:
+            logger.warning("Pre-tick fetch TIMED OUT for %s (30s)", email)
+            inbox_data = "[Inbox fetch timed out - will retry next cycle]"
+            if mcp_client:
+                try:
+                    mcp_client.close()
+                except Exception:
+                    pass
+                mcp_client = None
         except Exception as exc:
             logger.warning("Pre-tick fetch failed for %s: %s", email, exc)
             inbox_data = f"[Error fetching inbox: {exc}]"
