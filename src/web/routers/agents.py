@@ -150,7 +150,15 @@ async def get_activity_feed(limit: int = Query(30, ge=1, le=100)):
 
         # Agency execution
         elif e.action_data:
-            data = e.action_data if isinstance(e.action_data, dict) else {}
+            data = e.action_data
+            if isinstance(data, str):
+                try:
+                    import json as _json
+                    data = _json.loads(data)
+                    if isinstance(data, str):
+                        data = _json.loads(data)  # Double-encoded fix
+                except Exception:
+                    data = {}
             actions = data.get("actions_taken", [])
             if actions:
                 parts = []

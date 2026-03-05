@@ -78,7 +78,7 @@ class ResultParser:
             self.db.log_activity(
                 agent_email=email,
                 action_type="agency_execution",
-                action_data=json.dumps(action_data),
+                action_data=action_data,
                 result="success" if result.exit_code == 0 else "error",
                 error_message=result.error,
             )
