@@ -561,6 +561,14 @@
                     });
                     renderAgents();
                     buildTzBar();
+
+                    // Refresh feed periodically when company is running
+                    if (companyRunning && data.orchestrator && data.orchestrator.ticks > 0) {
+                        if (!window._lastFeedRefresh || Date.now() - window._lastFeedRefresh > 15000) {
+                            window._lastFeedRefresh = Date.now();
+                            fetchFeed();
+                        }
+                    }
                 }
             };
         }
@@ -674,7 +682,11 @@
                 const t = new Date(f.timestamp);
                 const time = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const isError = f.result === 'error';
-                const icon = isError ? '❌' : f.action.includes('email') ? '📧' : f.action.includes('inbox') ? '📨' : '⚡';
+                const iconMap = {email: '📧', event: '🎭', file: '📄', calendar: '📅', inbox: '📨', tick: '⚡'};
+                const icon = isError ? '❌' : (iconMap[f.icon] || '⚡');
+
+                // Skip boring "Checked inbox" entries to reduce noise
+                if (f.action === 'Checked inbox' && !isError) return '';
 
                 return `<div class="feed-item ${isError ? 'error' : ''}">
                     <span class="feed-time">${time}</span>

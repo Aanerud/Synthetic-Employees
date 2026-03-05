@@ -137,25 +137,56 @@ async def get_activity_feed(limit: int = Query(30, ge=1, le=100)):
     feed = []
     for e in entries:
         name = name_map.get(e.agent_email, e.agent_email.split("@")[0])
-        # Build human-readable description
-        desc = e.action_type
-        if e.action_data:
-            actions = e.action_data.get("actions_taken", [])
+        desc = e.action_type or "unknown"
+        icon = "tick"
+
+        # Office events
+        if e.action_type and e.action_type.startswith("event:"):
+            event_data = e.action_data if isinstance(e.action_data, dict) else {}
+            event_name = event_data.get("event", e.action_type.replace("event:", ""))
+            message = event_data.get("message", "")[:80]
+            desc = f"[{event_name}] {message}"
+            icon = "event"
+
+        # Agency execution
+        elif e.action_data:
+            data = e.action_data if isinstance(e.action_data, dict) else {}
+            actions = data.get("actions_taken", [])
             if actions:
-                types = [a.get("type", "") for a in actions]
-                email_count = sum(1 for t in types if t in ("send_email", "reply_email"))
-                if email_count:
-                    desc = f"Sent {email_count} email{'s' if email_count > 1 else ''}"
-                elif "no_action" in types:
-                    desc = "Checked inbox (no action needed)"
-                else:
-                    desc = ", ".join(t.replace("_", " ") for t in types[:3])
+                parts = []
+                for a in actions:
+                    t = a.get("type", "")
+                    if t == "send_email":
+                        to = a.get("to", "?").split("@")[0]
+                        subj = a.get("subject", "")[:30]
+                        parts.append(f"Emailed {to}: {subj}")
+                        icon = "email"
+                    elif t == "reply_email":
+                        parts.append("Replied to email")
+                        icon = "email"
+                    elif t == "upload_file":
+                        parts.append(f"Uploaded {a.get('filename', '?')}")
+                        icon = "file"
+                    elif t == "accept_meeting":
+                        parts.append("Accepted meeting")
+                        icon = "calendar"
+                    elif t == "no_action":
+                        parts.append("Checked inbox")
+                        icon = "inbox"
+                    elif t == "mark_read":
+                        pass  # Skip noise
+                if parts:
+                    desc = " | ".join(parts)
+                elif any(a.get("type") == "mark_read" for a in actions):
+                    desc = "Checked inbox"
+                    icon = "inbox"
 
         feed.append({
             "id": e.id,
             "name": name,
             "email": e.agent_email,
             "action": desc,
+            "icon": icon,
             "result": e.result,
             "error": e.error_message,
             "timestamp": e.timestamp.isoformat(),
