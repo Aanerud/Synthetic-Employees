@@ -156,9 +156,15 @@ class AgencyCliRunner:
         # Prompt and output mode
         cmd.extend(["--prompt", prompt])
 
-        # On Windows, agency.EXE; --print for non-interactive output
+        # On Windows, try agency.EXE if agency is not found
         if platform.system() == "Windows":
-            cmd[0] = cmd[0] + ".EXE" if not cmd[0].endswith(".EXE") else cmd[0]
+            import shutil
+            binary = cmd[0]
+            if not shutil.which(binary):
+                for variant in [binary + ".EXE", binary + ".exe", binary + ".cmd"]:
+                    if shutil.which(variant):
+                        cmd[0] = variant
+                        break
 
         return cmd
 

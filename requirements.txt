@@ -19,6 +19,7 @@ jinja2>=3.1.0
 python-dateutil>=2.8.2
 pytz>=2024.1
 PyYAML>=5.4
+tzdata>=2024.1           # Required on Windows for ZoneInfo
 
 # Logging
 colorlog>=6.8.0

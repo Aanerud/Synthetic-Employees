@@ -102,3 +102,4 @@ test_*.py
 
 # FHL submissions (personal, not repo content)
 FHL-*.md
+Credentials.txt

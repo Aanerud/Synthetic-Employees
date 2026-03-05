@@ -107,12 +107,22 @@ Each tick injects this context into the prompt, so the agent picks up where it l
 ```bash
 git clone <repo-url>
 cd Synthetic-Employees
-python3 -m venv venv && source venv/bin/activate
+python3 -m venv venv && source venv/bin/activate   # macOS/Linux
+# python -m venv venv && venv\Scripts\activate      # Windows
 pip install -r requirements.txt
 
 cp .env.example .env        # Add your Azure AD credentials
-cp config/agents.json.example config/agents.json  # Add employee entries
+
+# Generate agents.json from the CSV (no M365 provisioning needed)
+python -m src.main generate-agents --password YOUR_DEFAULT_PASSWORD
 ```
+
+### Windows Notes
+
+- Use `python` instead of `python3`
+- Agency CLI is `agency.EXE copilot` (the code handles this automatically)
+- The `tzdata` package is included in requirements for Windows timezone support
+- If `agency` is not in PATH, set `agency.binary_path` in `config.yaml` to the full path
 
 ### Run
 

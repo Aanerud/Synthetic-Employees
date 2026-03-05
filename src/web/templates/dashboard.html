@@ -678,23 +678,28 @@
             actionCount = feed.length;
             document.getElementById('stat-actions').textContent = actionCount;
 
-            list.innerHTML = feed.map(f => {
+            // Separate interesting vs boring items
+            const interesting = feed.filter(f => f.action !== 'Checked inbox' || f.result === 'error');
+            const boring = feed.filter(f => f.action === 'Checked inbox' && f.result !== 'error');
+
+            // Show interesting items first, then fill with boring if needed (min 5 shown)
+            const toShow = interesting.length >= 5 ? interesting : [...interesting, ...boring.slice(0, 5 - interesting.length)];
+
+            list.innerHTML = toShow.map(f => {
                 const t = new Date(f.timestamp);
                 const time = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const isError = f.result === 'error';
+                const isBoring = f.action === 'Checked inbox';
                 const iconMap = {email: '📧', event: '🎭', file: '📄', calendar: '📅', inbox: '📨', tick: '⚡'};
                 const icon = isError ? '❌' : (iconMap[f.icon] || '⚡');
 
-                // Skip boring "Checked inbox" entries to reduce noise
-                if (f.action === 'Checked inbox' && !isError) return '';
-
-                return `<div class="feed-item ${isError ? 'error' : ''}">
+                return `<div class="feed-item ${isError ? 'error' : ''}" ${isBoring ? 'style="opacity:0.5"' : ''}>
                     <span class="feed-time">${time}</span>
                     <span class="feed-name">${f.name}</span>
                     <span class="feed-action">${icon} ${f.action}</span>
                     ${f.error ? `<div style="color:#f85149;font-size:0.65rem">${f.error}</div>` : ''}
                 </div>`;
-            }).join('');
+            }).join('') || '<div class="feed-empty">Waiting for agent activity...</div>';
         }
 
         // ── Modal ──

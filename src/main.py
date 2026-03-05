@@ -356,17 +356,29 @@ class AgencyOrchestrator:
             self.db.upsert_agent_state(email, status="executing")
             actions = result.actions_taken
             if actions:
-                executor = ActionExecutor(mcp_client)
-                action_results = executor.execute_actions(actions, email)
-                actions_executed = sum(
-                    1 for r in action_results if r.get("status") == "success"
-                )
-                logger.info(
-                    "Executed %d/%d actions for %s",
-                    actions_executed,
-                    len(actions),
-                    email,
-                )
+                def _sync_execute():
+                    executor = ActionExecutor(mcp_client)
+                    return executor.execute_actions(actions, email)
+
+                try:
+                    loop = asyncio.get_event_loop()
+                    action_results = await asyncio.wait_for(
+                        loop.run_in_executor(None, _sync_execute),
+                        timeout=30,
+                    )
+                    actions_executed = sum(
+                        1 for r in action_results if r.get("status") == "success"
+                    )
+                    logger.info(
+                        "Executed %d/%d actions for %s",
+                        actions_executed,
+                        len(actions),
+                        email,
+                    )
+                except asyncio.TimeoutError:
+                    logger.warning("Post-tick execution TIMED OUT for %s", email)
+                except Exception as exc:
+                    logger.error("Post-tick execution failed for %s: %s", email, exc)
 
         # Close stdio client
         if mcp_client:
@@ -603,6 +615,13 @@ def main():
     # Test MCP
     subparsers.add_parser("test-mcp", help="Test MCP connectivity")
 
+    # Generate agents.json from CSV (no M365 provisioning needed)
+    gen_p = subparsers.add_parser(
+        "generate-agents", help="Generate config/agents.json from textcraft-europe.csv"
+    )
+    gen_p.add_argument("--csv", default="textcraft-europe.csv", help="CSV file path")
+    gen_p.add_argument("--password", help="Password for all agents (or uses DEFAULT_PASSWORD env)")
+
     # Import CSV
     import_p = subparsers.add_parser(
         "import-csv", help="Import agents from CSV"
@@ -659,7 +678,9 @@ def main():
         def _signal_handler():
             orchestrator.running = False
 
-        loop.add_signal_handler(signal.SIGINT, _signal_handler)
+        # add_signal_handler not available on Windows
+        if sys.platform != "win32":
+            loop.add_signal_handler(signal.SIGINT, _signal_handler)
 
         try:
             loop.run_until_complete(
@@ -669,6 +690,8 @@ def main():
                     dry_run=args.dry_run,
                 )
             )
+        except KeyboardInterrupt:
+            orchestrator.running = False
         finally:
             loop.close()
 
@@ -693,6 +716,45 @@ def main():
                 f"{persona.office_location:15s} {persona.timezone}"
             )
         print()
+
+    elif args.command == "generate-agents":
+        import csv as csv_mod
+        csv_file = args.csv
+        password = args.password or os.getenv("DEFAULT_PASSWORD", "")
+
+        if not password:
+            print("Error: provide --password or set DEFAULT_PASSWORD in .env")
+            sys.exit(1)
+
+        if not Path(csv_file).exists():
+            print(f"Error: CSV not found: {csv_file}")
+            sys.exit(1)
+
+        agents_list = []
+        with open(csv_file, encoding="utf-8") as f:
+            for row in csv_mod.DictReader(f):
+                agents_list.append({
+                    "name": row["name"],
+                    "email": row["email"],
+                    "role": row.get("jobTitle", row.get("role", "")),
+                    "department": row.get("department", ""),
+                    "userId": "",
+                    "password": password,
+                    "createdAt": datetime.now().isoformat(),
+                    "metadata": {"country": row.get("country", "")},
+                })
+
+        output = {
+            "agents": agents_list,
+            "metadata": {"totalAgents": len(agents_list), "version": "2.0.0"},
+        }
+
+        os.makedirs("config", exist_ok=True)
+        with open("config/agents.json", "w", encoding="utf-8") as f:
+            import json as json_mod
+            json_mod.dump(output, f, indent=2, ensure_ascii=False)
+
+        print(f"Generated config/agents.json with {len(agents_list)} agents")
 
     elif args.command == "test-mcp":
         print("\nTesting MCP connectivity via stdio adapter...\n")
