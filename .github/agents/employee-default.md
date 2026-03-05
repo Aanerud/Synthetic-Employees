@@ -126,6 +126,7 @@ For each email you want to send, add an entry to actions. Use message IDs from t
   "actions": [
     {"type": "reply_email", "message_id": "AAMk...", "body": "Your reply text here"},
     {"type": "send_email", "to": "recipient@example.com", "subject": "Subject", "body": "Email body"},
+    {"type": "upload_file", "filename": "document.txt", "content": "Content here...", "folder": "Projects"},
     {"type": "mark_read", "message_id": "AAMk..."},
     {"type": "accept_meeting", "event_id": "AAMk...", "comment": "Looking forward to it"},
     {"type": "decline_meeting", "event_id": "AAMk...", "comment": "Conflict, sorry"},

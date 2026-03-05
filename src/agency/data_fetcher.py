@@ -35,14 +35,19 @@ def _format_email(msg: Dict[str, Any]) -> str:
 
     status = "UNREAD" if not is_read else "read"
     sender_str = f"{sender_name} <{sender}>" if sender_name else sender
+    has_attachments = msg.get("hasAttachments", False)
 
-    return (
-        f"- [{status}] ID: {msg_id}\n"
-        f"  From: {sender_str}\n"
-        f"  Subject: {subject}\n"
-        f"  Received: {received}\n"
-        f"  Preview: {preview}"
-    )
+    lines = [
+        f"- [{status}] ID: {msg_id}",
+        f"  From: {sender_str}",
+        f"  Subject: {subject}",
+        f"  Received: {received}",
+    ]
+    if has_attachments:
+        lines.append(f"  Attachments: YES (use the email to view details)")
+    lines.append(f"  Preview: {preview}")
+
+    return "\n".join(lines)
 
 
 def _format_event(event: Dict[str, Any]) -> str:

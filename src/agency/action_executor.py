@@ -62,6 +62,10 @@ class ActionExecutor:
                 return self._respond_to_meeting(action, "tentativelyAccept")
             elif action_type == "create_meeting":
                 return self._create_meeting(action)
+            elif action_type == "upload_file":
+                return self._upload_file(action)
+            elif action_type == "share_file":
+                return self._share_file(action)
             elif action_type in ("no_action", "flag_for_later"):
                 return {
                     "action": action_type,
@@ -198,3 +202,35 @@ class ActionExecutor:
             "status": "success",
             "subject": subject,
         }
+
+    def _upload_file(self, action: Dict) -> Dict:
+        filename = action.get("filename", "")
+        content = action.get("content", "")
+        folder = action.get("folder", "Documents")
+
+        if not filename or not content:
+            return {"action": "upload_file", "status": "error", "error": "Missing filename or content"}
+
+        result = self.mcp.upload_file(filename, content, folder)
+        logger.info("Uploaded file: %s to %s", filename, folder)
+        return {"action": "upload_file", "status": "success", "filename": filename}
+
+    def _share_file(self, action: Dict) -> Dict:
+        file_id = action.get("file_id", "")
+        share_with = action.get("share_with", "")
+
+        if not file_id:
+            return {"action": "share_file", "status": "error", "error": "Missing file_id"}
+
+        link = self.mcp.create_sharing_link(file_id)
+        logger.info("Created sharing link for %s", file_id[:20])
+
+        # If share_with specified, email the link
+        if share_with:
+            self.mcp.send_mail(
+                to=share_with,
+                subject=action.get("subject", "Shared file"),
+                body=f"I've shared a file with you: {link.get('link', {}).get('webUrl', 'See OneDrive')}\n\n{action.get('message', '')}",
+            )
+
+        return {"action": "share_file", "status": "success", "file_id": file_id}

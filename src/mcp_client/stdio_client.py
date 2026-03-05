@@ -388,6 +388,39 @@ class MCPStdioClient:
         """Delete an email."""
         return self.call_tool("deleteMail", {"messageId": message_id})
 
+    # ========== Attachment Tools ==========
+
+    def get_mail_attachments(self, message_id: str) -> List[Dict]:
+        """Get attachments for an email message."""
+        result = self.call_tool("getMailAttachments", {"id": message_id})
+        if isinstance(result, list):
+            return result
+        if isinstance(result, dict) and "value" in result:
+            return result["value"]
+        return [result] if result else []
+
+    # ========== File Tools ==========
+
+    def upload_file(self, filename: str, content: str, folder: str = "Documents") -> Dict:
+        """Upload a file to OneDrive."""
+        return self.call_tool("uploadFile", {
+            "fileName": filename,
+            "content": content,
+            "folderPath": folder,
+        })
+
+    def create_sharing_link(self, file_id: str) -> Dict:
+        """Create a sharing link for a file."""
+        return self.call_tool("createSharingLink", {
+            "fileId": file_id,
+            "type": "view",
+            "scope": "organization",
+        })
+
+    def get_file_content(self, file_id: str) -> Dict:
+        """Get the content of a file."""
+        return self.call_tool("getFileContent", {"fileId": file_id})
+
     # ========== Calendar Tools ==========
 
     def get_events(
