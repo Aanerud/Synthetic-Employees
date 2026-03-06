@@ -32,12 +32,23 @@ class TokenManager:
     accounts without MFA enabled.
     """
 
-    # Microsoft Graph API scopes
+    # Microsoft Graph API scopes (must match Azure app registration)
     DEFAULT_SCOPES = [
+        "https://graph.microsoft.com/User.Read",
+        "https://graph.microsoft.com/User.Read.All",
         "https://graph.microsoft.com/Mail.ReadWrite",
         "https://graph.microsoft.com/Mail.Send",
         "https://graph.microsoft.com/Calendars.ReadWrite",
-        "https://graph.microsoft.com/User.Read",
+        "https://graph.microsoft.com/People.Read",
+        "https://graph.microsoft.com/People.Read.All",
+        "https://graph.microsoft.com/Files.ReadWrite.All",
+        "https://graph.microsoft.com/Chat.ReadWrite",
+        "https://graph.microsoft.com/ChannelMessage.Send",
+        "https://graph.microsoft.com/Channel.ReadBasic.All",
+        "https://graph.microsoft.com/Contacts.ReadWrite",
+        "https://graph.microsoft.com/Tasks.ReadWrite",
+        "https://graph.microsoft.com/Group.Read.All",
+        "https://graph.microsoft.com/OnlineMeetings.ReadWrite",
     ]
 
     def __init__(
