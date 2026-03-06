@@ -335,6 +335,14 @@ class AgencyOrchestrator:
         input_vars["CalendarData"] = calendar_data
         input_vars["TenantDomain"] = self.config.get("tenant_domain", "a830edad9050849coep9vqp9bog.onmicrosoft.com")
 
+        # Inject team directory for KAM agents
+        role_lower = role.lower()
+        if "key account" in role_lower or "account director" in role_lower:
+            from src.agency.team_directory import build_team_directory
+            input_vars["TeamDirectory"] = build_team_directory(self.persona_registry, exclude_email=email)
+        else:
+            input_vars["TeamDirectory"] = ""
+
         # Build memory context
         memory_context = self.context_assembler.build_context(email)
         input_vars["MemoryContext"] = memory_context

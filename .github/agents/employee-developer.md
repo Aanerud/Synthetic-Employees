@@ -59,6 +59,10 @@ inputs:
   - name: TenantDomain
     type: string
     role: required
+  - name: TeamDirectory
+    type: string
+    role: optional
+    default: ""
 ```
 
 # Identity
