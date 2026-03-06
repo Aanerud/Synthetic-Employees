@@ -386,6 +386,10 @@
                     <option value="active">Active</option>
                     <option value="off">Off Hours</option>
                 </select>
+                <select class="filter-select" id="event-select" style="background:#1a3a2a;border-color:#238636;color:#3fb950">
+                    <option value="">Trigger Event...</option>
+                </select>
+                <button onclick="triggerEvent()" style="padding:0.4rem 0.8rem;border:none;border-radius:6px;background:#238636;color:#fff;font-size:0.75rem;cursor:pointer">Fire!</button>
             </div>
             <div class="agents-grid" id="agents-grid"></div>
         </div>
@@ -429,9 +433,44 @@
             fetchAgents();
             fetchFeed();
             fetchKams();
+            fetchEvents();
             checkCompanyStatus();
             connectWS();
         });
+
+        async function fetchEvents() {
+            try {
+                const res = await fetch('/api/company/events');
+                const events = await res.json();
+                const sel = document.getElementById('event-select');
+                sel.innerHTML = '<option value="">Trigger Event...</option>' +
+                    events.map(e => `<option value="${e.name}" title="${e.description}">${e.category === 'emergency' ? '🚨' : e.category === 'social' ? '🎉' : e.category === 'hr' ? '🏥' : '☕'} ${e.name.replace(/_/g, ' ')}</option>`).join('');
+            } catch (e) {}
+        }
+
+        async function triggerEvent() {
+            const sel = document.getElementById('event-select');
+            const eventName = sel.value;
+            if (!eventName) { alert('Select an event first'); return; }
+            if (!companyRunning) { alert('Start the company first'); return; }
+
+            try {
+                const res = await fetch('/api/company/trigger-event', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({event: eventName}),
+                });
+                const data = await res.json();
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    sel.value = '';
+                    fetchFeed();
+                }
+            } catch (e) {
+                alert('Failed: ' + e.message);
+            }
+        }
 
         async function fetchKams() {
             try {

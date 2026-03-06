@@ -236,6 +236,110 @@ async def company_status():
     return _orchestrator.get_status()
 
 
+@app.get("/api/company/events")
+async def list_events():
+    """List available office events."""
+    from ..behaviors.office_events import load_events
+    events = load_events("events")
+    return [
+        {
+            "name": e.name,
+            "description": e.description,
+            "category": e.category,
+        }
+        for e in events
+    ]
+
+
+@app.post("/api/company/trigger-event")
+async def trigger_event(request: dict):
+    """Manually trigger a specific office event."""
+    event_name = request.get("event", "")
+
+    if not event_name:
+        return JSONResponse({"error": "Missing 'event' field"}, status_code=400)
+
+    from ..behaviors.office_events import load_events
+    events = load_events("events")
+    event = next((e for e in events if e.name == event_name), None)
+
+    if not event:
+        return JSONResponse({"error": f"Event not found: {event_name}"}, status_code=404)
+
+    # Get active agents
+    if not _orchestrator or not _orchestrator.running:
+        return JSONResponse({"error": "Company not running"}, status_code=400)
+
+    active_info = []
+    for p in _orchestrator.persona_registry:
+        if _orchestrator.scheduler.is_active_time(p.email):
+            country = _orchestrator._resolve_country(p)
+            active_info.append({
+                "email": p.email,
+                "name": p.name,
+                "role": p.role or p.job_title,
+                "department": p.department,
+                "country": country,
+            })
+
+    # Force-fire the event (bypass probability/cooldown)
+    import random
+    results = []
+    affected = active_info
+
+    # Scope filtering
+    if event.scope.startswith("random:"):
+        count = int(event.scope.split(":")[1])
+        affected = random.sample(active_info, min(count, len(active_info)))
+    elif event.scope.startswith("department:"):
+        dept = event.scope.split(":")[1]
+        affected = [a for a in active_info if a.get("department") == dept]
+    elif event.scope.startswith("country:"):
+        c = event.scope.split(":")[1]
+        affected = [a for a in active_info if a.get("country") == c]
+
+    for action in event.actions:
+        actors = random.sample(affected, min(action.pick_agents, len(affected))) if affected else []
+        for agent in actors:
+            template = random.choice(action.templates) if action.templates else ""
+            message = template.replace("{Name}", agent.get("name", ""))
+            message = message.replace("{OfficeLocation}", agent.get("country", ""))
+            if "{RandomColleague}" in message and affected:
+                colleague = random.choice([a for a in affected if a["email"] != agent["email"]] or affected)
+                message = message.replace("{RandomColleague}", colleague.get("name", "someone"))
+
+            subject = ""
+            if action.subject_templates:
+                subject = random.choice(action.subject_templates).replace("{Name}", agent.get("name", ""))
+
+            result_entry = {
+                "event": event.name,
+                "category": event.category,
+                "agent_email": agent["email"],
+                "agent_name": agent.get("name", ""),
+                "action_type": action.type,
+                "message": message,
+                "subject": subject,
+            }
+            results.append(result_entry)
+
+            # Log to DB
+            _orchestrator.db.log_activity(
+                agent_email=agent["email"],
+                action_type=f"event:{event.name}",
+                action_data=result_entry,
+                result="success",
+            )
+            _orchestrator.action_count += 1
+
+    return {
+        "status": "fired",
+        "event": event.name,
+        "actions": len(results),
+        "agents_affected": list(set(r["agent_name"] for r in results)),
+    }
+
+
 @app.get("/api/company/kams")
 async def get_kams():
     """Get Key Account Manager emails for sending work."""
