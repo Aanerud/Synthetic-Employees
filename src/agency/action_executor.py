@@ -15,8 +15,10 @@ logger = logging.getLogger(__name__)
 class ActionExecutor:
     """Executes M365 actions decided by the Agency CLI brain."""
 
-    def __init__(self, mcp_client: MCPClient):
+    def __init__(self, mcp_client: MCPClient, db=None, token_manager=None):
         self.mcp = mcp_client
+        self.db = db
+        self.token_manager = token_manager
 
     def execute_actions(
         self, actions: List[Dict[str, Any]], agent_email: str
@@ -62,6 +64,8 @@ class ActionExecutor:
                 return self._respond_to_meeting(action, "tentativelyAccept")
             elif action_type == "create_meeting":
                 return self._create_meeting(action)
+            elif action_type == "search_people":
+                return self._search_people(action, agent_email)
             elif action_type == "upload_file":
                 return self._upload_file(action)
             elif action_type == "share_file":
@@ -234,3 +238,36 @@ class ActionExecutor:
             )
 
         return {"action": "share_file", "status": "success", "file_id": file_id}
+
+    def _search_people(self, action: Dict, agent_email: str) -> Dict:
+        query = action.get("query", "")
+        if not query:
+            return {"action": "search_people", "status": "error", "error": "Missing 'query'"}
+
+        if not self.token_manager or not self.db:
+            return {"action": "search_people", "status": "error", "error": "Search not configured"}
+
+        import os
+        from src.agency.team_directory import search_people_graph
+
+        # Get Graph token for this agent
+        try:
+            pw = os.getenv("DEFAULT_PASSWORD", "")
+            graph_token = self.token_manager.authenticate(agent_email, pw)
+            results = search_people_graph(graph_token.access_token, query)
+        except Exception as exc:
+            logger.warning("People search failed for '%s': %s", query, exc)
+            return {"action": "search_people", "status": "error", "error": str(exc)}
+
+        # Store results in agent knowledge for next tick
+        self.db.upsert_agent_knowledge(
+            agent_email=agent_email,
+            knowledge_type="search_result",
+            subject=f"search:{query}",
+            content=f'People search results for "{query}":\n{results}',
+            source_type="observation",
+            confidence=1.0,
+        )
+
+        logger.info("People search '%s' for %s: stored in knowledge", query, agent_email.split("@")[0])
+        return {"action": "search_people", "status": "success", "query": query}

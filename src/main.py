@@ -378,7 +378,7 @@ class AgencyOrchestrator:
             actions = result.actions_taken
             if actions:
                 def _sync_execute():
-                    executor = ActionExecutor(mcp_client)
+                    executor = ActionExecutor(mcp_client, db=self.db, token_manager=self.token_manager.graph_token_manager)
                     return executor.execute_actions(actions, email)
 
                 try:

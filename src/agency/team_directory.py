@@ -10,6 +10,8 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Optional
 
+import requests
+
 logger = logging.getLogger(__name__)
 
 
@@ -92,3 +94,55 @@ def build_team_directory(
     logger.info("Built team directory: %d writers, %d editors, %d QA",
                 len(groups["Writers"]), len(groups["Editors"]), len(groups["Quality Assurance"]))
     return result
+
+
+def search_people_graph(access_token: str, query: str) -> str:
+    """Search for people via Microsoft Graph Search API.
+
+    Args:
+        access_token: Graph API bearer token with People.Read scope.
+        query: Search query (e.g., "Technical Writer", "proofreader", "Madrid").
+
+    Returns:
+        Formatted string of search results, one person per line.
+    """
+    body = {
+        "requests": [{
+            "entityTypes": ["person"],
+            "query": {"queryString": query},
+        }]
+    }
+
+    try:
+        resp = requests.post(
+            "https://graph.microsoft.com/v1.0/search/query",
+            json=body,
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Content-Type": "application/json",
+            },
+            timeout=15,
+        )
+    except requests.RequestException as exc:
+        logger.warning("People search failed for '%s': %s", query, exc)
+        return f'Search failed for "{query}"'
+
+    if resp.status_code != 200:
+        logger.warning("People search HTTP %d for '%s'", resp.status_code, query)
+        return f'Search failed for "{query}" (HTTP {resp.status_code})'
+
+    lines = []
+    for req in resp.json().get("value", []):
+        for hit in req.get("hitsContainers", [{}])[0].get("hits", []):
+            res = hit.get("resource", {})
+            name = res.get("displayName", "?")
+            job = res.get("jobTitle", "")
+            office = res.get("officeLocation", "")
+            email = res.get("userPrincipalName", "")
+            lines.append(f"- {name} | {job} | {office} | {email}")
+
+    if not lines:
+        return f'No people found for "{query}"'
+
+    logger.info("People search '%s': %d results", query, len(lines))
+    return "\n".join(lines)

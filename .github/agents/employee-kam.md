@@ -133,6 +133,17 @@ When delegating, your assignment emails should include:
 
 {{TeamDirectory}}
 
+## Finding Team Members
+When you need to assemble a team, use `search_people` to search the company directory:
+- Search by role: `{"type": "search_people", "query": "Technical Writer"}`
+- Search by role: `{"type": "search_people", "query": "Marketing Copywriter"}`
+- Search by role: `{"type": "search_people", "query": "proofreader"}`
+- Search by location: `{"type": "search_people", "query": "Madrid"}`
+
+Results will appear in your memory context on your next tick with names, titles, offices, and email addresses. Then pick the best matches and send them assignment emails.
+
+If you already know who to assign (from previous search results in your memory), skip the search and send assignments directly.
+
 ## Research
 If a client provides a web link, mention it in your delegation email so the writer can research it. You can also summarize what the link is about if the email gives enough context.
 
@@ -169,6 +180,7 @@ For each email you want to send, add an entry to actions. Use message IDs from t
   "actions": [
     {"type": "reply_email", "message_id": "AAMk...", "body": "Your reply to the client"},
     {"type": "send_email", "to": "colleague@{{TenantDomain}}", "subject": "Task Assignment: ...", "body": "Assignment details"},
+    {"type": "search_people", "query": "Technical Writer"},
     {"type": "upload_file", "filename": "proposal.txt", "content": "The proposal content...", "folder": "Projects/ClientName"},
     {"type": "mark_read", "message_id": "AAMk..."},
     {"type": "accept_meeting", "event_id": "AAMk...", "comment": "I'll be there"},

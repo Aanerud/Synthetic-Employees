@@ -1,21 +1,229 @@
 # Shadow Employees Activity Report
-Generated: 2026-03-06 14:07:30
+Generated: 2026-03-06 14:42:30
 
 ## Summary
 
 | Metric | Value |
 |--------|-------|
 | Total ticks | 200 |
-| Successful | 199 |
-| Errors | 1 |
-| Unique agents active | 64 |
-| Emails sent | 142 |
-| Email replies | 1 |
-| Files uploaded | 18 |
-| Office events fired | 8 |
+| Successful | 200 |
+| Errors | 0 |
+| Unique agents active | 32 |
+| Emails sent | 160 |
+| Email replies | 0 |
+| Files uploaded | 26 |
+| Office events fired | 6 |
 
 ## Activity Timeline
 
+- **13:42:02** paola.greco accepted a meeting
+- **13:42:02** paola.greco accepted a meeting
+- **13:41:48** emma.thompson sent email to marie.dubois: "Before close: any finance-sensitive client issues "
+- **13:41:48** emma.thompson sent email to isabella.rossi: "Before close: any executive matters I should pick "
+- **13:41:28** hugo.martins checked inbox (nothing to do)
+- **13:41:09** matteo.russo sent email to oliver.hughes: "Checking In: Automotive Documentation Availability"
+- **13:41:09** matteo.russo sent email to stefan.krause: "Follow-up on Automotive Documentation Collaboratio"
+- **13:41:09** matteo.russo sent email to lars.eriksen: "Checking In on Vehicle Documentation Support"
+- **13:40:59** christina.hall sent email to sophie.martin: "Bellissima Italia backgrounder - quick direction n"
+- **13:40:40** laura.fontaine sent email to oliver.hughes: "Follow-Up: Available for Any Technical Writing Bri"
+- **13:40:40** laura.fontaine accepted a meeting
+- **13:40:40** laura.fontaine accepted a meeting
+- **13:40:15** george.crawford sent email to amelie.petit: "Afternoon check-in: next week's writing priorities"
+- **13:40:08** isabel.fernandez sent email to petra.novak: "Urgent follow-up: Teams unread-message data availa"
+- **13:39:42** alejandro.vega uploaded file: follow-up-christina-kam-2026-03-06.txt
+- **13:39:35** oliver.hughes sent email to sebastian.mueller: "Today: upcoming briefs and Matteo allocation"
+- **13:39:35** oliver.hughes sent email to oscar.lindgren: "Quick status check: current content specialisation"
+- **13:39:14** amelie.petit sent email to sebastian.mueller: "Brief Friday check-in on incoming literary briefs"
+- **13:39:05** antonio.conti uploaded file: editorial-follow-up-2026-03-06.txt
+- **13:39:05** antonio.conti uploaded file: afternoon-priority-response-note-2026-03-06.txt
+- **13:38:48** sarah.williams sent email to alexander.wolf: "Ready to begin this afternoon’s speechwriting brie"
+- **13:38:07** joana.ferreira sent email to charlotte.bennett: "Afternoon check-in: available for academic and env"
+- **13:38:07** joana.ferreira sent email to anna.kowalski: "Afternoon availability for academic writing assign"
+- **13:38:07** joana.ferreira accepted a meeting
+- **13:38:07** joana.ferreira accepted a meeting
+- **13:38:04** siobhan.kelly sent email to siobhan.kelly: "Late afternoon creative brief monitoring"
+- **13:37:47** charlotte.bennett sent email to victoria.palmer: "Follow-Up Today: Academic Editorial Brief Details"
+- **13:37:47** charlotte.bennett sent email to erik.nilsson: "Quick Follow-Up Today: Medical Writing Brief Match"
+- **13:37:23** rui.costa accepted a meeting
+- **13:37:23** rui.costa accepted a meeting
+- **13:37:17** paola.greco checked inbox (nothing to do)
+- **13:36:56** emma.thompson sent email to james.obrien: "Follow-up: urgent client escalations before close"
+- **13:36:56** emma.thompson sent email to henrik.lindqvist: "Follow-up: operational or executive issues before "
+- **13:36:50** hugo.martins checked inbox (nothing to do)
+- **13:36:12** matteo.russo sent email to oliver.hughes: "Follow-up: Availability for Automotive Documentati"
+- **13:36:12** matteo.russo sent email to stefan.krause: "Checking In on Automotive Documentation Opportunit"
+- **13:36:12** matteo.russo sent email to lars.eriksen: "Follow-up on Vehicle Systems Documentation Support"
+- **13:35:58** christina.hall sent email to sophie.martin: "Bellissima Italia backgrounder - direction needed "
+- **13:35:58** christina.hall accepted a meeting
+- **13:35:58** christina.hall accepted a meeting
+- **13:35:48** laura.fontaine sent email to oliver.hughes: "Availability This Afternoon for Technical Writing "
+- **13:35:13** rita.almeida sent email to margaret.davies: "Fifth follow-up: Microsoft Teams unread-message ch"
+- **13:34:57** george.crawford sent email to amelie.petit: "Midday check-in: next week's writing priorities"
+- **13:34:36** alejandro.vega uploaded file: follow-up-christina-kam-2026-03-06.txt
+- **13:34:15** oliver.hughes sent email to sebastian.mueller: "Follow-up today: upcoming briefs and Matteo alloca"
+- **13:34:15** oliver.hughes sent email to oscar.lindgren: "Quick follow-up: current content specialisations"
+- **13:34:06** amelie.petit sent email to sebastian.mueller: "Follow-up on incoming literary briefs and team all"
+- **13:33:52** antonio.conti uploaded file: editorial-follow-up-2026-03-06.txt
+- **13:33:44** sarah.williams accepted a meeting
+- **13:33:44** sarah.williams sent email to alexander.wolf: "Available to start this afternoon’s writing brief"
+- **13:33:19** joana.ferreira sent email to anna.kowalski: "Late afternoon availability for environmental and "
+- **13:32:48** siobhan.kelly sent email to siobhan.kelly: "Afternoon creative brief standby"
+- **13:32:45** charlotte.bennett sent email to victoria.palmer: "Follow-Up Today: Academic Editorial Brief Details"
+- **13:32:45** charlotte.bennett sent email to erik.nilsson: "Quick Confirmation Needed Today: Medical Writing B"
+- **13:32:40** rui.costa checked inbox (nothing to do)
+- **13:32:07** paola.greco checked inbox (nothing to do)
+- **13:31:38** emma.thompson sent email to james.obrien: "Urgent client escalations this afternoon"
+- **13:31:38** emma.thompson sent email to henrik.lindqvist: "Operational or executive issues to escalate today"
+- **13:31:21** matteo.russo sent email to oliver.hughes: "Availability for Automotive Documentation Briefs T"
+- **13:31:21** matteo.russo sent email to stefan.krause: "Following Up on Automotive Documentation Collabora"
+- **13:31:21** matteo.russo sent email to lars.eriksen: "Availability for Vehicle Systems Documentation Sup"
+- **13:31:21** matteo.russo accepted a meeting
+- **13:31:21** matteo.russo accepted a meeting
+- **13:31:11** hugo.martins checked inbox (nothing to do)
+- **13:30:39** laura.fontaine sent email to oliver.hughes: "Afternoon Check-In: Available for New Technical Wr"
+- **13:30:11** isabel.fernandez sent email to petra.novak: "Seventh follow-up: Teams unread-message data avail"
+- **13:29:57** camille.laurent sent email to maccount: "Urgent same-day request: Audio Conferencing dial-i"
+- **13:29:49** rita.almeida sent email to margaret.davies: "Fourth follow-up: Microsoft Teams unread-message c"
+- **13:29:47** pablo.navarro checked inbox (nothing to do)
+- **13:29:03** george.crawford sent email to amelie.petit: "End-of-day follow-up: next week's writing prioriti"
+- **13:29:03** george.crawford accepted a meeting
+- **13:29:03** george.crawford accepted a meeting
+- **13:29:02** chiara.moretti sent email to amelie.petit: "Late-afternoon check-in on writing priorities"
+- **13:28:34** oliver.hughes sent email to sebastian.mueller: "Immediate allocation check: Matteo ready for next "
+- **13:28:34** oliver.hughes sent email to oscar.lindgren: "Quick status check: current content specialisation"
+- **13:28:32** alejandro.vega uploaded file: follow-up-christina-or-kam-2026-03-06.txt
+- **13:27:54** antonio.conti uploaded file: editorial-follow-up-2026-03-06.txt
+- **13:27:54** antonio.conti accepted a meeting
+- **13:27:54** antonio.conti accepted a meeting
+- **13:27:50** amelie.petit sent email to sebastian.mueller: "Follow-up on Incoming Literary Briefs"
+- **13:27:50** amelie.petit accepted a meeting
+- **13:27:50** amelie.petit accepted a meeting
+- **13:27:39** sarah.williams sent email to alexander.wolf: "Available to begin this afternoon’s writing brief"
+- **13:27:07** siobhan.kelly accepted a meeting
+- **13:27:07** siobhan.kelly accepted a meeting
+- **13:27:07** siobhan.kelly sent email to siobhan.kelly: "Creative writing availability note for this aftern"
+- **13:27:02** joana.ferreira accepted a meeting
+- **13:27:02** joana.ferreira accepted a meeting
+- **13:27:02** joana.ferreira sent email to charlotte.bennett: "Available after team meeting for environmental wri"
+- **13:26:48** charlotte.bennett sent email to erik.nilsson: "Final Status Check Today: Medical Writing Brief Ma"
+- **13:25:54** emma.thompson accepted a meeting
+- **13:25:54** emma.thompson accepted a meeting
+- **13:25:48** matteo.russo sent email to oliver.hughes: "Follow-Up on Upcoming Automotive Documentation Bri"
+- **13:25:48** matteo.russo sent email to stefan.krause: "Quick Follow-Up on Automotive Documentation Opport"
+- **13:25:48** matteo.russo sent email to lars.eriksen: "Checking In on Automotive Writing Support"
+- **13:25:47** hugo.martins checked inbox (nothing to do)
+- **13:25:08** christina.hall accepted a meeting
+- **13:25:08** christina.hall accepted a meeting
+- **13:25:00** laura.fontaine sent email to oliver.hughes: "Late Afternoon Availability for New Technical Writ"
+- **13:25:00** laura.fontaine accepted a meeting
+- **13:25:00** laura.fontaine accepted a meeting
+- **13:24:50** isabel.fernandez sent email to petra.novak: "Sixth follow-up: Teams unread-message data availab"
+- **13:24:22** pablo.navarro uploaded file: alexander-wolf-follow-up-draft-2026-03-06.txt
+- **13:24:22** pablo.navarro accepted a meeting
+- **13:24:22** pablo.navarro accepted a meeting
+- **13:24:18** rita.almeida sent email to margaret.davies: "Third follow-up: Microsoft Teams unread-message ch"
+- **13:24:06** camille.laurent sent email to maccount: "Immediate update requested: Audio Conferencing dia"
+- **13:23:37** chiara.moretti accepted a meeting
+- **13:23:37** chiara.moretti accepted a meeting
+- **13:23:37** chiara.moretti sent email to amelie.petit: "Afternoon availability for writing briefs"
+- **13:23:21** george.crawford sent email to amelie.petit: "Afternoon check-in: next week's writing priorities"
+- **13:22:50** alejandro.vega uploaded file: follow-up-christina-or-kam-2026-03-06.txt
+- **13:22:47** amelie.petit sent email to sebastian.mueller: "Brief Friday Check-In on Literary Assignments"
+- **13:22:41** oliver.hughes sent email to sebastian.mueller: "Follow-up: upcoming briefs and Matteo availability"
+- **13:22:41** oliver.hughes sent email to oscar.lindgren: "Follow-up: current content specialisations for bri"
+- **13:22:12** antonio.conti uploaded file: editorial-follow-up-draft-2026-03-06.txt
+- **13:22:12** antonio.conti uploaded file: afternoon-priority-response-note-2026-03-06.txt
+- **13:21:54** sarah.williams sent email to alexander.wolf: "Ready for this afternoon’s writing priorities"
+- **13:21:54** sarah.williams accepted a meeting
+- **13:21:54** sarah.williams accepted a meeting
+- **13:21:45** joana.ferreira sent email to charlotte.bennett: "Available this afternoon for environmental writing"
+- **13:21:45** joana.ferreira sent email to anna.kowalski: "Afternoon availability for academic writing assign"
+- **13:21:31** siobhan.kelly checked inbox (nothing to do)
+- **13:21:10** rui.costa accepted a meeting
+- **13:21:10** rui.costa accepted a meeting
+- **13:21:07** charlotte.bennett sent email to erik.nilsson: "Final Follow-Up Today: Medical Writing Brief Match"
+- **13:21:07** charlotte.bennett accepted a meeting
+- **13:21:07** charlotte.bennett accepted a meeting
+- **13:21:01** paola.greco accepted a meeting
+- **13:21:01** paola.greco accepted a meeting
+- **13:20:17** emma.thompson sent email to emma.thompson: "Block 16:30 today: review unread Teams messages"
+- **13:20:17** hugo.martins sent email to hugo.martins: "Pre-Project Review check: Teams Audio Conferencing"
+- **13:20:17** hugo.martins accepted a meeting
+- **13:20:05** matteo.russo sent email to oliver.hughes: "Follow-Up: Automotive Documentation Availability N"
+- **13:20:05** matteo.russo sent email to stefan.krause: "Checking In on Automotive Documentation Pipeline"
+- **13:20:05** matteo.russo sent email to lars.eriksen: "Follow-Up on Automotive Writing Support"
+- **13:20:05** matteo.russo accepted a meeting
+- **13:20:05** matteo.russo accepted a meeting
+- **13:19:25** laura.fontaine sent email to oliver.hughes: "Midday Follow-Up: Available for New Technical Writ"
+- **13:19:25** christina.hall sent email to sebastian.mueller: "Additional note on future brief allocation"
+- **13:18:50** rita.almeida sent email to margaret.davies: "Second follow-up: Microsoft Teams unread-message c"
+- **13:18:42** isabel.fernandez sent email to petra.novak: "Fifth follow-up: Teams unread-message data availab"
+- **13:18:41** camille.laurent sent email to maccount: "Urgent confirmation needed today: Audio Conferenci"
+- **13:18:13** pablo.navarro uploaded file: follow-up-alexander-wolf-draft-2026-03-06.txt
+- **13:17:58** chiara.moretti sent email to amelie.petit: "Final check-in on writing priorities for today"
+- **13:17:34** george.crawford sent email to amelie.petit: "Planning hold for next week's writing priorities"
+- **13:17:32** fiona.macleod checked inbox (nothing to do)
+- **13:17:11** oliver.hughes sent email to sebastian.mueller: "Brief allocation follow-up: Matteo ready to start"
+- **13:17:11** oliver.hughes sent email to oscar.lindgren: "Follow-up on your current content specialisations"
+- **13:17:11** oliver.hughes accepted a meeting
+- **13:17:11** oliver.hughes accepted a meeting
+- **13:17:06** alejandro.vega uploaded file: follow-up-christina-or-kam-2026-03-06.txt
+- **13:16:38** amelie.petit sent email to sebastian.mueller: "Checking In on Incoming Literary Assignments"
+- **13:16:25** antonio.conti uploaded file: editorial-follow-up-2026-03-06.txt
+- **13:16:04** sarah.williams sent email to alexander.wolf: "Ready to begin this afternoon’s writing brief afte"
+- **13:16:04** sarah.williams accepted a meeting
+- **13:16:04** sarah.williams accepted a meeting
+- **13:15:34** joana.ferreira sent email to charlotte.bennett: "Follow-up: availability for environmental writing "
+- **13:15:34** joana.ferreira sent email to anna.kowalski: "Follow-up: availability for academic writing assig"
+- **13:15:34** siobhan.kelly accepted a meeting
+- **13:15:34** siobhan.kelly accepted a meeting
+- **13:15:28** charlotte.bennett sent email to erik.nilsson: "Final Check-In Today: Medical Writing Brief Match"
+- **13:15:01** rui.costa checked inbox (nothing to do)
+- **13:14:57** paola.greco accepted a meeting
+- **13:14:57** paola.greco accepted a meeting
+- **13:14:26** emma.thompson accepted a meeting
+- **13:14:26** emma.thompson accepted a meeting
+- **13:14:26** emma.thompson sent email to emma.thompson: "Priority for this afternoon: review unread Teams m"
+- **13:13:47** hugo.martins sent email to hugo.martins: "Project Review prep: recheck Teams Audio Conferenc"
+- **13:13:47** hugo.martins accepted a meeting
+- **13:13:32** christina.hall sent email to sebastian.mueller: "Future brief allocation suggestions"
+- **13:13:28** matteo.russo sent email to oliver.hughes: "Checking In: Upcoming Automotive Documentation Bri"
+- **13:13:28** matteo.russo sent email to stefan.krause: "Follow-Up on Automotive Documentation Opportunitie"
+- **13:13:28** matteo.russo sent email to lars.eriksen: "Quick Follow-Up on Automotive Writing Support"
+- **13:12:59** laura.fontaine sent email to oliver.hughes: "End-of-Day Follow-Up: Availability for New Technic"
+- **13:12:23** rita.almeida sent email to margaret.davies: "Follow-up: Microsoft Teams unread-message check"
+- **13:12:19** isabel.fernandez sent email to petra.novak: "Fourth follow-up: Teams unread-message data availa"
+- **13:12:06** camille.laurent sent email to maccount: "Follow-up this afternoon: Audio Conferencing dial-"
+- **13:11:56** pablo.navarro uploaded file: follow-up-alexander-brief-request.txt
+- **13:11:36** chiara.moretti accepted a meeting
+- **13:11:36** chiara.moretti accepted a meeting
+- **13:11:36** chiara.moretti sent email to amelie.petit: "Quick follow-up on writing priorities for this aft"
+- **13:11:36** [EVENT] Sophie Martin: birthday_party - Happy birthday 🎂 Sorry I can't make it to the kitchen, but saving me a slice?
+- **13:11:36** [EVENT] Daan Vermeer: birthday_party - Is that cake I smell? Happy birthday to whoever's celebrating today! 🍰
+- **13:11:36** [EVENT] Isabella Rossi: birthday_party - Is that cake I smell? Happy birthday to whoever's celebrating today! 🍰
+- **13:11:36** [EVENT] Martina Vogel: birthday_party - Is that cake I smell? Happy birthday to whoever's celebrating today! 🍰
+- **13:11:36** [EVENT] Anna Kowalski: birthday_party - The cake looks amazing! Who made it? Happy birthday! 🎉
+- **13:11:36** [EVENT] Jan De Vries: birthday_party - Happy birthday! I got you something from the team. Check the kitchen! 🎁
+- **13:11:34** fiona.macleod checked inbox (nothing to do)
+- **13:11:06** george.crawford sent email to amelie.petit: "End-of-day check-in on next week's priorities"
+- **13:11:06** george.crawford accepted a meeting
+- **13:11:06** george.crawford accepted a meeting
+- **13:10:55** alejandro.vega uploaded file: follow-up-christina-kam-2026-03-06.txt
+- **13:10:26** margaret.davies sent email to henrik.lindqvist: "QA status holding update ahead of 14:00 London rev"
+- **13:10:26** margaret.davies accepted a meeting
+- **13:10:26** margaret.davies accepted a meeting
+- **13:10:05** andrea.colombo sent email to andrea.colombo: "Reminder: later-afternoon inbox and Teams QA reche"
+- **13:10:03** oliver.hughes sent email to sebastian.mueller: "Allocation status check: Matteo ready for next bri"
+- **13:10:03** oliver.hughes sent email to oscar.lindgren: "Quick follow-up: current content specialisations"
+- **13:09:33** antonio.conti uploaded file: post-team-meeting-editorial-follow-up-package.txt
+- **13:09:17** amelie.petit sent email to sebastian.mueller: "Availability for Upcoming Literary Assignments"
+- **13:09:17** amelie.petit accepted a meeting
+- **13:08:42** sarah.williams sent email to alexander.wolf: "Post-meeting availability for this afternoon’s wri"
+- **13:08:30** siobhan.kelly uploaded file: overflow-support-note-2026-03-06.txt
+- **13:08:16** joana.ferreira sent email to charlotte.bennett: "Late afternoon availability for environmental writ"
+- **13:08:16** joana.ferreira sent email to anna.kowalski: "Availability this afternoon for academic writing a"
+- **13:07:44** rui.costa checked inbox (nothing to do)
+- **13:07:35** paola.greco uploaded file: speculative-luxury-campaign-concept-milan-atelier.txt
 - **13:07:24** charlotte.bennett sent email to victoria.palmer: "Further Follow-Up: Academic Editorial Brief Detail"
 - **13:07:24** charlotte.bennett sent email to erik.nilsson: "Further Check-In: Medical Writing Brief Match"
 - **13:07:24** charlotte.bennett accepted a meeting
@@ -129,223 +337,6 @@ Generated: 2026-03-06 14:07:30
 - **12:47:54** oliver.hughes sent email to sebastian.mueller: "Brief allocation readiness: Matteo available, Osca"
 - **12:47:54** oliver.hughes accepted a meeting
 - **12:47:54** oliver.hughes accepted a meeting
-- **12:47:33** amelie.petit sent email to sebastian.mueller: "Quick check-in on incoming client work"
-- **12:47:24** robert.taylor sent email to petra.novak: "Final follow-up today: Teams Audio Conferencing PI"
-- **12:47:24** robert.taylor sent email to maccount: "Request to resend Teams Audio Conferencing details"
-- **12:47:24** robert.taylor sent email to martina.vogel: "Escalation: awaiting Teams Audio Conferencing PIN "
-- **12:47:03** finn.oconnor uploaded file: teams-audio-conferencing-follow-up-draft.txt
-- **12:47:03** finn.oconnor accepted a meeting
-- **12:47:03** finn.oconnor accepted a meeting
-- **12:46:31** joana.ferreira sent email to charlotte.bennett: "Availability this afternoon for academic writing a"
-- **12:46:31** joana.ferreira accepted a meeting
-- **12:46:31** joana.ferreira accepted a meeting
-- **12:46:30** sarah.williams sent email to alexander.wolf: "Afternoon speechwriting capacity after today’s mee"
-- **12:46:00** sylvie.blanc sent email to petra.novak: "Third follow-up: Teams message data availability"
-- **12:45:40** benjamin.moore sent email to benjamin.moore: "Status update: Teams access still needed for unrea"
-- **12:45:22** matteo.russo sent email to oliver.hughes: "Availability for Upcoming Automotive Documentation"
-- **12:45:22** matteo.russo sent email to lars.eriksen: "Checking In on Automotive Documentation Support"
-- **12:45:22** matteo.russo sent email to stefan.krause: "Availability for Technical Writing Collaboration"
-- **12:45:12** siobhan.kelly accepted a meeting
-- **12:45:12** siobhan.kelly accepted a meeting
-- **12:44:55** charlotte.bennett sent email to victoria.palmer: "Follow-Up: Academic Editorial Brief Details"
-- **12:44:55** charlotte.bennett sent email to erik.nilsson: "Follow-Up: Medical Writing Brief Status"
-- **12:44:23** rui.costa accepted a meeting
-- **12:44:23** rui.costa accepted a meeting
-- **12:43:29** emma.thompson sent email to emma.thompson: "Priority this afternoon: review unread Teams messa"
-- **12:43:27** hugo.martins sent email to hugo.martins: "Pre-meeting check: Teams Audio Conferencing detail"
-- **12:43:04** christina.hall accepted a meeting
-- **12:43:04** christina.hall accepted a meeting
-- **12:43:00** laura.fontaine checked inbox (nothing to do)
-- **12:42:25** rita.almeida accepted a meeting
-- **12:42:25** rita.almeida accepted a meeting
-- **12:42:13** camille.laurent sent email to maccount: "Final follow-up today: Microsoft Teams Audio Confe"
-- **12:41:53** pablo.navarro accepted a meeting
-- **12:41:53** pablo.navarro accepted a meeting
-- **12:41:46** chiara.moretti sent email to amelie.petit: "Availability for writing priorities this afternoon"
-- **12:41:28** fiona.macleod checked inbox (nothing to do)
-- **12:41:21** george.crawford sent email to amelie.petit: "Weekly priorities and incoming assignments"
-- **12:41:21** george.crawford accepted a meeting
-- **12:41:21** george.crawford accepted a meeting
-- **12:41:17** alejandro.vega accepted a meeting
-- **12:41:17** alejandro.vega accepted a meeting
-- **12:40:41** margaret.davies sent email to bruno.dupont: "Final QA status request before 14:00 escalation re"
-- **12:40:36** andrea.colombo accepted a meeting
-- **12:40:36** andrea.colombo accepted a meeting
-- **12:40:36** andrea.colombo sent email to andrea.colombo: "Final afternoon QA recheck"
-- **12:40:31** oliver.hughes sent email to sebastian.mueller: "Writer allocation readiness for upcoming briefs"
-- **12:40:31** oliver.hughes sent email to oscar.lindgren: "Final nudge: content specialisations for brief mat"
-- **12:40:31** oliver.hughes accepted a meeting
-- **12:39:35** amelie.petit sent email to sebastian.mueller: "Second Follow-up on Incoming Client Work and Write"
-- **12:39:35** amelie.petit accepted a meeting
-- **12:39:35** amelie.petit accepted a meeting
-- **12:39:23** robert.taylor sent email to petra.novak: "Urgent today: Teams Audio Conferencing PIN and dia"
-- **12:39:23** robert.taylor sent email to maccount: "Urgent follow-up: resend Teams Audio Conferencing "
-- **12:38:59** antonio.conti uploaded file: team-meeting-editorial-follow-up-draft.txt
-- **12:38:59** antonio.conti uploaded file: afternoon-writing-priority-monitoring-note.txt
-- **12:38:28** sarah.williams sent email to alexander.wolf: "Available for afternoon writing brief after team m"
-- **12:37:56** finn.oconnor checked inbox (nothing to do)
-- **12:37:04** sylvie.blanc sent email to petra.novak: "Second follow-up: Teams message data availability"
-- **12:36:56** benjamin.moore sent email to benjamin.moore: "Action pending: Teams access still required for un"
-- **12:36:38** bruno.dupont sent email to christina.hall: "Project 1d3bf8c3 - Request for Revised Copy and ET"
-- **12:36:38** bruno.dupont sent email to anna.kowalski: "Project 1d3bf8c3 - Proofreading Status Update"
-- **12:36:35** siobhan.kelly checked inbox (nothing to do)
-- **12:36:10** charlotte.bennett sent email to victoria.palmer: "Further Follow-Up: Academic Editorial Brief Detail"
-- **12:36:02** paola.greco accepted a meeting
-- **12:36:02** paola.greco accepted a meeting
-- **12:35:24** emma.thompson sent email to emma.thompson: "Action this afternoon: review unread Teams message"
-- **12:35:14** hugo.martins uploaded file: teams-audio-conferencing-reminder.txt
-- **12:35:14** hugo.martins sent email to hugo.martins: "Teams Audio Conferencing: keep dial-in details acc"
-- **12:35:08** matteo.russo sent email to oliver.hughes: "Follow-up: Availability for Automotive Documentati"
-- **12:35:08** matteo.russo sent email to lars.eriksen: "Quick Check-In on Automotive Documentation Support"
-- **12:35:08** matteo.russo sent email to stefan.krause: "Availability for Upcoming Technical Writing Work"
-- **12:35:08** matteo.russo accepted a meeting
-- **12:35:08** matteo.russo accepted a meeting
-- **12:34:51** christina.hall uploaded file: assignment-distribution-notes-2026-03-06.txt
-- **12:34:51** christina.hall accepted a meeting
-- **12:34:33** laura.fontaine checked inbox (nothing to do)
-- **12:34:26** isabel.fernandez accepted a meeting
-- **12:34:26** isabel.fernandez accepted a meeting
-- **12:34:14** rita.almeida accepted a meeting
-- **12:34:14** rita.almeida accepted a meeting
-- **12:33:43** camille.laurent sent email to maccount: "Urgent follow-up: Microsoft Teams Audio Conferenci"
-- **12:33:39** pablo.navarro checked inbox (nothing to do)
-- **12:33:34** chiara.moretti sent email to amelie.petit: "Availability for any writing priorities this after"
-- **12:33:11** fiona.macleod checked inbox (nothing to do)
-- **12:33:11** alejandro.vega checked inbox (nothing to do)
-- **12:32:40** margaret.davies accepted a meeting
-- **12:32:40** margaret.davies accepted a meeting
-- **12:32:31** oliver.hughes sent email to sebastian.mueller: "Follow-up: upcoming briefs and writer allocation"
-- **12:32:31** oliver.hughes sent email to oscar.lindgren: "Quick check-in on your content specialisations"
-- **12:32:22** andrea.colombo accepted a meeting
-- **12:32:22** andrea.colombo accepted a meeting
-- **12:32:22** andrea.colombo sent email to andrea.colombo: "Reminder: late-afternoon inbox and Teams QA rechec"
-- **12:31:56** antonio.conti uploaded file: post-team-meeting-priority-check-in-draft.txt
-- **12:31:56** antonio.conti uploaded file: post-team-meeting-editorial-support-note.txt
-- **12:31:37** amelie.petit sent email to sebastian.mueller: "Follow-up on incoming client work and writer avail"
-- **12:31:27** robert.taylor sent email to petra.novak: "Second follow-up: Teams Audio Conferencing PIN and"
-- **12:31:27** robert.taylor sent email to maccount: "Follow-up: request to resend Teams Audio Conferenc"
-- **12:30:56** [EVENT] Isabel Fernandez: friday_drinks - Bringing homemade snacks today! See everyone downstairs at 5.
-- **12:30:56** [EVENT] Niels Andersen: friday_drinks - Anyone up for a drink after work? It's been a long week.
-- **12:30:56** [EVENT] Miguel Santos: friday_drinks - Count me in for Friday drinks! 🙋
-- **12:30:56** [EVENT] Karen Jensen: friday_drinks - Friday drinks in 30 minutes! Who's joining? 🍻
-- **12:30:56** [EVENT] Daan Vermeer: friday_drinks - Anyone up for a drink after work? It's been a long week.
-- **12:30:56** [EVENT] Pablo Navarro: friday_drinks - Every Friday I tell myself I'll skip drinks. Every Friday I'm there.
-- **12:30:56** [EVENT] Finn O'Connor: friday_drinks - I'll be there! First round is on the team that shipped this week 😄
-- **12:30:56** [EVENT] Prof. Erik Nilsson: friday_drinks - Anyone up for a drink after work? It's been a long week.
-- **12:30:50** sarah.williams accepted a meeting
-- **12:30:50** sarah.williams accepted a meeting
-- **12:30:50** sarah.williams sent email to alexander.wolf: "Availability after team meeting for afternoon prio"
-- **12:30:48** finn.oconnor checked inbox (nothing to do)
-- **12:30:20** joana.ferreira sent email to charlotte.bennett: "Afternoon availability for academic assignments"
-- **12:30:20** joana.ferreira sent email to anna.kowalski: "Afternoon follow-up on writing availability"
-- **12:30:01** sylvie.blanc sent email to petra.novak: "Follow-up on Teams message data availability"
-- **12:30:01** sylvie.blanc accepted a meeting
-- **12:30:01** sylvie.blanc accepted a meeting
-- **12:29:58** benjamin.moore sent email to benjamin.moore: "Follow-up reminder: Teams access still required fo"
-- **12:29:22** siobhan.kelly accepted a meeting
-- **12:29:22** siobhan.kelly accepted a meeting
-- **12:29:14** bruno.dupont sent email to christina.hall: "Project 1d3bf8c3 - Final Revised Copy Request"
-- **12:29:14** bruno.dupont sent email to anna.kowalski: "Project 1d3bf8c3 - Proofreading Pending Revised Co"
-- **12:28:58** charlotte.bennett sent email to erik.nilsson: "Quick Check-In: Medical Writing Brief Status"
-- **12:28:58** charlotte.bennett sent email to sebastian.mueller: "Status Update: Academic Brief and Erik Availabilit"
-- **12:28:58** charlotte.bennett accepted a meeting
-- **12:28:33** rui.costa accepted a meeting
-- **12:28:33** rui.costa accepted a meeting
-- **12:28:07** paola.greco checked inbox (nothing to do)
-- **12:28:06** nicolas.bernard sent email to daan.vermeer: "Next week round table pipeline check"
-- **12:28:06** nicolas.bernard sent email to sofia.lopes: "Next week round table hold status"
-- **12:27:58** carmen.ruiz accepted a meeting
-- **12:27:58** carmen.ruiz accepted a meeting
-- **12:27:17** emma.thompson sent email to emma.thompson: "Reminder: Review Teams unread messages this aftern"
-- **12:27:17** emma.thompson accepted a meeting
-- **12:27:17** emma.thompson accepted a meeting
-- **12:27:08** karen.jensen sent email to sylvie.blanc: "Second follow-up: Teams Audio Conferencing details"
-- **12:26:54** celine.mayer sent email to celine.mayer: "Second follow-up: Teams Audio Conferencing details"
-- **12:26:26** isabella.rossi sent email to henrik.lindqvist: "Alexander Wolf escalation - 16:30 CET checkpoint"
-- **12:26:17** francois.moreau sent email to victoria.palmer: "Follow-up: Nexans Offshore Wind draft for editoria"
-- **12:26:02** hugo.martins sent email to hugo.martins: "Reminder: Keep Teams Audio Conferencing details ac"
-- **12:25:38** sofia.lopes sent email to patrick.ryan: "Round table deliverables status"
-- **12:25:28** marco.bianchi sent email to james.obrien: "Availability for Incoming Briefs"
-- **12:25:28** marco.bianchi accepted a meeting
-- **12:25:28** marco.bianchi accepted a meeting
-- **12:25:02** maximilian.huber accepted a meeting
-- **12:25:02** maximilian.huber accepted a meeting
-- **12:24:56** lars.eriksen checked inbox (nothing to do)
-- **12:24:52** lukas.fischer accepted a meeting
-- **12:24:52** lukas.fischer accepted a meeting
-- **12:24:28** stefan.krause checked inbox (nothing to do)
-- **12:23:58** willem.bakker sent email to karin.meier: "Quick check-in for any late-day collaboration"
-- **12:23:57** matteo.russo sent email to oliver.hughes: "Availability for Upcoming Automotive Documentation"
-- **12:23:57** matteo.russo sent email to lars.eriksen: "Checking In on Automotive Documentation Opportunit"
-- **12:23:57** matteo.russo sent email to stefan.krause: "Availability for Future Automotive Documentation W"
-- **12:23:32** laura.fontaine accepted a meeting
-- **12:23:32** laura.fontaine accepted a meeting
-- **12:22:56** frederik.mikkelsen checked inbox (nothing to do)
-- **12:22:35** martina.vogel sent email to sylvie.blanc: "Need Petra's current contact details"
-- **12:22:35** martina.vogel sent email to henrik.lindqvist: "Quick help confirming Petra Novak's contact detail"
-- **12:22:35** camille.laurent sent email to maccount: "Follow-up on escalation: Audio Conferencing dial-i"
-- **12:22:30** rita.almeida checked inbox (nothing to do)
-- **12:21:46** chiara.moretti sent email to amelie.petit: "Checking in on writing priorities for this afterno"
-- **12:21:46** chiara.moretti accepted a meeting
-- **12:21:46** chiara.moretti accepted a meeting
-- **12:21:45** ingrid.holm sent email to alexander.wolf: "Escalation: Missing Teams Audio Conferencing dial-"
-- **12:21:43** pablo.navarro accepted a meeting
-- **12:21:43** pablo.navarro accepted a meeting
-- **12:21:13** fiona.macleod checked inbox (nothing to do)
-- **12:21:11** alejandro.vega accepted a meeting
-- **12:21:11** alejandro.vega accepted a meeting
-- **12:20:56** nadia.janssen accepted a meeting
-- **12:20:56** nadia.janssen accepted a meeting
-- **12:20:56** nadia.janssen sent email to christina.hall: "Quick check-in on briefs for today"
-- **12:20:39** hendrik.jansen accepted a meeting
-- **12:20:39** hendrik.jansen accepted a meeting
-- **12:20:27** hannah.klein accepted a meeting
-- **12:20:27** hannah.klein accepted a meeting
-- **12:20:27** hannah.klein sent email to hannah.klein: "Proofreading queue follow-up for later today"
-- **12:20:16** simon.berger uploaded file: teams-activity-review-manual-checklist.txt
-- **12:20:16** simon.berger uploaded file: audio-conferencing-support-request.txt
-- **12:20:16** simon.berger uploaded file: benjamin-moore-contact-verification-request.txt
-- **12:19:50** petra.novak sent email to benjamin.moore: "Request: Teams Audio Conferencing dial-in details"
-- **12:19:49** tobias.schneider accepted a meeting
-- **12:19:49** tobias.schneider accepted a meeting
-- **12:19:18** margaret.davies sent email to bruno.dupont: "Third follow-up: QA status, blockers, and escalati"
-- **12:19:14** ewa.kowalczyk accepted a meeting
-- **12:19:14** ewa.kowalczyk accepted a meeting
-- **12:19:14** ewa.kowalczyk sent email to amelie.petit: "Availability for new writing brief"
-- **12:18:54** andrea.colombo accepted a meeting
-- **12:18:54** andrea.colombo accepted a meeting
-- **12:18:54** andrea.colombo sent email to andrea.colombo: "Reminder: late-afternoon inbox and Teams check"
-- **12:18:44** marta.wisniewska accepted a meeting
-- **12:18:44** marta.wisniewska accepted a meeting
-- **12:18:44** marta.wisniewska uploaded file: charlotte-bennett-follow-up-draft-2026-03-06.txt
-- **12:18:16** oliver.hughes accepted a meeting
-- **12:18:16** oliver.hughes accepted a meeting
-- **12:18:16** oliver.hughes sent email to sebastian.mueller: "Upcoming project pipeline and writer allocation"
-- **12:18:06** marek.zielinski sent email to marek.zielinski: "End-of-day proofreading queue check reminder"
-- **12:18:06** alexander.wolf replied to an email thread
-- **12:17:36** daniel.schmidt accepted a meeting
-- **12:17:17** dieter.hoffmann accepted a meeting
-- **12:17:17** dieter.hoffmann sent email to christina.hall: "Available for Prysmian copy support today"
-- **12:17:03** amelie.petit accepted a meeting
-- **12:17:03** amelie.petit accepted a meeting
-- **12:17:03** amelie.petit sent email to sebastian.mueller: "Checking in on incoming client work"
-- **12:16:51** robert.taylor sent email to petra.novak: "Follow-up: Teams Audio Conferencing PIN / dial-in "
-- **12:16:42** antonio.conti accepted a meeting
-- **12:16:42** antonio.conti accepted a meeting
-- **12:16:35** hans.richter accepted a meeting
-- **12:16:35** hans.richter accepted a meeting
-- **12:16:24** finn.oconnor checked inbox (nothing to do)
-- **12:15:53** joana.ferreira sent email to anna.kowalski: "Afternoon availability for academic writing suppor"
-- **12:15:53** joana.ferreira accepted a meeting
-- **12:15:53** joana.ferreira accepted a meeting
-- **12:15:37** oscar.lindgren sent email to oliver.hughes: "Availability for upcoming writing assignments"
-- **12:15:37** oscar.lindgren accepted a meeting
-- **12:15:37** oscar.lindgren accepted a meeting
-- **12:15:32** sarah.williams sent email to alexander.wolf: "Follow-up on writing priorities this afternoon"
-- **12:14:37** sylvie.blanc sent email to sylvie.blanc: "Follow-up: Teams message review pending data avail"
-- **12:14:32** benjamin.moore sent email to benjamin.moore: "Escalation reminder: restore Teams access to compl"
-- **12:14:21** bruno.dupont sent email to christina.hall: "Project 1d3bf8c3 - Follow-up on Revised Copy"
-- **12:14:21** bruno.dupont sent email to anna.kowalski: "Project 1d3bf8c3 - Proofreading Status Follow-up"
 
 ---
 *Report auto-generated by Shadow Employees monitor*
