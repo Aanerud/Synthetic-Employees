@@ -127,12 +127,42 @@ async def get_stats():
 @router.get("/feed")
 async def get_activity_feed(limit: int = Query(30, ge=1, le=100)):
     """Recent activity across ALL agents for the live feed."""
-    db = get_db()
+    import sqlite3
+    from pathlib import Path
+
     reg = PersonaRegistry()
     reg.load_all()
-
-    entries = db.get_activity_log(limit=limit)
     name_map = {p.email: p.name for p in reg.list_all()}
+
+    # Direct SQLite query to avoid any connection caching issues
+    db_path = str(Path("data/synthetic_employees.db"))
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute(
+        "SELECT * FROM activity_log ORDER BY timestamp DESC LIMIT ?", (limit,)
+    ).fetchall()
+    conn.close()
+
+    import json as _json
+
+    # Convert rows to entries
+    entries = []
+    for row in rows:
+        action_data = None
+        if row["action_data"]:
+            try:
+                action_data = _json.loads(row["action_data"])
+            except Exception:
+                action_data = {}
+        entries.append(type('Entry', (), {
+            'agent_email': row['agent_email'],
+            'action_type': row['action_type'],
+            'action_data': action_data,
+            'result': row['result'],
+            'error_message': row['error_message'],
+            'timestamp': row['timestamp'],
+            'id': row['id'],
+        })())
 
     feed = []
     for e in entries:
@@ -197,7 +227,7 @@ async def get_activity_feed(limit: int = Query(30, ge=1, le=100)):
             "icon": icon,
             "result": e.result,
             "error": e.error_message,
-            "timestamp": e.timestamp.isoformat(),
+            "timestamp": e.timestamp if isinstance(e.timestamp, str) else e.timestamp.isoformat(),
         })
 
     return feed
@@ -209,7 +239,8 @@ async def get_agent_activity(
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
 ):
-    db = get_db()
+    from ...database.db_service import DatabaseService
+    db = DatabaseService()
     entries = db.get_activity_log(agent_email=email, limit=limit, offset=offset)
     return [
         ActivityLogEntry(
