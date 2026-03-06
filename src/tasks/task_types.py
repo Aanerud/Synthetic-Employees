@@ -63,13 +63,16 @@ Consider your workload when accepting meetings.""",
 4. Share progress updates where appropriate.
 
 Focus on your role's core responsibilities and take initiative.""",
-    TaskType.RESPOND_TO_PENDING: """You have items flagged from previous cycles that need attention.
-Review the pending items in your memory context and address them:
-1. Compose thoughtful replies to flagged emails.
-2. Follow up on items you were waiting on.
-3. Complete any deferred tasks.
+    TaskType.RESPOND_TO_PENDING: """You have unfinished work from previous cycles. This is your TOP PRIORITY.
 
-Take your time - these items were flagged because they needed more thought.""",
+Review the PENDING WORK section below and take action:
+1. If you were drafting content, write it now and send it via email or upload_file.
+2. If you were waiting for team confirmations, follow up by emailing them.
+3. If you need to deliver work to a client or KAM, compose and send the email now.
+4. If an email bounced, try sending to the recipient again or find an alternative.
+
+Do NOT just acknowledge the pending items. Actually DO the work. Send emails, write drafts, deliver results.
+If you are a KAM waiting for team sign-off, email your team asking for status updates.""",
     TaskType.END_OF_DAY: """End of day wrap-up:
 1. Check inbox one final time for any urgent items.
 2. Send any end-of-day status updates if relevant to your role.

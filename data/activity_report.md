@@ -1,231 +1,111 @@
 # Shadow Employees Activity Report
-Generated: 2026-03-05 21:35:31
+Generated: 2026-03-06 10:57:30
 
 ## Summary
 
 | Metric | Value |
 |--------|-------|
-| Total ticks | 200 |
-| Successful | 198 |
-| Errors | 2 |
-| Unique agents active | 14 |
-| Emails sent | 4 |
-| Email replies | 0 |
-| Files uploaded | 3 |
-| Office events fired | 0 |
+| Total ticks | 138 |
+| Successful | 137 |
+| Errors | 1 |
+| Unique agents active | 84 |
+| Emails sent | 26 |
+| Email replies | 34 |
+| Files uploaded | 7 |
+| Office events fired | 4 |
 
 ## Activity Timeline
 
-- **20:20:31** fiona.macleod accepted a meeting
-- **20:20:31** fiona.macleod accepted a meeting
-- **20:20:24** margaret.davies checked inbox (nothing to do)
-- **20:20:14** oliver.hughes checked inbox (nothing to do)
-- **20:20:07** robert.taylor checked inbox (nothing to do)
-- **20:20:06** sarah.williams checked inbox (nothing to do)
-- **20:19:59** victoria.palmer checked inbox (nothing to do)
-- **20:19:50** charlotte.bennett checked inbox (nothing to do)
-- **20:19:45** emma.thompson checked inbox (nothing to do)
-- **20:19:39** george.crawford checked inbox (nothing to do)
-- **20:19:32** christina.hall checked inbox (nothing to do)
-- **20:19:29** margaret.davies checked inbox (nothing to do)
-- **20:19:18** oliver.hughes checked inbox (nothing to do)
-- **20:19:17** robert.taylor checked inbox (nothing to do)
-- **20:19:10** sarah.williams checked inbox (nothing to do)
-- **20:19:02** victoria.palmer checked inbox (nothing to do)
-- **20:18:56** charlotte.bennett checked inbox (nothing to do)
-- **20:18:51** emma.thompson checked inbox (nothing to do)
-- **20:18:44** george.crawford accepted a meeting
-- **20:18:44** george.crawford accepted a meeting
-- **20:18:38** christina.hall checked inbox (nothing to do)
-- **20:18:33** margaret.davies checked inbox (nothing to do)
-- **20:18:24** oliver.hughes checked inbox (nothing to do)
-- **20:18:17** sarah.williams checked inbox (nothing to do)
-- **20:18:17** robert.taylor checked inbox (nothing to do)
-- **20:18:09** victoria.palmer checked inbox (nothing to do)
-- **20:18:01** charlotte.bennett checked inbox (nothing to do)
-- **20:17:59** emma.thompson checked inbox (nothing to do)
-- **20:17:49** george.crawford checked inbox (nothing to do)
-- **20:17:44** christina.hall checked inbox (nothing to do)
-- **20:17:40** margaret.davies checked inbox (nothing to do)
-- **20:17:32** robert.taylor checked inbox (nothing to do)
-- **20:17:30** oliver.hughes checked inbox (nothing to do)
-- **20:17:21** sarah.williams checked inbox (nothing to do)
-- **20:17:16** victoria.palmer checked inbox (nothing to do)
-- **20:17:09** charlotte.bennett checked inbox (nothing to do)
-- **20:17:01** emma.thompson checked inbox (nothing to do)
-- **20:16:58** george.crawford accepted a meeting
-- **20:16:58** george.crawford checked inbox (nothing to do)
-- **20:16:52** christina.hall checked inbox (nothing to do)
-- **20:16:46** margaret.davies checked inbox (nothing to do)
-- **20:16:39** oliver.hughes checked inbox (nothing to do)
-- **20:16:29** robert.taylor checked inbox (nothing to do)
-- **20:16:29** sarah.williams checked inbox (nothing to do)
-- **20:16:24** victoria.palmer checked inbox (nothing to do)
-- **20:16:09** charlotte.bennett checked inbox (nothing to do)
-- **20:16:09** emma.thompson checked inbox (nothing to do)
-- **20:16:02** george.crawford accepted a meeting
-- **20:16:02** george.crawford checked inbox (nothing to do)
-- **20:15:51** christina.hall checked inbox (nothing to do)
-- **20:15:48** margaret.davies checked inbox (nothing to do)
-- **20:15:37** robert.taylor checked inbox (nothing to do)
-- **20:15:31** oliver.hughes checked inbox (nothing to do)
-- **20:15:30** sarah.williams checked inbox (nothing to do)
-- **20:15:16** victoria.palmer checked inbox (nothing to do)
-- **20:15:16** charlotte.bennett checked inbox (nothing to do)
-- **20:15:15** emma.thompson checked inbox (nothing to do)
-- **20:15:00** george.crawford accepted a meeting
-- **20:14:57** christina.hall checked inbox (nothing to do)
-- **20:14:56** margaret.davies checked inbox (nothing to do)
-- **20:14:44** robert.taylor checked inbox (nothing to do)
-- **20:14:41** oliver.hughes checked inbox (nothing to do)
-- **20:14:35** sarah.williams checked inbox (nothing to do)
-- **20:14:28** victoria.palmer checked inbox (nothing to do)
-- **20:14:24** charlotte.bennett checked inbox (nothing to do)
-- **20:14:16** emma.thompson checked inbox (nothing to do)
-- **20:14:12** george.crawford checked inbox (nothing to do)
-- **20:14:06** christina.hall checked inbox (nothing to do)
-- **20:13:59** margaret.davies checked inbox (nothing to do)
-- **20:13:52** robert.taylor checked inbox (nothing to do)
-- **20:13:51** oliver.hughes checked inbox (nothing to do)
-- **20:13:43** sarah.williams checked inbox (nothing to do)
-- **20:13:36** victoria.palmer checked inbox (nothing to do)
-- **20:13:31** charlotte.bennett checked inbox (nothing to do)
-- **20:13:22** emma.thompson checked inbox (nothing to do)
-- **20:13:18** george.crawford accepted a meeting
-- **20:13:18** george.crawford accepted a meeting
-- **20:13:10** christina.hall checked inbox (nothing to do)
-- **20:13:06** margaret.davies checked inbox (nothing to do)
-- **20:12:57** oliver.hughes checked inbox (nothing to do)
-- **20:12:54** robert.taylor accepted a meeting
-- **20:12:54** robert.taylor checked inbox (nothing to do)
-- **20:12:44** sarah.williams checked inbox (nothing to do)
-- **20:12:43** victoria.palmer checked inbox (nothing to do)
-- **20:12:32** charlotte.bennett checked inbox (nothing to do)
-- **20:12:27** george.crawford checked inbox (nothing to do)
-- **20:12:26** emma.thompson checked inbox (nothing to do)
-- **20:12:15** christina.hall checked inbox (nothing to do)
-- **20:12:07** margaret.davies checked inbox (nothing to do)
-- **20:12:03** oliver.hughes checked inbox (nothing to do)
-- **20:11:58** robert.taylor checked inbox (nothing to do)
-- **20:11:49** victoria.palmer checked inbox (nothing to do)
-- **20:11:48** sarah.williams checked inbox (nothing to do)
-- **20:11:41** charlotte.bennett checked inbox (nothing to do)
-- **20:11:27** george.crawford accepted a meeting
-- **20:11:24** emma.thompson checked inbox (nothing to do)
-- **20:11:19** christina.hall checked inbox (nothing to do)
-- **20:11:07** margaret.davies checked inbox (nothing to do)
-- **20:11:05** oliver.hughes checked inbox (nothing to do)
-- **20:11:03** victoria.palmer checked inbox (nothing to do)
-- **20:10:50** sarah.williams checked inbox (nothing to do)
-- **20:10:50** robert.taylor checked inbox (nothing to do)
-- **20:10:33** charlotte.bennett checked inbox (nothing to do)
-- **20:10:30** emma.thompson checked inbox (nothing to do)
-- **20:10:20** george.crawford accepted a meeting
-- **20:10:10** christina.hall checked inbox (nothing to do)
-- **20:10:03** margaret.davies checked inbox (nothing to do)
-- **20:09:58** oliver.hughes checked inbox (nothing to do)
-- **20:09:50** victoria.palmer checked inbox (nothing to do)
-- **20:09:45** sarah.williams checked inbox (nothing to do)
-- **20:09:42** robert.taylor checked inbox (nothing to do)
-- **20:07:19** margaret.davies sent email to henrik.lindqvist: "London Proofreader Shortlist — Follow-Up"
-- **20:07:14** george.crawford accepted a meeting
-- **20:07:05** christina.hall checked inbox (nothing to do)
-- **20:06:52** robert.taylor checked inbox (nothing to do)
-- **20:06:49** sarah.williams checked inbox (nothing to do)
-- **20:06:49** oliver.hughes checked inbox (nothing to do)
-- **20:06:32** victoria.palmer checked inbox (nothing to do)
-- **20:06:32** charlotte.bennett checked inbox (nothing to do)
-- **20:06:00** margaret.davies sent email to robert.taylor: "Q2 Training Budget — QA Department Request"
-- **20:06:00** margaret.davies sent email to petra.novak: "QA Dashboard — API Integration Feasibility Query"
-- **20:05:54** emma.thompson checked inbox (nothing to do)
-- **20:05:51** karen.jensen checked inbox (nothing to do)
-- **20:05:39** celine.mayer checked inbox (nothing to do)
-- **20:05:37** george.crawford accepted a meeting
-- **20:05:25** christina.hall checked inbox (nothing to do)
-- **20:05:11** robert.taylor checked inbox (nothing to do)
-- **20:05:07** oliver.hughes checked inbox (nothing to do)
-- **20:04:54** sarah.williams checked inbox (nothing to do)
-- **20:04:54** victoria.palmer checked inbox (nothing to do)
-- **20:04:37** margaret.davies uploaded file: QA_Dashboard_Spec_v0.2_Reviewed.md
-- **20:04:37** margaret.davies sent email to henrik.lindqvist: "QA Dashboard Specification — Final Draft for Your "
-- **20:04:27** charlotte.bennett checked inbox (nothing to do)
-- **20:04:27** emma.thompson checked inbox (nothing to do)
-- **20:04:09** karen.jensen checked inbox (nothing to do)
-- **20:04:00** celine.mayer checked inbox (nothing to do)
-- **20:03:56** george.crawford accepted a meeting
-- **20:03:45** christina.hall checked inbox (nothing to do)
-- **20:03:31** oliver.hughes checked inbox (nothing to do)
-- **20:03:31** robert.taylor checked inbox (nothing to do)
-- **20:03:30** sarah.williams checked inbox (nothing to do)
-- **20:03:17** victoria.palmer checked inbox (nothing to do)
-- **20:03:10** charlotte.bennett checked inbox (nothing to do)
-- **20:03:09** emma.thompson accepted a meeting
-- **20:03:09** emma.thompson accepted a meeting
-- **20:03:01** margaret.davies uploaded file: QA_Dashboard_Spec_Review_Notes_v0.1_Weekend_7-8March.md
-- **20:02:53** karen.jensen checked inbox (nothing to do)
-- **20:02:47** celine.mayer checked inbox (nothing to do)
-- **20:02:38** george.crawford accepted a meeting
-- **20:02:31** christina.hall checked inbox (nothing to do)
-- **20:02:18** oliver.hughes checked inbox (nothing to do)
-- **20:02:13** sarah.williams checked inbox (nothing to do)
-- **20:02:12** robert.taylor checked inbox (nothing to do)
-- **20:02:01** victoria.palmer checked inbox (nothing to do)
-- **20:01:51** charlotte.bennett checked inbox (nothing to do)
-- **20:01:47** emma.thompson checked inbox (nothing to do)
-- **20:01:33** karen.jensen checked inbox (nothing to do)
-- **20:01:33** celine.mayer checked inbox (nothing to do)
-- **20:01:26** margaret.davies uploaded file: QA_Dashboard_Review_Checklist_Weekend_7-8March.txt
-- **20:01:18** george.crawford checked inbox (nothing to do)
-- **20:01:05** christina.hall checked inbox (nothing to do)
-- **20:00:51** sarah.williams accepted a meeting
-- **20:00:51** sarah.williams accepted a meeting
-- **20:00:49** oliver.hughes checked inbox (nothing to do)
-- **20:00:41** robert.taylor checked inbox (nothing to do)
-- **20:00:33** victoria.palmer checked inbox (nothing to do)
-- **20:00:21** emma.thompson checked inbox (nothing to do)
-- **20:00:20** charlotte.bennett checked inbox (nothing to do)
-- **20:00:08** karen.jensen checked inbox (nothing to do)
-- **20:00:02** celine.mayer checked inbox (nothing to do)
-- **20:00:00** christina.hall accepted a meeting
-- **19:59:51** margaret.davies accepted a meeting
-- **19:59:51** margaret.davies accepted a meeting
-- **19:59:47** george.crawford accepted a meeting
-- **19:59:47** george.crawford accepted a meeting
-- **19:59:44** oliver.hughes accepted a meeting
-- **19:59:25** robert.taylor checked inbox (nothing to do)
-- **19:59:25** sarah.williams checked inbox (nothing to do)
-- **19:59:23** victoria.palmer checked inbox (nothing to do)
-- **19:59:08** charlotte.bennett checked inbox (nothing to do)
-- **19:59:03** emma.thompson checked inbox (nothing to do)
-- **19:58:57** karen.jensen checked inbox (nothing to do)
-- **19:58:47** maximilian.huber checked inbox (nothing to do)
-- **19:58:46** celine.mayer checked inbox (nothing to do)
-- **19:58:44** lukas.fischer checked inbox (nothing to do)
-- **19:58:30** margaret.davies checked inbox (nothing to do)
-- **19:58:30** christina.hall checked inbox (nothing to do)
-- **19:58:29** george.crawford checked inbox (nothing to do)
-- **19:58:12** oliver.hughes checked inbox (nothing to do)
-- **19:58:05** robert.taylor checked inbox (nothing to do)
-- **19:57:59** sarah.williams checked inbox (nothing to do)
-- **19:57:51** victoria.palmer checked inbox (nothing to do)
-- **19:57:40** charlotte.bennett checked inbox (nothing to do)
-- **19:57:35** emma.thompson checked inbox (nothing to do)
-- **19:57:24** karen.jensen checked inbox (nothing to do)
-- **19:57:15** maximilian.huber checked inbox (nothing to do)
-- **19:57:11** celine.mayer checked inbox (nothing to do)
-- **19:57:07** lukas.fischer checked inbox (nothing to do)
-- **19:56:54** george.crawford checked inbox (nothing to do)
-- **19:56:52** margaret.davies checked inbox (nothing to do)
-- **19:56:51** christina.hall checked inbox (nothing to do)
-- **19:56:31** sarah.williams checked inbox (nothing to do)
-- **19:56:31** oliver.hughes checked inbox (nothing to do)
-- **19:56:28** robert.taylor checked inbox (nothing to do)
-- **19:56:10** victoria.palmer checked inbox (nothing to do)
-- **19:56:02** emma.thompson checked inbox (nothing to do)
-- **19:56:02** charlotte.bennett checked inbox (nothing to do)
-- **19:55:43** maximilian.huber checked inbox (nothing to do)
-- **19:55:41** karen.jensen checked inbox (nothing to do)
-- **19:55:36** celine.mayer checked inbox (nothing to do)
+- **09:54:29** oscar.lindgren sent email to oliver.hughes: "Available for New Assignments"
+- **09:54:22** victoria.palmer replied to an email thread
+- **09:54:22** victoria.palmer replied to an email thread
+- **09:54:22** victoria.palmer replied to an email thread
+- **09:53:53** joana.ferreira checked inbox (nothing to do)
+- **09:53:50** sylvie.blanc uploaded file: HR_Meeting_Template_Updated_March2026.txt
+- **09:53:50** sylvie.blanc sent email to karen.jensen: "Update: Teams Audio Conferencing Now Active — Meet"
+- **09:53:29** benjamin.moore uploaded file: Teams_AudioConferencing_Reference.txt
+- **09:52:58** bruno.dupont sent email to anna.kowalski: "[Project 41e06072] Closure Confirmation – Prysmian"
+- **09:52:38** sebastian.mueller checked inbox (nothing to do)
+- **09:52:30** lena.braun checked inbox (nothing to do)
+- **09:52:11** annika.berg checked inbox (nothing to do)
+- **09:51:53** jonas.pettersson checked inbox (nothing to do)
+- **09:51:30** siobhan.kelly checked inbox (nothing to do)
+- **09:51:24** birgit.strand replied to an email thread
+- **09:51:12** agnieszka.kaczmarek checked inbox (nothing to do)
+- **09:50:48** francois.moreau replied to an email thread
+- **09:50:48** francois.moreau replied to an email thread
+- **09:50:39** nicolas.bernard replied to an email thread
+- **09:50:00** carmen.ruiz checked inbox (nothing to do)
+- **09:49:37** marco.bianchi sent email to james.obrien: "Weekly Check-In – Key Account Availability"
+- **09:49:31** sofia.lopes replied to an email thread
+- **09:49:31** sofia.lopes sent email to nicolas.bernard: "Round table scheduling – this week"
+- **09:49:01** lars.eriksen replied to an email thread
+- **09:48:29** eva.svensson checked inbox (nothing to do)
+- **09:48:28** stefan.krause replied to an email thread
+- **09:48:03** matteo.russo replied to an email thread
+- **09:47:47** james.obrien replied to an email thread
+- **09:47:35** aoife.murphy checked inbox (nothing to do)
+- **09:47:26** miguel.santos checked inbox (nothing to do)
+- **09:47:05** christina.hall replied to an email thread
+- **09:47:05** christina.hall replied to an email thread
+- **09:47:05** christina.hall replied to an email thread
+- **09:46:37** marie.dubois sent email to henrik.lindqvist: "Q1 Financial Review – Prep Kickoff"
+- **09:46:37** marie.dubois uploaded file: Q1_2026_Financial_Review_Framework.txt
+- **09:44:41** astrid.larsson sent email to victoria.palmer: "Editorial Availability – Any Pending Assignments?"
+- **09:44:02** klaus.weber checked inbox (nothing to do)
+- **09:43:47** elena.rodriguez sent email to victoria.palmer: "Available for New Assignments"
+- **09:43:39** lucia.romano checked inbox (nothing to do)
+- **09:43:15** daan.vermeer sent email to julia.werner: "Quick check-in – round table prep this week"
+- **09:42:36** carlos.garcia replied to an email thread
+- **09:42:07** henrik.lindqvist uploaded file: Q1_Sync_Prep_2026-03-06.txt
+- **09:41:39** hendrik.jansen replied to an email thread
+- **09:41:21** pierre.lefevre sent email to sophie.martin: "Quick Check-in: Active Client Projects"
+- **09:41:21** pierre.lefevre sent email to carlos.garcia: "Quick Check-in: Active Client Projects"
+- **09:41:21** pierre.lefevre sent email to anna.kowalski: "Quick Check-in: Active Client Projects"
+- **09:40:50** ewa.kowalczyk replied to an email thread
+- **09:40:27** jan.devries checked inbox (nothing to do)
+- **09:40:19** marta.wisniewska replied to an email thread
+- **09:40:17** [EVENT] Christina Hall: bad_coffee - Coffee machine update: it's dead. Who's up for a coffee run? ☕
+- **09:40:16** [EVENT] George Crawford: bad_coffee - Plot twist: the coffee machine works fine, someone just forgot to add water. Aga
+- **09:40:16** [EVENT] Petra Novak: bad_coffee - Coffee machine update: it's dead. Who's up for a coffee run? ☕
+- **09:40:16** [EVENT] Chiara Moretti: bad_coffee - Day 1 without functioning coffee. Morale is low. Productivity declining.
+- **09:40:01** oliver.hughes replied to an email thread
+- **09:39:55** alexander.wolf checked inbox (nothing to do)
+- **09:39:08** anna.kowalski replied to an email thread
+- **09:39:06** dieter.hoffmann replied to an email thread
+- **09:38:25** amelie.petit replied to an email thread
+- **09:38:25** amelie.petit replied to an email thread
+- **09:38:25** amelie.petit replied to an email thread
+- **09:38:05** jakub.kovar checked inbox (nothing to do)
+- **09:37:44** sophie.martin replied to an email thread
+- **09:36:34** niels.andersen sent email to james.obrien: "Pipeline check-in – week of 6 March"
+- **09:35:40** victoria.palmer uploaded file: TextCraft_Europe_Brand_Guide_2025.txt
+- **09:35:40** victoria.palmer uploaded file: Annual_Client_Event_2025_Reference_Materials.txt
+- **09:35:40** victoria.palmer uploaded file: Project_Assignment_Nexans_Offshore_Wind_Case_Study.txt
+- **09:35:40** victoria.palmer sent email to anna.kowalski: "RE: Scenario Test - 20260303-224200 — Brand Guide "
+- **09:35:40** victoria.palmer sent email to francois.moreau: "Assignment: Nexans Offshore Wind Case Study (Proje"
+- **09:34:27** lena.braun checked inbox (nothing to do)
+- **09:34:26** sebastian.mueller replied to an email thread
+- **09:34:26** sebastian.mueller sent email to alexander.wolf: "RE: Escalation: Persistent M365/Teams Connectivity"
+- **09:34:26** sebastian.mueller sent email to isabella.rossi: "Urgent: IT Escalation Needed – Alexander Wolf M365"
+- **09:34:07** erik.nilsson sent email to charlotte.bennett: "Checking in — any new assignments?"
+- **09:33:47** annika.berg sent email to julia.werner: "Morning check-in — active editorial review tasks"
+- **09:33:38** siobhan.kelly checked inbox (nothing to do)
+- **09:33:28** charlotte.bennett sent email to sebastian.mueller: "Availability for New Assignments – Academic Writin"
+- **09:33:23** birgit.strand sent email to dieter.hoffmann: "Checking in — anything brewing on your end?"
+- **09:33:16** thomas.vanderberg sent email to sophie.martin: "Quick Check-In: Active Client Projects"
+- **09:32:55** giovanni.ricci checked inbox (nothing to do)
+- **09:32:53** rui.costa sent email to amelie.petit: "Availability & Upcoming Assignments"
+- **09:32:42** giulia.ferrari sent email to francois.moreau: "Pipeline check-in – any content heading our way?"
+- **09:32:21** paola.greco sent email to christina.hall: "Checking In – Available for New Assignments"
+- **09:31:46** isabella.rossi replied to an email thread
+- **09:30:19** victoria.palmer replied to an email thread
+- **09:30:19** victoria.palmer replied to an email thread
+- **09:29:22** henrik.lindqvist replied to an email thread
+- **09:28:17** anna.kowalski replied to an email thread
+- **09:26:40** sebastian.mueller replied to an email thread
+- **09:26:40** sebastian.mueller sent email to it-support: "Urgent: Persistent M365/Teams Issue – Alexander Wo"
+- **09:25:38** charlotte.bennett replied to an email thread
 
 ---
 *Report auto-generated by Shadow Employees monitor*

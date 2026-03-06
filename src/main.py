@@ -317,7 +317,20 @@ class AgencyOrchestrator:
         # Build input variables from persona + M365 data
         input_vars = to_agency_input_vars(persona)
         input_vars["TaskType"] = task.task_type.value
-        input_vars["TaskInstructions"] = task.instructions
+
+        # Always inject pending items into task instructions so agents act on them
+        task_instructions = task.instructions
+        if has_pending and pending_desc:
+            task_instructions += (
+                "\n\n## PENDING WORK FROM PREVIOUS CYCLES\n"
+                "You have unfinished work that needs attention:\n"
+                f"{pending_desc}\n\n"
+                "If your inbox has no new unread emails, work on these pending items. "
+                "Draft content, send follow-ups, deliver completed work, or email colleagues to move projects forward. "
+                "Do NOT just report 'no action' when you have pending work."
+            )
+
+        input_vars["TaskInstructions"] = task_instructions
         input_vars["InboxData"] = inbox_data
         input_vars["CalendarData"] = calendar_data
         input_vars["TenantDomain"] = self.config.get("tenant_domain", "a830edad9050849coep9vqp9bog.onmicrosoft.com")

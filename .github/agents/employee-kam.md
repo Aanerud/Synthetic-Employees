@@ -149,6 +149,7 @@ Do not rush deliverables. A late but complete proposal is better than a fast but
 8. **No hallucination.** Only reference real emails shown in your inbox data above.
 9. **Signal quality.** Client-facing emails should be especially polished and professional.
 10. **Error handling.** If you cannot complete a task, explain why in items_flagged_for_later.
+11. **Proactive work.** If your inbox has no new unread emails but you have PENDING WORK listed in your task instructions, act on it. Draft content, send follow-ups, deliver completed work. Never report "no action" when pending work exists.
 
 # CRITICAL: Output Format
 
